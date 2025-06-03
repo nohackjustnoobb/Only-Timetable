@@ -1,0 +1,46 @@
+{
+  "@@locale": "en",
+  "appName": "Only Timetable",
+  "saved": "Saved",
+  "nearby": "Nearby",
+  "settings": "Settings",
+  "plugin": "Plugin",
+  "about": "About",
+  "addPlugin": "Add Plugin",
+  "add": "Add",
+  "json": "JSON",
+  "url": "URL",
+  "failed": "Failed",
+  "close": "Close",
+  "noPluginAvailable": "No Plugin Available",
+  "updatedOn": "Updated on {date}",
+  "@updatedOn": {
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yMd"
+      }
+    }
+  },
+  "neverUpdated": "Never Updated",
+  "pluginInfo": "Plugin Info",
+  "removePlugin": "Remove Plugin",
+  "author": "Author",
+  "id": "ID",
+  "name": "Name",
+  "version": "Version",
+  "repositoryUrl": "Repository URL",
+  "description": "Description",
+  "confirmation": "Confirmation",
+  "confirm": "Confirm",
+  "cancel": "Cancel",
+  "removePluginConfirm": "Are you sure you want to remove this plugin?",
+  "failedToUpdateRoutes": "Failed to update routes for {pluginName}.",
+  "@failedToUpdateRoutes": {
+    "placeholders": {
+      "pluginName": {
+        "type": "String"
+      }
+    }
+  }
+}
