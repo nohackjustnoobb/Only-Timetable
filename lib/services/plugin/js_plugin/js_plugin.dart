@@ -64,7 +64,6 @@ class JsPlugin extends BasePlugin {
        _author = author,
        _repositoryUrl = repositoryUrl {
     // Extract the function name and set the script
-
     final regex = RegExp(r'export{(.*) as default};');
     RegExpMatch? match = regex.firstMatch(updateRoutesScript);
     if (match != null && match.groupCount > 0) {

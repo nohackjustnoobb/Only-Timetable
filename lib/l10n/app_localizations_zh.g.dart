@@ -99,6 +99,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String failedToUpdateRoutes(String pluginName) {
     return 'Failed to update routes for $pluginName.';
   }
+
+  @override
+  String get noRoutesFound => 'No Routes Found';
+
+  @override
+  String get viewAll => 'View All';
+
+  @override
+  String get loadMore => 'Load More';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).

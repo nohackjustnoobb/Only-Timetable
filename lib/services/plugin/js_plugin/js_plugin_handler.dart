@@ -21,7 +21,6 @@ class JsPluginHandler extends Handler<JsPlugin> {
   HeadlessInAppWebView? headlessWebView;
   InAppWebViewController? controller;
 
-  int _pluginCount = 0;
   final Map<String, Isar> _pluginsIsar = {};
 
   Future<void> initWebView() async {
@@ -33,6 +32,7 @@ class JsPluginHandler extends Handler<JsPlugin> {
       initialSettings: InAppWebViewSettings(isInspectable: kDebugMode),
       initialData: InAppWebViewInitialData(data: ""),
       onWebViewCreated: (controller) {
+        // TODO override fetch to bypass cors
         // TODO The type of data is changed to JavaScriptHandlerFunctionData after 6.2.0
         controller.addJavaScriptHandler(
           handlerName: "saveStops",
@@ -66,6 +66,12 @@ class JsPluginHandler extends Handler<JsPlugin> {
             await isar.writeTxn(() async {
               await isar.routes.clear();
               await isar.routes.putAll(routes);
+
+              // Fetch stops for each route
+              for (final route in routes) {
+                await route.fetchStops(isar);
+                await route.stops.save();
+              }
             });
           },
         );
@@ -131,7 +137,6 @@ class JsPluginHandler extends Handler<JsPlugin> {
   @override
   Future<void> initPlugin<T2 extends BasePlugin>(T2 plugin) async {
     if (plugin is! JsPlugin) return;
-    _pluginCount++;
 
     await initWebView();
     plugin.controller = controller;
@@ -161,7 +166,6 @@ class JsPluginHandler extends Handler<JsPlugin> {
 
     await isar.writeTxn(() => isar.kvPairs.deleteByKey(plugin.id));
 
-    _pluginCount--;
-    if (_pluginCount <= 0) await disposeWebView();
+    if (_pluginsIsar.isEmpty) await disposeWebView();
   }
 }

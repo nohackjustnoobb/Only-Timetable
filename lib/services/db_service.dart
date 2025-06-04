@@ -7,6 +7,7 @@ import 'package:only_timetable/models/stop.dart';
 import 'package:only_timetable/services/plugin/handler.dart';
 import 'package:path_provider/path_provider.dart';
 
+/// A service class responsible for managing the Isar instances used by the application.
 class DbService {
   late final Directory _dir;
   Map<String, Isar> pluginIsars = {};

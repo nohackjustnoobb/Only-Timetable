@@ -28,7 +28,13 @@ class SettingsGroup extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(title, style: context.textTheme.titleSmall),
+              Text(
+                title,
+                style: context.textTheme.titleSmall?.copyWith(
+                  color: context.colorScheme.primary,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
               if (action != null) action!,
             ],
           ),

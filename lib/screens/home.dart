@@ -5,7 +5,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:only_timetable/extensions/shortcut.dart';
 import 'package:only_timetable/globals.dart';
-import 'package:only_timetable/screens/search.dart';
+import 'package:only_timetable/screens/search/search.dart';
 import 'package:only_timetable/screens/settings/settings.dart';
 import 'package:only_timetable/widgets/simple_search_bar.dart';
 
@@ -41,8 +41,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 actionsPadding: const EdgeInsets.only(right: 20),
                 actions: [
                   CupertinoButton(
-                    padding: const EdgeInsets.all(0),
-                    minimumSize: const Size(0, 0),
+                    padding: EdgeInsets.zero,
+                    minimumSize: Size.zero,
                     child: Icon(
                       LucideIcons.settings200,
                       color: context.textColor,
@@ -92,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               horizontal: 20,
                               vertical: 5,
                             ),
-                            minimumSize: const Size(0, 0),
+                            minimumSize: Size.zero,
                             child: Text(
                               text,
                               style: TextStyle(

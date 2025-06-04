@@ -80,8 +80,8 @@ class _AddPluginModalState extends State<AddPluginModal> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: CupertinoButton(
-                      padding: const EdgeInsets.all(0),
-                      minimumSize: const Size(0, 0),
+                      padding: EdgeInsets.zero,
+                      minimumSize: Size.zero,
                       child: Icon(
                         LucideIcons.x200,
                         color: context.textColor,
@@ -181,8 +181,8 @@ class PluginInfoModal extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerRight,
                     child: CupertinoButton(
-                      padding: const EdgeInsets.all(0),
-                      minimumSize: const Size(0, 0),
+                      padding: EdgeInsets.zero,
+                      minimumSize: Size.zero,
                       child: Icon(
                         LucideIcons.x200,
                         color: context.textColor,
@@ -237,7 +237,7 @@ class PluginInfoModal extends StatelessWidget {
             ),
             CupertinoButton(
               minimumSize: const Size(double.infinity, 0),
-              padding: const EdgeInsets.all(0),
+              padding: EdgeInsets.zero,
               onPressed: () => context.showConfirm(
                 context.l10n.removePluginConfirm,
                 () async {
@@ -284,9 +284,9 @@ class PluginGroup extends StatelessWidget {
     return SettingsGroup(
       title: context.l10n.plugin,
       action: CupertinoButton(
-        minimumSize: const Size(0, 0),
-        padding: const EdgeInsets.all(0),
-        child: Icon(LucideIcons.plus200, color: context.textColor, size: 25),
+        minimumSize: Size.zero,
+        padding: EdgeInsets.zero,
+        child: Icon(LucideIcons.plus200, size: 25),
         onPressed: () => showModalBottomSheet(
           context: context,
           isScrollControlled: true,
@@ -307,7 +307,7 @@ class PluginGroup extends StatelessWidget {
                 ),
               )
             : ListView.separated(
-                padding: const EdgeInsets.all(0),
+                padding: EdgeInsets.zero,
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: pluginService.plugins.length,
@@ -327,8 +327,8 @@ class PluginGroup extends StatelessWidget {
                     children: [
                       Flexible(
                         child: CupertinoButton(
-                          minimumSize: const Size(0, 0),
-                          padding: const EdgeInsets.all(0),
+                          minimumSize: Size.zero,
+                          padding: EdgeInsets.zero,
                           onPressed: () => showModalBottomSheet(
                             isScrollControlled: true,
                             context: context,
@@ -370,8 +370,8 @@ class PluginGroup extends StatelessWidget {
                                 : context.l10n.neverUpdated,
                           ),
                           CupertinoButton(
-                            minimumSize: const Size(0, 0),
-                            padding: const EdgeInsets.all(0),
+                            minimumSize: Size.zero,
+                            padding: EdgeInsets.zero,
                             child: Icon(
                               LucideIcons.refreshCcw200,
                               color: context.textColor,

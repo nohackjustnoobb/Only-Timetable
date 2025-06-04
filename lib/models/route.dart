@@ -74,9 +74,7 @@ class Route {
   Future<void> fetchStops(Isar isar) async {
     if (_stopsId.isEmpty) return;
 
-    final stopsLinks = await isar.stops.getAll(
-      _stopsId.map((e) => fastHash(e)).toList(),
-    );
+    final stopsLinks = await isar.stops.getAllById(_stopsId);
 
     stops.addAll(stopsLinks.whereType<Stop>().toList());
   }

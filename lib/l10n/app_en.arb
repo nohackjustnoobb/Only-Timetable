@@ -42,5 +42,8 @@
         "type": "String"
       }
     }
-  }
+  },
+  "noRoutesFound": "No Routes Found",
+  "viewAll": "View All",
+  "loadMore": "Load More"
 }

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as material;
@@ -35,8 +37,8 @@ extension Shortcut on BuildContext {
             actions ??
             [
               CupertinoButton(
-                padding: const EdgeInsets.all(0),
-                minimumSize: const Size(0, 0),
+                padding: EdgeInsets.zero,
+                minimumSize: Size.zero,
                 child: Text(context.l10n.close),
                 onPressed: () => context.pop(),
               ),
@@ -51,13 +53,13 @@ extension Shortcut on BuildContext {
     actions: [
       CupertinoButton(
         padding: const EdgeInsets.only(right: 10),
-        minimumSize: const Size(0, 0),
+        minimumSize: Size.zero,
         child: Text(l10n.cancel),
         onPressed: () => pop(),
       ),
       CupertinoButton(
-        padding: const EdgeInsets.all(0),
-        minimumSize: const Size(0, 0),
+        padding: EdgeInsets.zero,
+        minimumSize: Size.zero,
         child: Text(l10n.confirm, style: TextStyle(color: colorScheme.error)),
         onPressed: () {
           action();
@@ -66,4 +68,21 @@ extension Shortcut on BuildContext {
       ),
     ],
   );
+
+  String getLocalizedString(String source) {
+    final parsed = jsonDecode(source) as Map<String, dynamic>;
+
+    if (parsed.containsKey(l10n.localeName)) {
+      return parsed[l10n.localeName]!;
+    }
+
+    // Fallback to English if the current locale is not available
+    if (parsed.containsKey('en')) {
+      return parsed['en']!;
+    }
+
+    throw Exception(
+      'No localized string found for locale ${l10n.localeName} in $source',
+    );
+  }
 }

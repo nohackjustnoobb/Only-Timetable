@@ -266,6 +266,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to update routes for {pluginName}.'**
   String failedToUpdateRoutes(String pluginName);
+
+  /// No description provided for @noRoutesFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No Routes Found'**
+  String get noRoutesFound;
+
+  /// No description provided for @viewAll.
+  ///
+  /// In en, this message translates to:
+  /// **'View All'**
+  String get viewAll;
+
+  /// No description provided for @loadMore.
+  ///
+  /// In en, this message translates to:
+  /// **'Load More'**
+  String get loadMore;
 }
 
 class _AppLocalizationsDelegate

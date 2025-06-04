@@ -11,6 +11,7 @@ import 'package:only_timetable/services/plugin/handler.dart';
 import 'package:only_timetable/services/plugin/js_plugin/js_plugin_handler.dart';
 import 'package:only_timetable/services/plugin/base_plugin.dart';
 
+/// A service class responsible for managing plugins within the application.
 class PluginService extends ChangeNotifier {
   static List<Handler> pluginHandlers = [JsPluginHandler()];
   late final DbService dbService;
@@ -88,8 +89,8 @@ class PluginService extends ChangeNotifier {
     List<Future<void>> futures = [];
 
     for (final plugin in plugins) {
-      await updateRoute(plugin.id);
-      // futures.add(updateRoute(plugin.id));
+      // await updateRoute(plugin.id);
+      futures.add(updateRoute(plugin.id));
     }
 
     await Future.wait(futures);
@@ -170,5 +171,13 @@ class PluginService extends ChangeNotifier {
     await dbService.deletePluginIsar(plugin.id);
     routesUpdateTimestamps.remove(plugin.id);
     await saveRouteUpdateTimestamp();
+  }
+
+  BasePlugin getPluginById(String id) {
+    if (!_plugins.containsKey(id)) {
+      throw Exception("Plugin with id $id not found");
+    }
+
+    return _plugins[id]!;
   }
 }
