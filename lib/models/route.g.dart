@@ -51,6 +51,11 @@ const RouteSchema = CollectionSchema(
       id: 6,
       name: r'source',
       type: IsarType.string,
+    ),
+    r'stopsOrder': PropertySchema(
+      id: 7,
+      name: r'stopsOrder',
+      type: IsarType.stringList,
     )
   },
   estimateSize: _routeEstimateSize,
@@ -131,6 +136,13 @@ int _routeEstimateSize(
       bytesCount += 3 + value.length * 3;
     }
   }
+  bytesCount += 3 + object.stopsOrder.length * 3;
+  {
+    for (var i = 0; i < object.stopsOrder.length; i++) {
+      final value = object.stopsOrder[i];
+      bytesCount += value.length * 3;
+    }
+  }
   return bytesCount;
 }
 
@@ -147,6 +159,7 @@ void _routeSerialize(
   writer.writeString(offsets[4], object.name);
   writer.writeString(offsets[5], object.orig);
   writer.writeString(offsets[6], object.source);
+  writer.writeStringList(offsets[7], object.stopsOrder);
 }
 
 Route _routeDeserialize(
@@ -163,6 +176,7 @@ Route _routeDeserialize(
     name: reader.readStringOrNull(offsets[4]),
     orig: reader.readStringOrNull(offsets[5]),
     source: reader.readStringOrNull(offsets[6]),
+    stopsOrder: reader.readStringList(offsets[7]) ?? const [],
   );
   return object;
 }
@@ -188,6 +202,8 @@ P _routeDeserializeProp<P>(
       return (reader.readStringOrNull(offset)) as P;
     case 6:
       return (reader.readStringOrNull(offset)) as P;
+    case 7:
+      return (reader.readStringList(offset) ?? const []) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -1424,6 +1440,222 @@ extension RouteQueryFilter on QueryBuilder<Route, Route, QFilterCondition> {
       ));
     });
   }
+
+  QueryBuilder<Route, Route, QAfterFilterCondition> stopsOrderElementEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'stopsOrder',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Route, Route, QAfterFilterCondition>
+      stopsOrderElementGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'stopsOrder',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Route, Route, QAfterFilterCondition> stopsOrderElementLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'stopsOrder',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Route, Route, QAfterFilterCondition> stopsOrderElementBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'stopsOrder',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Route, Route, QAfterFilterCondition> stopsOrderElementStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'stopsOrder',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Route, Route, QAfterFilterCondition> stopsOrderElementEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'stopsOrder',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Route, Route, QAfterFilterCondition> stopsOrderElementContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'stopsOrder',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Route, Route, QAfterFilterCondition> stopsOrderElementMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'stopsOrder',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Route, Route, QAfterFilterCondition> stopsOrderElementIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'stopsOrder',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Route, Route, QAfterFilterCondition>
+      stopsOrderElementIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'stopsOrder',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Route, Route, QAfterFilterCondition> stopsOrderLengthEqualTo(
+      int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'stopsOrder',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Route, Route, QAfterFilterCondition> stopsOrderIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'stopsOrder',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Route, Route, QAfterFilterCondition> stopsOrderIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'stopsOrder',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Route, Route, QAfterFilterCondition> stopsOrderLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'stopsOrder',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<Route, Route, QAfterFilterCondition> stopsOrderLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'stopsOrder',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Route, Route, QAfterFilterCondition> stopsOrderLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'stopsOrder',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
+    });
+  }
 }
 
 extension RouteQueryObject on QueryBuilder<Route, Route, QFilterCondition> {}
@@ -1718,6 +1950,12 @@ extension RouteQueryWhereDistinct on QueryBuilder<Route, Route, QDistinct> {
       return query.addDistinctBy(r'source', caseSensitive: caseSensitive);
     });
   }
+
+  QueryBuilder<Route, Route, QDistinct> distinctByStopsOrder() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'stopsOrder');
+    });
+  }
 }
 
 extension RouteQueryProperty on QueryBuilder<Route, Route, QQueryProperty> {
@@ -1766,6 +2004,12 @@ extension RouteQueryProperty on QueryBuilder<Route, Route, QQueryProperty> {
   QueryBuilder<Route, String?, QQueryOperations> sourceProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'source');
+    });
+  }
+
+  QueryBuilder<Route, List<String>, QQueryOperations> stopsOrderProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'stopsOrder');
     });
   }
 }

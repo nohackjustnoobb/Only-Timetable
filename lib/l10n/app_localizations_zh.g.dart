@@ -12,10 +12,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get appName => 'Only Timetable';
 
   @override
-  String get saved => '收藏';
+  String get saved => 'Saved';
 
   @override
-  String get nearby => '附近';
+  String get nearby => 'Nearby';
 
   @override
   String get settings => 'Settings';
@@ -108,6 +108,21 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get loadMore => 'Load More';
+
+  @override
+  String get general => 'General';
+
+  @override
+  String get alwaysUseOSM => 'Always use OpenStreetMap';
+
+  @override
+  String get routeHasNoStops => 'This route has no stops.';
+
+  @override
+  String get routeHasNoValidStops => 'This route has no valid stops.';
+
+  @override
+  String get failedToLoadRoute => 'Failed to load route.';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).

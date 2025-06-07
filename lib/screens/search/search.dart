@@ -63,65 +63,43 @@ class _SearchScreenState extends State<SearchScreen> {
                 ],
               ),
               Expanded(
-                child: _searchResults == null || _searchResults!.isEmpty
-                    ? GestureDetector(onTap: () => context.pop())
-                    : SingleChildScrollView(
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                            bottom: context.mediaQuery.padding.bottom,
-                          ),
-                          child: Consumer<PluginService>(
-                            builder: (context, pluginService, _) => Column(
-                              spacing: 20,
-                              children: _searchResults!.entries
-                                  .map(
-                                    (entry) => Column(
+                child: GestureDetector(
+                  onTap: () => context.pop(),
+                  child: _searchResults == null || _searchResults!.isEmpty
+                      ? Container(color: Colors.transparent)
+                      : SingleChildScrollView(
+                          keyboardDismissBehavior:
+                              ScrollViewKeyboardDismissBehavior.onDrag,
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                              bottom: context.mediaQuery.padding.bottom,
+                            ),
+                            child: Consumer<PluginService>(
+                              builder: (context, pluginService, _) => Column(
+                                spacing: 20,
+                                children: _searchResults!.entries.map((entry) {
+                                  final plugin = pluginService.getPluginById(
+                                    entry.key,
+                                  );
+
+                                  return GestureDetector(
+                                    // Make it not dissmissible
+                                    onTap: () {},
+                                    child: Column(
                                       spacing: 5,
                                       children: [
                                         Padding(
                                           padding: const EdgeInsets.symmetric(
                                             horizontal: 10,
                                           ),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                pluginService
-                                                    .getPluginById(entry.key)
-                                                    .name,
-                                                style: context
-                                                    .textTheme
-                                                    .titleMedium
-                                                    ?.copyWith(
-                                                      color: context
-                                                          .colorScheme
-                                                          .primary,
-                                                      fontWeight:
-                                                          FontWeight.normal,
-                                                    ),
-                                              ),
-                                              CupertinoButton(
-                                                padding: EdgeInsets.zero,
-                                                minimumSize: Size.zero,
-                                                onPressed: () =>
-                                                    showModalBottomSheet(
-                                                      context: context,
-                                                      isScrollControlled: true,
-                                                      builder: (context) =>
-                                                          SearchByPluginModal(
-                                                            plugin: pluginService
-                                                                .getPluginById(
-                                                                  entry.key,
-                                                                ),
-                                                            query: _query!,
-                                                          ),
-                                                    ),
-                                                child: Text(
-                                                  context.l10n.viewAll,
+                                          child: IntrinsicHeight(
+                                            child: Row(
+                                              children: [
+                                                Text(
+                                                  plugin.name,
                                                   style: context
                                                       .textTheme
-                                                      .titleSmall
+                                                      .titleMedium
                                                       ?.copyWith(
                                                         color: context
                                                             .colorScheme
@@ -130,19 +108,57 @@ class _SearchScreenState extends State<SearchScreen> {
                                                             FontWeight.normal,
                                                       ),
                                                 ),
-                                              ),
-                                            ],
+                                                Expanded(
+                                                  child: CupertinoButton(
+                                                    padding: EdgeInsets.zero,
+                                                    minimumSize: Size.zero,
+                                                    alignment:
+                                                        Alignment.bottomRight,
+                                                    onPressed: () =>
+                                                        showModalBottomSheet(
+                                                          context: context,
+                                                          isScrollControlled:
+                                                              true,
+                                                          builder: (context) =>
+                                                              SearchByPluginModal(
+                                                                plugin: plugin,
+                                                                query: _query!,
+                                                              ),
+                                                        ),
+                                                    child: Text(
+                                                      context.l10n.viewAll,
+
+                                                      style: context
+                                                          .textTheme
+                                                          .titleSmall
+                                                          ?.copyWith(
+                                                            color: context
+                                                                .colorScheme
+                                                                .primary,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal,
+                                                          ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                        RoutesList(routes: entry.value),
+                                        RoutesList(
+                                          plugin: plugin,
+                                          routes: entry.value,
+                                        ),
                                       ],
                                     ),
-                                  )
-                                  .toList(),
+                                  );
+                                }).toList(),
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                ),
               ),
             ],
           ),

@@ -89,7 +89,7 @@ class _SearchByPluginModalState extends State<SearchByPluginModal> {
                         Text(
                           widget.plugin.name,
                           style: context.textTheme.titleMedium?.copyWith(
-                            height: .7,
+                            height: .8,
                           ),
                         ),
                         Row(
@@ -145,7 +145,11 @@ class _SearchByPluginModalState extends State<SearchByPluginModal> {
                   padding: EdgeInsets.only(bottom: paddingBottom),
                   child: Column(
                     children: [
-                      RoutesList(routes: _results, showContainer: false),
+                      RoutesList(
+                        plugin: widget.plugin,
+                        routes: _results,
+                        showContainer: false,
+                      ),
                       // TODO automatically load more when reaching the end
                       if (!reachingEnd)
                         CupertinoButton(

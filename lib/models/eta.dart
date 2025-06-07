@@ -1,6 +1,4 @@
 class Eta {
-  final DateTime updatedTime = DateTime.now();
-
   final bool isRealTime;
   final int arrivalTime;
 

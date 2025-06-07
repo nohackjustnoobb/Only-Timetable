@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:only_timetable/extensions/shortcut.dart';
 import 'package:only_timetable/extensions/theme.dart';
-import 'package:only_timetable/screens/settings/settings.dart';
 import 'package:only_timetable/services/plugin/base_plugin.dart';
 import 'package:only_timetable/services/plugin/js_plugin/js_plugin.dart';
 import 'package:only_timetable/services/plugin/plugin_service.dart';
+import 'package:only_timetable/widgets/settings_group.dart';
 import 'package:provider/provider.dart';
 
 class AddPluginModal extends StatefulWidget {
@@ -283,14 +283,17 @@ class PluginGroup extends StatelessWidget {
   Widget build(BuildContext context) {
     return SettingsGroup(
       title: context.l10n.plugin,
-      action: CupertinoButton(
-        minimumSize: Size.zero,
-        padding: EdgeInsets.zero,
-        child: Icon(LucideIcons.plus200, size: 25),
-        onPressed: () => showModalBottomSheet(
-          context: context,
-          isScrollControlled: true,
-          builder: (BuildContext context) => AddPluginModal(),
+      action: Expanded(
+        child: CupertinoButton(
+          minimumSize: Size.zero,
+          padding: EdgeInsets.zero,
+          alignment: Alignment.bottomRight,
+          child: Icon(LucideIcons.plus200, size: 25),
+          onPressed: () => showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            builder: (BuildContext context) => AddPluginModal(),
+          ),
         ),
       ),
       child: Consumer<PluginService>(

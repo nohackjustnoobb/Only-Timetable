@@ -45,5 +45,10 @@
   },
   "noRoutesFound": "No Routes Found",
   "viewAll": "View All",
-  "loadMore": "Load More"
+  "loadMore": "Load More",
+  "general": "General",
+  "alwaysUseOSM": "Always use OpenStreetMap",
+  "routeHasNoStops": "This route has no stops.",
+  "routeHasNoValidStops": "This route has no valid stops.",
+  "failedToLoadRoute": "Failed to load route."
 }

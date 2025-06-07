@@ -108,4 +108,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get loadMore => 'Load More';
+
+  @override
+  String get general => 'General';
+
+  @override
+  String get alwaysUseOSM => 'Always use OpenStreetMap';
+
+  @override
+  String get routeHasNoStops => 'This route has no stops.';
+
+  @override
+  String get routeHasNoValidStops => 'This route has no valid stops.';
+
+  @override
+  String get failedToLoadRoute => 'Failed to load route.';
 }

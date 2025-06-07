@@ -18,6 +18,7 @@ void main() async {
         ChangeNotifierProvider.value(value: mainService),
         ChangeNotifierProvider.value(value: mainService.pluginService),
         ChangeNotifierProvider.value(value: mainService.settingsService),
+        ChangeNotifierProvider.value(value: mainService.etaService),
       ],
       child: const App(),
     ),

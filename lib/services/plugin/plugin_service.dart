@@ -21,6 +21,12 @@ class PluginService extends ChangeNotifier {
   final Set<String> _routesUpdating = {};
   Map<String, DateTime> routesUpdateTimestamps = {};
 
+  /// Searches for routes based on the provided criteria.
+  ///
+  /// Returns a [Future] that completes with a [Map] where the keys are [String]
+  /// plugin's id and the values are lists of [Route] objects matching the search.
+  ///
+  /// Throws an exception if the search fails.
   Future<Map<String, List<Route>>> searchRoute(
     String query, {
     String? pluginId,
@@ -85,17 +91,30 @@ class PluginService extends ChangeNotifier {
     updateAllRoutes();
   }
 
+  /// Updates all routes by fetching the latest data and applying necessary changes.
+  ///
+  /// This method performs asynchronous operations to ensure that all routes
+  /// are up-to-date. It may involve network requests, database updates, or
+  /// other side effects required to synchronize route information.
+  ///
+  /// Throws an exception if the update process fails.
   Future<void> updateAllRoutes() async {
     List<Future<void>> futures = [];
 
     for (final plugin in plugins) {
-      // await updateRoute(plugin.id);
       futures.add(updateRoute(plugin.id));
     }
 
     await Future.wait(futures);
   }
 
+  /// Updates the route for the specified plugin.
+  ///
+  /// Takes a [pluginId] as a parameter, which identifies the plugin whose route needs to be updated.
+  ///
+  /// This method performs the update asynchronously.
+  ///
+  /// Throws an exception if the update fails.
   Future<void> updateRoute(String pluginId) async {
     if (_routesUpdating.contains(pluginId)) return; // Skip if already updating
     _routesUpdating.add(pluginId);
@@ -107,14 +126,10 @@ class PluginService extends ChangeNotifier {
         await plugin.updateRoutes();
 
         routesUpdateTimestamps[pluginId] = DateTime.now();
-        await saveRouteUpdateTimestamp();
+        await _saveRouteUpdateTimestamp();
 
         notifyListeners();
       } catch (e) {
-        if (kDebugMode) {
-          print("Failed to update routes for plugin $pluginId: $e");
-        }
-
         if (navigatorKey.currentContext != null) {
           showErrorSnackbar(
             navigatorKey.currentContext!.l10n.failedToUpdateRoutes(plugin.name),
@@ -126,7 +141,7 @@ class PluginService extends ChangeNotifier {
     _routesUpdating.remove(pluginId);
   }
 
-  Future<void> saveRouteUpdateTimestamp() async {
+  Future<void> _saveRouteUpdateTimestamp() async {
     await dbService.appIsar.writeTxn(() async {
       await dbService.appIsar.kvPairs.put(
         KvPair(
@@ -141,6 +156,14 @@ class PluginService extends ChangeNotifier {
     });
   }
 
+  /// Adds a [plugin] to the service.
+  ///
+  /// This method asynchronously registers the provided [BasePlugin] instance,
+  /// allowing it to be managed and utilized by the service.
+  ///
+  /// Throws an [Exception] if the plugin cannot be added.
+  ///
+  /// [plugin]: The plugin instance to add.
   Future<void> addPlugin(BasePlugin plugin) async {
     _plugins[plugin.id] = plugin;
     plugin.isar = await dbService.getPluginIsar(plugin.id);
@@ -154,12 +177,27 @@ class PluginService extends ChangeNotifier {
     updateRoute(plugin.id);
   }
 
+  /// Saves the current state of plugins to persistent storage.
+  ///
+  /// This method performs any necessary serialization and writes the plugin data
+  /// to a storage medium (such as local files or a database). It is asynchronous
+  /// and should be awaited to ensure that the save operation completes before
+  /// proceeding.
+  ///
+  /// Throws an exception if the save operation fails.
   Future<void> savePlugins() async {
     for (final pluginHandler in pluginHandlers) {
       await pluginHandler.savePlugin(plugins);
     }
   }
 
+  /// Removes the specified [plugin] from the system.
+  ///
+  /// This method performs any necessary cleanup and ensures that the plugin
+  /// is properly unregistered or deleted. The operation is asynchronous and
+  /// completes when the removal process is finished.
+  ///
+  /// Throws an exception if the removal fails.
   Future<void> removePlugin(BasePlugin plugin) async {
     _plugins.remove(plugin.id);
     notifyListeners();
@@ -170,9 +208,12 @@ class PluginService extends ChangeNotifier {
 
     await dbService.deletePluginIsar(plugin.id);
     routesUpdateTimestamps.remove(plugin.id);
-    await saveRouteUpdateTimestamp();
+    await _saveRouteUpdateTimestamp();
   }
 
+  /// Returns the [BasePlugin] instance that matches the given [id].
+  ///
+  /// Throws an exception if no plugin with the specified [id] is found.
   BasePlugin getPluginById(String id) {
     if (!_plugins.containsKey(id)) {
       throw Exception("Plugin with id $id not found");

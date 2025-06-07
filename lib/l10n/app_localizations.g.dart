@@ -284,6 +284,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Load More'**
   String get loadMore;
+
+  /// No description provided for @general.
+  ///
+  /// In en, this message translates to:
+  /// **'General'**
+  String get general;
+
+  /// No description provided for @alwaysUseOSM.
+  ///
+  /// In en, this message translates to:
+  /// **'Always use OpenStreetMap'**
+  String get alwaysUseOSM;
+
+  /// No description provided for @routeHasNoStops.
+  ///
+  /// In en, this message translates to:
+  /// **'This route has no stops.'**
+  String get routeHasNoStops;
+
+  /// No description provided for @routeHasNoValidStops.
+  ///
+  /// In en, this message translates to:
+  /// **'This route has no valid stops.'**
+  String get routeHasNoValidStops;
+
+  /// No description provided for @failedToLoadRoute.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to load route.'**
+  String get failedToLoadRoute;
 }
 
 class _AppLocalizationsDelegate

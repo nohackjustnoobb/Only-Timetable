@@ -8,12 +8,15 @@ environment:
 
 dependencies:
   animated_snack_bar: ^0.4.0
+  apple_maps_flutter: ^1.4.0
   collection: ^1.19.1
   flutter:
     sdk: flutter
   flutter_inappwebview: ^6.1.5
   flutter_localizations:
     sdk: flutter
+  flutter_map: ^8.1.1
+  google_polyline_algorithm: ^3.1.0
   http: ^1.4.0
   intl: ^0.20.2
   isar:
@@ -22,9 +25,12 @@ dependencies:
   isar_flutter_libs:
     version: ^3.1.8
     hosted: https://pub.isar-community.dev/
+  latlong2: ^0.9.1
   lucide_icons_flutter: ^3.0.3
+  mutex: ^3.1.0
   path_provider: ^2.1.5
   provider: ^6.1.5
+  split_view: ^3.2.1
 
 dev_dependencies:
   flutter_test:

@@ -5,14 +5,18 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:only_timetable/extensions/shortcut.dart';
 import 'package:only_timetable/extensions/theme.dart';
 import 'package:only_timetable/models/route.dart';
+import 'package:only_timetable/screens/route_detail.dart';
+import 'package:only_timetable/services/plugin/base_plugin.dart';
 
 class RoutesList extends StatelessWidget {
   final List<Route> routes;
+  final BasePlugin plugin;
   final bool showContainer;
 
   const RoutesList({
     super.key,
     required this.routes,
+    required this.plugin,
     this.showContainer = true,
   });
 
@@ -52,8 +56,8 @@ class RoutesList extends StatelessWidget {
               itemBuilder: (context, index) {
                 final route = routes[index];
 
-                final dest = route.dest ?? route.stops.lastOrNull;
-                final orig = route.orig ?? route.stops.firstOrNull;
+                final String? dest = route.dest ?? route.stopsOrder.lastOrNull;
+                final String? orig = route.orig ?? route.stopsOrder.firstOrNull;
 
                 final destName = route.stops
                     .firstWhereOrNull((stop) => stop.id == dest)
@@ -65,7 +69,12 @@ class RoutesList extends StatelessWidget {
                 return CupertinoButton(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   minimumSize: Size.zero,
-                  onPressed: () {},
+                  onPressed: () => context.push(
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          RouteDetailScreen(plugin: plugin, route: route),
+                    ),
+                  ),
                   child: Row(
                     spacing: 20,
                     children: [

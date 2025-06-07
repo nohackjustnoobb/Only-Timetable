@@ -43,19 +43,22 @@ class Route {
   /// Links to the stops associated with this route.
   final stops = IsarLinks<Stop>();
 
+  /// A list of stop IDs in the order they appear on the route.
+  final List<String> stopsOrder;
+
   // --------- Constructor ---------
 
   Route({
     required this.id,
+    this.stopsOrder = const [],
     this.displayId,
     this.source,
     this.name,
     this.dest,
     this.orig,
     this.meta,
-  }) : _stopsId = [];
+  });
 
-  late final List<String> _stopsId;
   Route.fromJson(Map<String, dynamic> json)
     : id = json['id'] as String,
       displayId = json['displayId'] as String?,
@@ -64,7 +67,7 @@ class Route {
       dest = json['dest'] as String?,
       orig = json['orig'] as String?,
       meta = json['meta'] as String?,
-      _stopsId =
+      stopsOrder =
           (json['stops'] as List<dynamic>?)
               ?.map((e) => e.toString())
               .toList() ??
@@ -72,9 +75,9 @@ class Route {
 
   // --------- Helper Methods ---------
   Future<void> fetchStops(Isar isar) async {
-    if (_stopsId.isEmpty) return;
+    if (stopsOrder.isEmpty) return;
 
-    final stopsLinks = await isar.stops.getAllById(_stopsId);
+    final stopsLinks = await isar.stops.getAllById(stopsOrder);
 
     stops.addAll(stopsLinks.whereType<Stop>().toList());
   }
@@ -88,7 +91,7 @@ class Route {
       'dest': dest,
       'orig': orig,
       'meta': meta,
-      'stops': stops.map((stop) => stop.id).toList(),
+      'stops': stopsOrder,
     };
   }
 }

@@ -32,6 +32,8 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               AppBar(
+                scrolledUnderElevation: 0,
+                backgroundColor: context.colorScheme.surface,
                 automaticallyImplyLeading: false,
                 title: Padding(
                   padding: const EdgeInsets.only(left: 6),

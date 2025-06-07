@@ -3,51 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:only_timetable/extensions/shortcut.dart';
-import 'package:only_timetable/extensions/theme.dart';
 import 'package:only_timetable/screens/settings/plugin.dart';
-
-class SettingsGroup extends StatelessWidget {
-  final String title;
-  final Widget? child;
-  final Widget? action;
-
-  const SettingsGroup({
-    super.key,
-    required this.title,
-    this.child,
-    this.action,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10, bottom: 5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                title,
-                style: context.textTheme.titleSmall?.copyWith(
-                  color: context.colorScheme.primary,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              if (action != null) action!,
-            ],
-          ),
-        ),
-        Container(
-          decoration: context.theme.boxDecoration,
-          padding: EdgeInsets.all(20),
-          child: child,
-        ),
-      ],
-    );
-  }
-}
+import 'package:only_timetable/services/settings_service.dart';
+import 'package:only_timetable/widgets/settings_group.dart';
+import 'package:only_timetable/widgets/settings_options.dart';
+import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -56,6 +16,8 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: 0,
+        backgroundColor: context.colorScheme.surface,
         title: Text(context.l10n.settings),
         leading: CupertinoButton(
           child: Icon(
@@ -71,6 +33,29 @@ class SettingsScreen extends StatelessWidget {
         child: Column(
           spacing: 20,
           children: [
+            SettingsGroup(
+              title: context.l10n.general,
+              child: Consumer<SettingsService>(
+                builder: (context, settingsService, _) {
+                  return Column(
+                    children: [
+                      ToggleOption(
+                        title: context.l10n.alwaysUseOSM,
+                        value: settingsService.getSync<bool>(
+                          SettingsKey.alwaysUseOSM,
+                        ),
+                        onChanged: (value) async {
+                          await settingsService.set<bool>(
+                            SettingsKey.alwaysUseOSM,
+                            value,
+                          );
+                        },
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
             PluginGroup(),
             SettingsGroup(title: context.l10n.about),
           ],
