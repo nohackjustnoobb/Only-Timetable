@@ -47,7 +47,7 @@ class Stop {
       meta = json['meta'] as String?;
 
   // --------- Helper Methods ---------
-  Future<dynamic> toJson() async {
+  dynamic toJson() {
     return {'id': id, 'name': name, 'lat': lat, 'long': long, 'meta': meta};
   }
 }

@@ -142,10 +142,11 @@ class JsPlugin extends BasePlugin {
       throw Exception('Controller is not initialized');
     }
 
-    final result = await controller!.callAsyncJavaScript(
-      functionBody:
-          "$_injectHandler $_getEtaScript return await $_getEtaFunctionName(${route.toJson()},${stop.toJson()});",
-    );
+    final encodedRoute = jsonEncode(route.toJson());
+    final encodedStop = jsonEncode(stop.toJson());
+    final body =
+        "$_injectHandler $_getEtaScript return await $_getEtaFunctionName($encodedRoute,$encodedStop);";
+    final result = await controller!.callAsyncJavaScript(functionBody: body);
 
     if (result == null) {
       throw Exception('Failed to get ETA: result is null');
@@ -155,8 +156,9 @@ class JsPlugin extends BasePlugin {
       throw Exception('Error getting ETA: ${result.error}');
     }
 
-    final parsed = jsonDecode(result.value) as List<dynamic>;
-    return parsed.map((e) => Eta.fromJson(e as Map<String, dynamic>)).toList();
+    return (result.value as List<dynamic>)
+        .map((e) => Eta.fromJson(Map<String, dynamic>.from(e)))
+        .toList();
   }
 
   Map<String, dynamic> toJson() => {

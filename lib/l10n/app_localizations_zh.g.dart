@@ -123,6 +123,23 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get failedToLoadRoute => 'Failed to load route.';
+
+  @override
+  String mins(int minutes) {
+    String _temp0 = intl.Intl.pluralLogic(
+      minutes,
+      locale: localeName,
+      other: '$minutes mins',
+      one: '1 min',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get noEtaAvailable => 'No ETA available';
+
+  @override
+  String get loadingEta => 'Loading ETA...';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).

@@ -9,11 +9,13 @@ import 'package:flutter/material.dart' hide Route;
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:mutex/mutex.dart';
 import 'package:only_timetable/extensions/shortcut.dart';
 import 'package:only_timetable/extensions/theme.dart';
 import 'package:only_timetable/globals.dart';
 import 'package:only_timetable/models/route.dart';
 import 'package:only_timetable/models/stop.dart';
+import 'package:only_timetable/services/eta_service.dart';
 import 'package:only_timetable/services/plugin/base_plugin.dart';
 import 'package:only_timetable/services/settings_service.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +31,6 @@ class RouteMap extends StatefulWidget {
   final Stop destStop;
   final Function(Stop) onStopTapped;
   final Stop? selectedStop;
-  final List<LatLng>? road;
 
   late final List<Stop> _stopsList;
 
@@ -40,7 +41,6 @@ class RouteMap extends StatefulWidget {
     required this.destStop,
     required this.onStopTapped,
     this.selectedStop,
-    this.road,
   }) {
     _stopsList = route.stops
         .where((stop) => stop.lat != null && stop.long != null)
@@ -63,6 +63,8 @@ class _RouteMapState extends State<RouteMap> {
   }
 
   void _toStop(Stop stop) {
+    if (stop.lat == null || stop.long == null) return;
+
     if (_controller is MapController) {
       (_controller as MapController).move(LatLng(stop.lat!, stop.long!), 15);
     } else if (_controller is AppleMapController) {
@@ -107,23 +109,28 @@ class _RouteMapState extends State<RouteMap> {
                       urlTemplate:
                           'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                     ),
-                    if (widget.road != null)
-                      PolylineLayer(
-                        polylines: [
-                          Polyline(
-                            points: widget.road!,
-                            strokeWidth: 5,
-                            color: Colors.red,
-                          ),
-                        ],
-                      ),
+                    PolylineLayer(
+                      polylines: [
+                        Polyline(
+                          points: widget._stopsList
+                              .map((stop) => LatLng(stop.lat!, stop.long!))
+                              .toList(),
+                          strokeWidth: 5,
+                          color: Colors.red,
+                        ),
+                      ],
+                    ),
                     MarkerLayer(
                       markers: widget._stopsList
                           .map(
                             (stop) => Marker(
                               point: LatLng(stop.lat!, stop.long!),
                               child: GestureDetector(
-                                onTap: () => widget.onStopTapped(stop),
+                                onTap: () {
+                                  _toStop(stop);
+
+                                  widget.onStopTapped(stop);
+                                },
                                 child: Icon(
                                   Icons.location_on,
                                   shadows: [
@@ -160,34 +167,42 @@ class _RouteMapState extends State<RouteMap> {
                       .map(
                         (stop) => Annotation(
                           // FIXME the color of the icon is not changing
-                          icon: BitmapDescriptor.defaultAnnotationWithHue(
-                            widget.selectedStop == null ||
-                                    widget._stopsList.indexOf(
-                                          widget.selectedStop!,
-                                        ) <=
-                                        widget._stopsList.indexOf(stop)
-                                ? BitmapDescriptor.hueRed
-                                : BitmapDescriptor.hueGreen,
-                          ),
+                          // icon: BitmapDescriptor.defaultAnnotationWithHue(
+                          //   widget.selectedStop == null ||
+                          //           widget._stopsList.indexOf(
+                          //                 widget.selectedStop!,
+                          //               ) <=
+                          //               widget._stopsList.indexOf(stop)
+                          //       ? BitmapDescriptor.hueRed
+                          //       : BitmapDescriptor.hueGreen,
+                          // ),
                           annotationId: AnnotationId(stop.id),
                           position: LatLng(
                             stop.lat!,
                             stop.long!,
                           ).toAppleMapLatLng(),
-                          onTap: () => widget.onStopTapped(stop),
+                          onTap: () {
+                            _toStop(stop);
+
+                            widget.onStopTapped(stop);
+                          },
                         ),
                       )
                       .toSet(),
                   polylines: {
-                    if (widget.road != null)
-                      amf.Polyline(
-                        polylineId: PolylineId(widget.route.id),
-                        points: widget.road!
-                            .map((e) => e.toAppleMapLatLng())
-                            .toList(),
-                        color: Colors.red,
-                        width: 5,
-                      ),
+                    amf.Polyline(
+                      polylineId: PolylineId(widget.route.id),
+                      points: widget._stopsList
+                          .map(
+                            (stop) => LatLng(
+                              stop.lat!,
+                              stop.long!,
+                            ).toAppleMapLatLng(),
+                          )
+                          .toList(),
+                      color: Colors.red,
+                      width: 5,
+                    ),
                   },
                 );
         },
@@ -211,14 +226,17 @@ class RouteDetailScreen extends StatefulWidget {
 }
 
 class _RouteDetailScreenState extends State<RouteDetailScreen> {
+  final ScrollController _scrollController = ScrollController();
+
   Stop? _destStop;
   Stop? _origStop;
   Stop? _selectedStop;
-  List<LatLng>? _road;
 
   late final List<Stop> _sortedStops;
 
-  late final ScrollController _scrollController;
+  final _subscriptionLock = Mutex();
+  late final EtaService _etaService;
+  Future<void> Function()? _unsubscribeToEta;
 
   @override
   void initState() {
@@ -246,18 +264,30 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
     // If the destination stop is not found, show an error and return
     if (_destStop == null || _origStop == null) return;
 
-    _scrollController = ScrollController();
-
-    _road = _sortedStops
-        .where((stop) => stop.lat != null && stop.long != null)
-        .map((stop) => LatLng(stop.lat!, stop.long!))
-        .toList();
+    _etaService = Provider.of<EtaService>(context, listen: false);
   }
 
-  void setSelectedStop(Stop stop) {
+  void setSelectedStop(Stop stop) async {
     setState(() => _selectedStop = stop);
 
-    // TODO subscribe to the eta
+    await _subscriptionLock.acquire();
+
+    if (_unsubscribeToEta != null) await _unsubscribeToEta!();
+
+    _unsubscribeToEta = await _etaService.subscribe(
+      widget.plugin,
+      widget.route,
+      stop,
+    );
+
+    _subscriptionLock.release();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    if (_unsubscribeToEta != null) _unsubscribeToEta!();
   }
 
   @override
@@ -352,7 +382,6 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
                   destStop: _destStop!,
                   onStopTapped: setSelectedStop,
                   selectedStop: _selectedStop,
-                  road: _road,
                 ),
               ),
               Padding(
@@ -368,7 +397,7 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
                         spacing: 20,
                         children: [
                           SizedBox(
-                            width: 30,
+                            width: 25,
                             child: Center(
                               child: Container(
                                 width: 5,
@@ -421,33 +450,41 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
                                 ),
                                 Align(
                                   alignment: Alignment.center,
-                                  child: Container(
-                                    height: 30,
-                                    width: 30,
-                                    decoration: BoxDecoration(
-                                      color: isSelected
-                                          ? context.colorScheme.primary
-                                          : context
-                                                .colorScheme
-                                                .surfaceContainer,
-                                      border: BoxBorder.all(
+                                  child: CupertinoButton(
+                                    padding: EdgeInsets.zero,
+                                    minimumSize: Size.zero,
+                                    onPressed: () => setSelectedStop(stop),
+                                    child: Container(
+                                      height: 25,
+                                      width: 25,
+                                      decoration: BoxDecoration(
                                         color: isSelected
-                                            ? Colors.transparent
-                                            : context.colorScheme.primary,
-                                        width: 3,
-                                      ),
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        (index + 1).toString(),
-                                        style: TextStyle(
+                                            ? context.colorScheme.primary
+                                            : context
+                                                  .colorScheme
+                                                  .surfaceContainer,
+                                        border: BoxBorder.all(
                                           color: isSelected
-                                              ? Colors.white
+                                              ? Colors.transparent
                                               : context.colorScheme.primary,
-                                          fontWeight: FontWeight.bold,
+                                          width: 3,
                                         ),
-                                        overflow: TextOverflow.visible,
+                                        borderRadius: BorderRadius.circular(
+                                          12.5,
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          (index + 1).toString(),
+                                          style: TextStyle(
+                                            color: isSelected
+                                                ? Colors.white
+                                                : context.colorScheme.primary,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                          ),
+                                          overflow: TextOverflow.visible,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -489,12 +526,82 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
                                     ),
                                     if (isSelected)
                                       Padding(
-                                        padding: const EdgeInsets.only(top: 10),
+                                        padding: const EdgeInsets.only(top: 5),
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Container(),
+                                            Consumer<EtaService>(
+                                              builder: (context, etaService, child) {
+                                                final etas = etaService.getEta(
+                                                  widget.plugin,
+                                                  widget.route,
+                                                  stop,
+                                                );
+
+                                                final now = DateTime.now();
+
+                                                return etas == null ||
+                                                        etas.isEmpty
+                                                    ? Text(
+                                                        etas == null
+                                                            ? context
+                                                                  .l10n
+                                                                  .loadingEta
+                                                            : context
+                                                                  .l10n
+                                                                  .noEtaAvailable,
+                                                        style: TextStyle(
+                                                          color: context
+                                                              .textColor
+                                                              ?.withValues(
+                                                                alpha: .5,
+                                                              ),
+                                                        ),
+                                                      )
+                                                    : Column(
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: etas
+                                                            .map(
+                                                              (eta) => Row(
+                                                                spacing: 5,
+                                                                children: [
+                                                                  Icon(
+                                                                    eta.isRealTime
+                                                                        ? LucideIcons
+                                                                              .clock
+                                                                        : LucideIcons
+                                                                              .calendar,
+                                                                    color: context
+                                                                        .textColor
+                                                                        ?.withValues(
+                                                                          alpha:
+                                                                              .5,
+                                                                        ),
+                                                                    size: 16,
+                                                                  ),
+                                                                  Text(
+                                                                    context.l10n.mins(
+                                                                      DateTime.fromMillisecondsSinceEpoch(
+                                                                            eta.arrivalTime,
+                                                                          )
+                                                                          .difference(
+                                                                            now,
+                                                                          )
+                                                                          .inMinutes,
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            )
+                                                            .toList(),
+                                                      );
+                                              },
+                                            ),
                                             CupertinoButton(
                                               padding: EdgeInsets.zero,
                                               minimumSize: Size.zero,
@@ -502,7 +609,6 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
                                               child: Icon(
                                                 LucideIcons.bookmark200,
                                                 color: context.textColor,
-                                                size: 25,
                                               ),
                                             ),
                                           ],

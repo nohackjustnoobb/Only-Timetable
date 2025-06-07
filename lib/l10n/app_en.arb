@@ -50,5 +50,15 @@
   "alwaysUseOSM": "Always use OpenStreetMap",
   "routeHasNoStops": "This route has no stops.",
   "routeHasNoValidStops": "This route has no valid stops.",
-  "failedToLoadRoute": "Failed to load route."
+  "failedToLoadRoute": "Failed to load route.",
+  "mins": "{minutes, plural, one {1 min} other {{minutes} mins}}",
+  "@mins": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "noEtaAvailable": "No ETA available",
+  "loadingEta": "Loading ETA..."
 }

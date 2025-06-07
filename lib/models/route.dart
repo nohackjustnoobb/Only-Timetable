@@ -82,7 +82,7 @@ class Route {
     stops.addAll(stopsLinks.whereType<Stop>().toList());
   }
 
-  Future<dynamic> toJson() async {
+  dynamic toJson() {
     return {
       'id': id,
       'displayId': displayId,

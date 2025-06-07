@@ -9,7 +9,7 @@ import 'package:only_timetable/services/plugin/base_plugin.dart';
 // ignore: constant_identifier_names
 const ETA_UPDATE_INTERVAL = Duration(seconds: 30);
 // ignore: constant_identifier_names
-const ETA_CHECK_INTERVAL = Duration(seconds: 5);
+const ETA_MINIMUM_UPDATE_INTERVAL = Duration(seconds: 5);
 // ignore: constant_identifier_names
 const MAX_CACHED_ETA = 100;
 
@@ -24,9 +24,10 @@ class _EtaSubscription {
 
   // To count the number of active subscriptions for this ETA.
   final Mutex _counterLock = Mutex();
-  int counter = 0;
+  int counter = 1;
 
   DateTime? lastUpdate;
+  DateTime? lastTryUpdate;
 
   Future<void> incrementCounter() async {
     await _counterLock.acquire();
@@ -42,9 +43,11 @@ class _EtaSubscription {
   }
 
   Future<bool> update() async {
+    lastTryUpdate = DateTime.now();
+
     try {
       etas = await plugin.getEta(route, stop);
-      lastUpdate = DateTime.now();
+      lastUpdate = lastTryUpdate;
 
       return true;
     } catch (e) {
@@ -73,7 +76,9 @@ class EtaService extends ChangeNotifier {
     if (_etaLock.isLocked) return;
     await _etaLock.acquire();
 
-    while (_etaSubscription.isNotEmpty) {
+    while (_etaSubscription.values
+        .where((sub) => sub.counter != 0)
+        .isNotEmpty) {
       final now = DateTime.now();
 
       // Remove subscriptions that have no active counters
@@ -83,25 +88,33 @@ class EtaService extends ChangeNotifier {
         );
       }
 
-      for (final subscription in _etaSubscription.values) {
+      for (final sub in _etaSubscription.values) {
         // Skip subscriptions that have no active counters
-        if (subscription.counter == 0) continue;
+        if (sub.counter == 0) continue;
 
         // Check if the ETA data needs to be updated
-        if (subscription.lastUpdate == null ||
-            // If the last update was more than ETA_UPDATE_INTERVAL ago
-            now.difference(subscription.lastUpdate!) > ETA_UPDATE_INTERVAL ||
-            // If the latest ETA is older than the current time
-            (subscription.etas.isNotEmpty &&
-                subscription.etas.first.arrivalTime >
-                    now.millisecondsSinceEpoch)) {
-          subscription.update().then((updated) {
+        final shouldUpdate =
+            // Never updated before
+            sub.lastTryUpdate == null ||
+            // Never successfully updated, and last try was a while ago
+            (sub.lastUpdate == null &&
+                now.difference(sub.lastTryUpdate!) >
+                    ETA_MINIMUM_UPDATE_INTERVAL) ||
+            // Last successful update was a while ago
+            (sub.lastUpdate != null &&
+                now.difference(sub.lastUpdate!) > ETA_UPDATE_INTERVAL) ||
+            // The latest ETA is already in the past
+            (sub.etas.isNotEmpty &&
+                now.millisecondsSinceEpoch > sub.etas.first.arrivalTime);
+
+        if (shouldUpdate) {
+          sub.update().then((updated) {
             if (updated) notifyListeners();
           });
         }
       }
 
-      await Future.delayed(ETA_CHECK_INTERVAL);
+      await Future.delayed(Duration(seconds: 1));
     }
 
     _etaLock.release();
@@ -134,16 +147,16 @@ class EtaService extends ChangeNotifier {
     return unsubcribe;
   }
 
-  /// Retrieves a list of estimated arrival times ([Eta]) for a given [plugin], [route], and [stop].
+  /// Retrieves a list of estimated time of arrivals (ETA).
   ///
-  /// Requires calling [subscribe] before using this method.
-  ///
-  /// Returns a list of [Eta] objects representing the estimated arrival times.
-  List<Eta> getEta(BasePlugin plugin, Route route, Stop stop) {
+  /// This method returns a list of [Eta] objects, which represent the
+  /// estimated times of arrival for a specific service or location.
+  List<Eta>? getEta(BasePlugin plugin, Route route, Stop stop) {
     final id = _EtaSubscription.getId(plugin, route, stop);
 
-    if (!_etaSubscription.containsKey(id)) {
-      throw Exception("Please subscribe to the ETA first.");
+    if (!_etaSubscription.containsKey(id) ||
+        _etaSubscription[id]!.lastUpdate == null) {
+      return null;
     }
 
     return _etaSubscription[id]!.etas;

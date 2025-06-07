@@ -314,6 +314,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to load route.'**
   String get failedToLoadRoute;
+
+  /// No description provided for @mins.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes, plural, one {1 min} other {{minutes} mins}}'**
+  String mins(int minutes);
+
+  /// No description provided for @noEtaAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'No ETA available'**
+  String get noEtaAvailable;
+
+  /// No description provided for @loadingEta.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading ETA...'**
+  String get loadingEta;
 }
 
 class _AppLocalizationsDelegate

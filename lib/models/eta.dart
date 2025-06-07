@@ -6,5 +6,6 @@ class Eta {
 
   Eta.fromJson(Map<String, dynamic> json)
     : isRealTime = json['isRealTime'] as bool,
-      arrivalTime = json['arrivalTime'] as int;
+      // Standardize arrivalTime to an integer
+      arrivalTime = num.parse(json["arrivalTime"].toString()).toInt();
 }

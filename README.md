@@ -5,7 +5,7 @@ Only Timetable is a flexible, plugin-based timetable application for bus and oth
 ## Features
 
 - **Plugin-based architecture:** Easily extend support to new transport providers or regions.
-- **No built-in routes or ETAs:** All data is provided by plugins, making the app lightweight and adaptable.
+- **No built-in routes or ETAs:** All data is provided by plugins, making the app minimal and adaptable.
 - **Supports multiple transport types:** Not limited to buses—can be extended for trains, ferries, etc.
 
 ## Getting Started
