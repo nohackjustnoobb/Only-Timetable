@@ -118,7 +118,7 @@ class PluginInfoModal extends StatelessWidget {
                       [context.l10n.name, plugin.name],
                       [context.l10n.version, plugin.version],
                       [context.l10n.author, plugin.author],
-                      [context.l10n.repositoryUrl, plugin.repositoryUrl],
+                      [context.l10n.repository, plugin.repositoryUrl],
                       [context.l10n.description, plugin.description],
                     ]
                     .where((info) => info[1] != null)

@@ -65,8 +65,10 @@ class _HomeScreenState extends State<HomeScreen> {
     if (_selected != "nearby") {
       final bookmark = _bookmarkService.getBookmark(_selected);
       if (bookmark == null) {
-        setState(() => _selected = "default");
-        return;
+        _selected = "default";
+        _lock.release();
+
+        return _bookmarkServiceListener();
       }
 
       for (final bookmarked in bookmark.bookmarkeds) {

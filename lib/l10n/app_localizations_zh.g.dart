@@ -77,7 +77,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get version => 'Version';
 
   @override
-  String get repositoryUrl => 'Repository URL';
+  String get repository => 'Repository';
 
   @override
   String get description => 'Description';
@@ -172,6 +172,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get min => 'min(s)';
+
+  @override
+  String get license => 'License';
+
+  @override
+  String get openInBrowser => 'Open in Browser';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).

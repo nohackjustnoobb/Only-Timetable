@@ -225,11 +225,11 @@ abstract class AppLocalizations {
   /// **'Version'**
   String get version;
 
-  /// No description provided for @repositoryUrl.
+  /// No description provided for @repository.
   ///
   /// In en, this message translates to:
-  /// **'Repository URL'**
-  String get repositoryUrl;
+  /// **'Repository'**
+  String get repository;
 
   /// No description provided for @description.
   ///
@@ -392,6 +392,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'min(s)'**
   String get min;
+
+  /// No description provided for @license.
+  ///
+  /// In en, this message translates to:
+  /// **'License'**
+  String get license;
+
+  /// No description provided for @openInBrowser.
+  ///
+  /// In en, this message translates to:
+  /// **'Open in Browser'**
+  String get openInBrowser;
 }
 
 class _AppLocalizationsDelegate

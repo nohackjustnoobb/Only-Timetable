@@ -21,6 +21,7 @@ import 'package:only_timetable/services/plugin/base_plugin.dart';
 import 'package:only_timetable/services/settings_service.dart';
 import 'package:only_timetable/widgets/add_bookmark_modal.dart';
 import 'package:provider/provider.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:split_view/split_view.dart';
 
 extension AppleMapLatLng on LatLng {
@@ -213,7 +214,7 @@ class _RouteMapState extends State<RouteMap> {
   }
 }
 
-class StopsList extends StatelessWidget {
+class StopsList extends StatefulWidget {
   final BasePlugin plugin;
   final Route route;
   final List<Stop> sortedStops;
@@ -230,11 +231,40 @@ class StopsList extends StatelessWidget {
   });
 
   @override
+  State<StopsList> createState() => _StopsListState();
+}
+
+class _StopsListState extends State<StopsList> {
+  final _controller = AutoScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.selectedStop != null) _toStop(widget.selectedStop!);
+  }
+
+  @override
+  void didUpdateWidget(covariant StopsList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (widget.selectedStop != null) _toStop(widget.selectedStop!);
+  }
+
+  void _toStop(Stop stop) {
+    final index = widget.sortedStops.indexWhere(
+      (stop) => stop.id == widget.selectedStop!.id,
+    );
+    _controller.scrollToIndex(index, preferPosition: AutoScrollPosition.middle);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       decoration: context.theme.boxDecoration,
       child: ListView.separated(
+        controller: _controller,
         padding: EdgeInsets.symmetric(vertical: 20),
         separatorBuilder: (context, index) => IntrinsicHeight(
           child: Row(
@@ -261,196 +291,211 @@ class StopsList extends StatelessWidget {
             ],
           ),
         ),
-        itemCount: sortedStops.length,
+        itemCount: widget.sortedStops.length,
         itemBuilder: (context, index) {
-          final stop = sortedStops[index];
-          final isSelected = selectedStop?.id == stop.id;
+          final stop = widget.sortedStops[index];
+          final isSelected = widget.selectedStop?.id == stop.id;
 
-          return IntrinsicHeight(
-            child: Row(
-              spacing: 20,
-              children: [
-                Stack(
-                  alignment: AlignmentDirectional.topCenter,
-                  children: [
-                    Align(
-                      alignment: index == 0
-                          ? Alignment.bottomCenter
-                          : Alignment.topCenter,
-                      child: FractionallySizedBox(
-                        heightFactor:
-                            index == 0 || index == sortedStops.length - 1
-                            ? .5
-                            : 1,
-                        child: Container(
-                          width: 5,
-                          color: context.colorScheme.primary.withValues(
-                            alpha: .5,
+          return AutoScrollTag(
+            key: ValueKey(stop.id),
+            controller: _controller,
+            index: index,
+            child: IntrinsicHeight(
+              child: Row(
+                spacing: 20,
+                children: [
+                  Stack(
+                    alignment: AlignmentDirectional.topCenter,
+                    children: [
+                      Align(
+                        alignment: index == 0
+                            ? Alignment.bottomCenter
+                            : Alignment.topCenter,
+                        child: FractionallySizedBox(
+                          heightFactor:
+                              index == 0 ||
+                                  index == widget.sortedStops.length - 1
+                              ? .5
+                              : 1,
+                          child: Container(
+                            width: 5,
+                            color: context.colorScheme.primary.withValues(
+                              alpha: .5,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    Align(
-                      alignment: Alignment.center,
-                      child: GestureDetector(
-                        onTap: () => setSelectedStop(stop),
-                        child: Container(
-                          height: 25,
-                          width: 25,
-                          decoration: BoxDecoration(
-                            color: isSelected
-                                ? context.colorScheme.primary
-                                : context.colorScheme.surfaceContainer,
-                            border: BoxBorder.all(
+                      Align(
+                        alignment: Alignment.center,
+                        child: GestureDetector(
+                          onTap: () => widget.setSelectedStop(stop),
+                          child: Container(
+                            height: 25,
+                            width: 25,
+                            decoration: BoxDecoration(
                               color: isSelected
-                                  ? Colors.transparent
-                                  : context.colorScheme.primary,
-                              width: 3,
-                            ),
-                            borderRadius: BorderRadius.circular(12.5),
-                          ),
-                          child: Center(
-                            child: Text(
-                              (index + 1).toString(),
-                              style: TextStyle(
+                                  ? context.colorScheme.primary
+                                  : context.colorScheme.surfaceContainer,
+                              border: BoxBorder.all(
                                 color: isSelected
-                                    ? Colors.white
+                                    ? Colors.transparent
                                     : context.colorScheme.primary,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 12,
+                                width: 3,
                               ),
-                              overflow: TextOverflow.visible,
+                              borderRadius: BorderRadius.circular(12.5),
+                            ),
+                            child: Center(
+                              child: Text(
+                                (index + 1).toString(),
+                                style: TextStyle(
+                                  color: isSelected
+                                      ? Colors.white
+                                      : context.colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                ),
+                                overflow: TextOverflow.visible,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          width: double.infinity,
-                          child: CupertinoButton(
-                            padding: EdgeInsets.zero,
-                            minimumSize: Size.zero,
-                            alignment: Alignment.centerLeft,
-                            onPressed: () => setSelectedStop(stop),
-                            child: Text(
-                              context.getLocalizedString(stop.name ?? stop.id),
-                              style: context.textTheme.titleMedium?.copyWith(
-                                color: isSelected
-                                    ? context.colorScheme.primary
-                                    : null,
-                                fontWeight: isSelected
-                                    ? FontWeight.normal
-                                    : null,
+                    ],
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Column(
+                        children: [
+                          SizedBox(
+                            width: double.infinity,
+                            child: CupertinoButton(
+                              padding: EdgeInsets.zero,
+                              minimumSize: Size.zero,
+                              alignment: Alignment.centerLeft,
+                              onPressed: () => widget.setSelectedStop(stop),
+                              child: Text(
+                                context.getLocalizedString(
+                                  stop.name ?? stop.id,
+                                ),
+                                style: context.textTheme.titleMedium?.copyWith(
+                                  color: isSelected
+                                      ? context.colorScheme.primary
+                                      : null,
+                                  fontWeight: isSelected
+                                      ? FontWeight.normal
+                                      : null,
+                                ),
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                        ),
-                        if (isSelected)
-                          Padding(
-                            padding: const EdgeInsets.only(top: 5),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Consumer<EtaService>(
-                                  builder: (context, etaService, child) {
-                                    final etas = etaService.getEta(
-                                      plugin,
-                                      route,
-                                      stop,
-                                    );
+                          if (isSelected)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Consumer<EtaService>(
+                                    builder: (context, etaService, child) {
+                                      final etas = etaService.getEta(
+                                        widget.plugin,
+                                        widget.route,
+                                        stop,
+                                      );
 
-                                    final now = DateTime.now();
+                                      final now = DateTime.now();
 
-                                    return etas == null || etas.isEmpty
-                                        ? Text(
-                                            etas == null
-                                                ? context.l10n.loadingEta
-                                                : context.l10n.noEtaAvailable,
-                                            style: TextStyle(
-                                              color: context.textColor
-                                                  ?.withValues(alpha: .5),
-                                            ),
-                                          )
-                                        : Column(
-                                            spacing: 5,
-                                            mainAxisSize: MainAxisSize.min,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: etas
-                                                .map(
-                                                  (eta) => Row(
-                                                    spacing: 5,
-                                                    children: [
-                                                      Icon(
-                                                        eta.isRealTime
-                                                            ? LucideIcons.clock
-                                                            : LucideIcons
-                                                                  .calendar,
-                                                        color: context.textColor
-                                                            ?.withValues(
-                                                              alpha: .5,
-                                                            ),
-                                                        size: 16,
-                                                      ),
-                                                      Text(
-                                                        context.l10n.mins(
-                                                          DateTime.fromMillisecondsSinceEpoch(
-                                                                eta.arrivalTime,
-                                                              )
-                                                              .difference(now)
-                                                              .inMinutes,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                )
-                                                .toList(),
-                                          );
-                                  },
-                                ),
-                                Consumer<BookmarkService>(
-                                  builder: (context, bookmarkService, child) =>
-                                      CupertinoButton(
-                                        padding: EdgeInsets.zero,
-                                        minimumSize: Size.zero,
-                                        onPressed: () => showModalBottomSheet(
-                                          context: context,
-                                          builder: (context) =>
-                                              AddBookmarkModal(
-                                                plugin: plugin,
-                                                route: route,
-                                                stop: stop,
+                                      return etas == null || etas.isEmpty
+                                          ? Text(
+                                              etas == null
+                                                  ? context.l10n.loadingEta
+                                                  : context.l10n.noEtaAvailable,
+                                              style: TextStyle(
+                                                color: context.textColor
+                                                    ?.withValues(alpha: .5),
                                               ),
+                                            )
+                                          : Column(
+                                              spacing: 5,
+                                              mainAxisSize: MainAxisSize.min,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: etas
+                                                  .map(
+                                                    (eta) => Row(
+                                                      spacing: 5,
+                                                      children: [
+                                                        Icon(
+                                                          eta.isRealTime
+                                                              ? LucideIcons
+                                                                    .clock
+                                                              : LucideIcons
+                                                                    .calendar,
+                                                          color: context
+                                                              .textColor
+                                                              ?.withValues(
+                                                                alpha: .5,
+                                                              ),
+                                                          size: 16,
+                                                        ),
+                                                        Text(
+                                                          context.l10n.mins(
+                                                            DateTime.fromMillisecondsSinceEpoch(
+                                                                  eta.arrivalTime,
+                                                                )
+                                                                .difference(now)
+                                                                .inMinutes,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  )
+                                                  .toList(),
+                                            );
+                                    },
+                                  ),
+                                  Consumer<BookmarkService>(
+                                    builder:
+                                        (
+                                          context,
+                                          bookmarkService,
+                                          child,
+                                        ) => CupertinoButton(
+                                          padding: EdgeInsets.zero,
+                                          minimumSize: Size.zero,
+                                          onPressed: () => showModalBottomSheet(
+                                            context: context,
+                                            builder: (context) =>
+                                                AddBookmarkModal(
+                                                  plugin: widget.plugin,
+                                                  route: widget.route,
+                                                  stop: stop,
+                                                ),
+                                          ),
+                                          child: Icon(
+                                            bookmarkService.isBookmarked(
+                                                  plugin: widget.plugin,
+                                                  route: widget.route,
+                                                  stop: stop,
+                                                )
+                                                ? LucideIcons.bookmarkCheck200
+                                                : LucideIcons.bookmark200,
+                                            color: context.textColor,
+                                          ),
                                         ),
-                                        child: Icon(
-                                          bookmarkService.isBookmarked(
-                                                plugin: plugin,
-                                                route: route,
-                                                stop: stop,
-                                              )
-                                              ? LucideIcons.bookmarkCheck200
-                                              : LucideIcons.bookmark200,
-                                          color: context.textColor,
-                                        ),
-                                      ),
-                                ),
-                              ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         },

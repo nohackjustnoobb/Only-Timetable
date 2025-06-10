@@ -6,6 +6,7 @@ import 'package:only_timetable/models/route.dart';
 import 'package:only_timetable/models/stop.dart';
 import 'package:only_timetable/services/bookmark_service.dart';
 import 'package:only_timetable/services/plugin/base_plugin.dart';
+import 'package:only_timetable/widgets/create_bookmark_modal.dart';
 import 'package:only_timetable/widgets/modal_base.dart';
 import 'package:provider/provider.dart';
 
@@ -71,7 +72,7 @@ class AddBookmarkModal extends StatelessWidget {
                           allBookmarks[index].name == "default"
                               ? context.l10n.defaultBookmark
                               : allBookmarks[index].name,
-                          style: context.textTheme.bodyMedium,
+                          style: context.textTheme.titleMedium,
                         ),
                       ),
                       Icon(
@@ -92,6 +93,31 @@ class AddBookmarkModal extends StatelessWidget {
               ),
             );
           },
+        ),
+        CupertinoButton(
+          padding: const EdgeInsets.only(bottom: 10),
+          minimumSize: Size.zero,
+          onPressed: () => showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            builder: (BuildContext context) => CreateBookmarkModal(),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            spacing: 10,
+            children: [
+              Icon(
+                LucideIcons.plus200,
+                color: context.textColor?.withValues(alpha: .5),
+              ),
+              Text(
+                context.l10n.createBookmark,
+                style: context.textTheme.titleMedium?.copyWith(
+                  color: context.textColor?.withValues(alpha: .5),
+                ),
+              ),
+            ],
+          ),
         ),
         CupertinoButton.filled(
           borderRadius: BorderRadius.all(Radius.circular(10)),

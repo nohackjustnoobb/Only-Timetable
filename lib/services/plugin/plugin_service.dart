@@ -42,16 +42,40 @@ class PluginService extends ChangeNotifier {
       final pluginId = entry.key;
       final isar = entry.value;
 
-      results[pluginId] = await isar.routes
+      final exactMatches = await isar.routes
           .filter()
-          .nameContains(query, caseSensitive: false)
+          .nameEqualTo(query, caseSensitive: false)
           .or()
-          .idContains(query, caseSensitive: false)
+          .idEqualTo(query, caseSensitive: false)
           .or()
-          .displayIdContains(query, caseSensitive: false)
+          .displayIdEqualTo(query, caseSensitive: false)
           .offset(offset)
           .limit(limit)
           .findAll();
+
+      List<Route> containsMatches = [];
+
+      int remaining = limit - exactMatches.length;
+      if (remaining > 0) {
+        final exactIds = exactMatches.map((r) => r.id).toSet();
+        containsMatches = await isar.routes
+            .filter()
+            .anyOf(exactIds, (q, id) => q.not().idEqualTo(id))
+            .and()
+            .group(
+              (q) => q
+                  .nameContains(query, caseSensitive: false)
+                  .or()
+                  .idContains(query, caseSensitive: false)
+                  .or()
+                  .displayIdContains(query, caseSensitive: false),
+            )
+            .offset(offset)
+            .limit(remaining)
+            .findAll();
+      }
+
+      results[pluginId] = [...exactMatches, ...containsMatches];
     }
 
     return results;

@@ -29,7 +29,7 @@
   "id": "ID",
   "name": "Name",
   "version": "Version",
-  "repositoryUrl": "Repository URL",
+  "repository": "Repository",
   "description": "Description",
   "confirmation": "Confirmation",
   "confirm": "Confirm",
@@ -70,5 +70,7 @@
   "deleteBookmarkConfirm": "Are you sure you want to delete this bookmark?",
   "done": "Done",
   "bookmarkAlreadyExists": "A bookmark with this name already exists.",
-  "min": "min(s)"
+  "min": "min(s)",
+  "license": "License",
+  "openInBrowser": "Open in Browser"
 }

@@ -25,19 +25,14 @@ Only Timetable is a flexible, plugin-based timetable application for bus and oth
 
 3. **Run the app:**
 
-   - For Android:
-     ```sh
-     flutter run -d android
-     ```
-   - For iOS:
-     ```sh
-     flutter run -d ios
-     ```
-   - For web:
-     ```sh
-     flutter run -d chrome
-     ```
+   ```sh
+   flutter run
+   ```
 
 ## Plugin Development
 
-TODO
+To develop a plugin for Only Timetable, use the official plugin template:
+
+[Only-Timetable-Plugin-Template](https://github.com/nohackjustnoobb/Only-Timetable-Plugin-Template)
+
+The template repository contains detailed instructions and boilerplate code to help you get started quickly. Follow the steps in the template's README to create and publish your own plugin for any transport provider or region.

@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:only_timetable/extensions/shortcut.dart';
 import 'package:only_timetable/screens/settings/plugin.dart';
 import 'package:only_timetable/services/bookmark_service.dart';
+import 'package:only_timetable/services/main_service.dart';
 import 'package:only_timetable/services/settings_service.dart';
 import 'package:only_timetable/widgets/settings_group.dart';
 import 'package:only_timetable/widgets/settings_options.dart';
@@ -129,7 +131,81 @@ class SettingsScreen extends StatelessWidget {
                     ),
               ),
             ),
-            SettingsGroup(title: context.l10n.about),
+            SettingsGroup(
+              title: context.l10n.about,
+              child: Consumer<MainService>(
+                builder: (context, mainService, _) {
+                  return Column(
+                    spacing: 10,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (mainService.version != null)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              context.l10n.version,
+                              style: context.textTheme.titleMedium,
+                            ),
+                            Text(
+                              mainService.version!,
+                              style: context.textTheme.titleMedium?.copyWith(
+                                color: context.colorScheme.primary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      if (mainService.repository != null)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              context.l10n.repository,
+                              style: context.textTheme.titleMedium,
+                            ),
+                            CupertinoButton(
+                              padding: EdgeInsets.zero,
+                              minimumSize: Size.zero,
+                              child: Row(
+                                spacing: 5,
+                                children: [
+                                  Icon(LucideIcons.github200),
+                                  Icon(LucideIcons.externalLink200),
+                                ],
+                              ),
+                              onPressed: () async {
+                                final url = Uri.parse(mainService.repository!);
+                                if (await canLaunchUrl(url)) {
+                                  await launchUrl(
+                                    url,
+                                    mode: LaunchMode.externalApplication,
+                                  );
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      if (mainService.license != null)
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              context.l10n.license,
+                              style: context.textTheme.titleMedium,
+                            ),
+                            Text(
+                              mainService.license!,
+                              style: context.textTheme.titleMedium?.copyWith(
+                                color: context.colorScheme.primary,
+                              ),
+                            ),
+                          ],
+                        ),
+                    ],
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),

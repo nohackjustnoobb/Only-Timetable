@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:only_timetable/globals.dart';
 import 'package:provider/provider.dart';
 
+import 'package:only_timetable/globals.dart';
 import 'package:only_timetable/services/main_service.dart';
 import 'package:only_timetable/screens/home.dart';
 import 'l10n/app_localizations.g.dart';
