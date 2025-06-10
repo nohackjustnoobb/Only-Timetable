@@ -4,9 +4,11 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:only_timetable/extensions/shortcut.dart';
 import 'package:only_timetable/screens/settings/plugin.dart';
+import 'package:only_timetable/services/bookmark_service.dart';
 import 'package:only_timetable/services/settings_service.dart';
 import 'package:only_timetable/widgets/settings_group.dart';
 import 'package:only_timetable/widgets/settings_options.dart';
+import 'package:only_timetable/widgets/create_bookmark_modal.dart';
 import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -57,6 +59,76 @@ class SettingsScreen extends StatelessWidget {
               ),
             ),
             PluginGroup(),
+            SettingsGroup(
+              title: context.l10n.bookmark,
+              action: Expanded(
+                child: CupertinoButton(
+                  minimumSize: Size.zero,
+                  padding: EdgeInsets.zero,
+                  alignment: Alignment.bottomRight,
+                  child: Icon(LucideIcons.plus200, size: 25),
+                  onPressed: () => showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (BuildContext context) => CreateBookmarkModal(),
+                  ),
+                ),
+              ),
+              child: Consumer<BookmarkService>(
+                builder: (context, bookmarkService, child) =>
+                    ListView.separated(
+                      padding: EdgeInsets.zero,
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: bookmarkService.bookmarks.length,
+                      separatorBuilder: (context, index) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Divider(
+                          color: context.textColor?.withValues(alpha: .1),
+                          height: 1,
+                        ),
+                      ),
+                      itemBuilder: (context, index) {
+                        final bookmark = bookmarkService.bookmarks[index];
+                        final isDefault = bookmark.name == "default";
+
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          spacing: 20,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                isDefault
+                                    ? context.l10n.defaultBookmark
+                                    : bookmark.name,
+                                style: context.textTheme.titleMedium,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            CupertinoButton(
+                              padding: EdgeInsets.zero,
+                              minimumSize: Size.zero,
+                              onPressed: isDefault
+                                  ? null
+                                  : () => context.showConfirm(
+                                      context.l10n.deleteBookmarkConfirm,
+                                      () => bookmarkService.deleteBookmark(
+                                        bookmark,
+                                      ),
+                                    ),
+                              child: Icon(
+                                LucideIcons.trash200,
+                                color: isDefault
+                                    ? context.textColor?.withValues(alpha: .5)
+                                    : Colors.red,
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+              ),
+            ),
             SettingsGroup(title: context.l10n.about),
           ],
         ),

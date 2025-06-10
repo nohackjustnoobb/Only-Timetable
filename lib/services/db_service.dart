@@ -4,6 +4,8 @@ import 'package:isar/isar.dart';
 import 'package:only_timetable/models/kv_pair.dart';
 import 'package:only_timetable/models/route.dart';
 import 'package:only_timetable/models/stop.dart';
+import 'package:only_timetable/models/bookmark.dart';
+import 'package:only_timetable/models/bookmarked.dart';
 import 'package:only_timetable/services/plugin/handler.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -16,7 +18,11 @@ class DbService {
 
   Future<void> init() async {
     _dir = await getApplicationDocumentsDirectory();
-    appIsar = await Isar.open([KvPairSchema], directory: _dir.path);
+    appIsar = await Isar.open([
+      KvPairSchema,
+      BookmarkSchema,
+      BookmarkedSchema,
+    ], directory: _dir.path);
   }
 
   /// Asynchronously retrieves an [Isar] database instance associated with the given [pluginHandler].

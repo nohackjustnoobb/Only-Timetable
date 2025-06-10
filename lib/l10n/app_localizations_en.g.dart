@@ -140,4 +140,36 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get loadingEta => 'Loading ETA...';
+
+  @override
+  String get bookmark => 'Bookmark';
+
+  @override
+  String get createBookmark => 'Create Bookmark';
+
+  @override
+  String get bookmarkName => 'Bookmark Name';
+
+  @override
+  String get create => 'Create';
+
+  @override
+  String get bookmarkNameRequired => 'Bookmark name is required.';
+
+  @override
+  String get defaultBookmark => 'Default';
+
+  @override
+  String get deleteBookmarkConfirm =>
+      'Are you sure you want to delete this bookmark?';
+
+  @override
+  String get done => 'Done';
+
+  @override
+  String get bookmarkAlreadyExists =>
+      'A bookmark with this name already exists.';
+
+  @override
+  String get min => 'min(s)';
 }

@@ -80,7 +80,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 children: _searchResults!.entries.map((entry) {
                                   final plugin = pluginService.getPluginById(
                                     entry.key,
-                                  );
+                                  )!;
 
                                   return GestureDetector(
                                     // Make it not dissmissible

@@ -214,11 +214,7 @@ class PluginService extends ChangeNotifier {
   /// Returns the [BasePlugin] instance that matches the given [id].
   ///
   /// Throws an exception if no plugin with the specified [id] is found.
-  BasePlugin getPluginById(String id) {
-    if (!_plugins.containsKey(id)) {
-      throw Exception("Plugin with id $id not found");
-    }
-
-    return _plugins[id]!;
+  BasePlugin? getPluginById(String id) {
+    return _plugins[id];
   }
 }

@@ -5,23 +5,32 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:only_timetable/extensions/shortcut.dart';
 import 'package:only_timetable/extensions/theme.dart';
 import 'package:only_timetable/models/route.dart';
+import 'package:only_timetable/models/stop.dart';
 import 'package:only_timetable/screens/route_detail.dart';
+import 'package:only_timetable/services/eta_service.dart';
 import 'package:only_timetable/services/plugin/base_plugin.dart';
+import 'package:provider/provider.dart';
 
 class RoutesList extends StatelessWidget {
   final List<Route> routes;
-  final BasePlugin plugin;
+  final List<Stop>? stops;
+  final List<BasePlugin>? plugins;
+  final BasePlugin? plugin;
   final bool showContainer;
 
   const RoutesList({
     super.key,
     required this.routes,
-    required this.plugin,
+    this.plugin,
+    this.plugins,
+    this.stops,
     this.showContainer = true,
   });
 
   @override
   Widget build(BuildContext context) {
+    final now = DateTime.now();
+
     return Container(
       padding: showContainer
           ? EdgeInsets.symmetric(horizontal: 20, vertical: 10)
@@ -57,22 +66,31 @@ class RoutesList extends StatelessWidget {
                 final route = routes[index];
 
                 final String? dest = route.dest ?? route.stopsOrder.lastOrNull;
-                final String? orig = route.orig ?? route.stopsOrder.firstOrNull;
-
                 final destName = route.stops
                     .firstWhereOrNull((stop) => stop.id == dest)
                     ?.name;
-                final origName = route.stops
-                    .firstWhereOrNull((stop) => stop.id == orig)
-                    ?.name;
+
+                String? origName;
+                if (stops != null) {
+                  origName = stops![index].name;
+                } else {
+                  final String? orig =
+                      route.orig ?? route.stopsOrder.firstOrNull;
+                  origName = route.stops
+                      .firstWhereOrNull((stop) => stop.id == orig)
+                      ?.name;
+                }
 
                 return CupertinoButton(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   minimumSize: Size.zero,
                   onPressed: () => context.push(
                     MaterialPageRoute(
-                      builder: (context) =>
-                          RouteDetailScreen(plugin: plugin, route: route),
+                      builder: (context) => RouteDetailScreen(
+                        plugin: plugin ?? plugins![index],
+                        route: route,
+                        stop: stops != null ? stops![index] : null,
+                      ),
                     ),
                   ),
                   child: Row(
@@ -125,7 +143,54 @@ class RoutesList extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Icon(LucideIcons.route200, color: context.textColor),
+                      if (stops != null && plugins != null)
+                        SizedBox(
+                          width: 40,
+                          child: Consumer<EtaService>(
+                            builder: (context, etaService, child) {
+                              final etas = etaService.getEta(
+                                plugins![index],
+                                route,
+                                stops![index],
+                              );
+
+                              if (etas == null) {
+                                return CupertinoActivityIndicator();
+                              }
+
+                              if (etas.isEmpty) {
+                                return Icon(LucideIcons.clockAlert200);
+                              }
+
+                              return Column(
+                                children: [
+                                  Text(
+                                    DateTime.fromMillisecondsSinceEpoch(
+                                      etas.first.arrivalTime,
+                                    ).difference(now).inMinutes.toString(),
+                                    style: context.textTheme.titleLarge
+                                        ?.copyWith(
+                                          color: context.colorScheme.primary,
+                                        ),
+                                  ),
+                                  Text(
+                                    context.l10n.min,
+                                    style: context.textTheme.titleSmall
+                                        ?.copyWith(
+                                          color: context.textColor?.withValues(
+                                            alpha: .5,
+                                          ),
+                                        ),
+                                    overflow: TextOverflow.visible,
+                                    softWrap: false,
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        )
+                      else
+                        Icon(LucideIcons.route200, color: context.textColor),
                     ],
                   ),
                 );

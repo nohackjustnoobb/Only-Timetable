@@ -15,9 +15,11 @@ import 'package:only_timetable/extensions/theme.dart';
 import 'package:only_timetable/globals.dart';
 import 'package:only_timetable/models/route.dart';
 import 'package:only_timetable/models/stop.dart';
+import 'package:only_timetable/services/bookmark_service.dart';
 import 'package:only_timetable/services/eta_service.dart';
 import 'package:only_timetable/services/plugin/base_plugin.dart';
 import 'package:only_timetable/services/settings_service.dart';
+import 'package:only_timetable/widgets/add_bookmark_modal.dart';
 import 'package:provider/provider.dart';
 import 'package:split_view/split_view.dart';
 
@@ -211,14 +213,262 @@ class _RouteMapState extends State<RouteMap> {
   }
 }
 
+class StopsList extends StatelessWidget {
+  final BasePlugin plugin;
+  final Route route;
+  final List<Stop> sortedStops;
+  final Stop? selectedStop;
+  final Function(Stop) setSelectedStop;
+
+  const StopsList({
+    super.key,
+    required this.plugin,
+    required this.route,
+    required this.sortedStops,
+    required this.selectedStop,
+    required this.setSelectedStop,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      decoration: context.theme.boxDecoration,
+      child: ListView.separated(
+        padding: EdgeInsets.symmetric(vertical: 20),
+        separatorBuilder: (context, index) => IntrinsicHeight(
+          child: Row(
+            spacing: 20,
+            children: [
+              SizedBox(
+                width: 25,
+                child: Center(
+                  child: Container(
+                    width: 5,
+                    color: context.colorScheme.primary.withValues(alpha: .5),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: Divider(
+                    color: context.textColor?.withValues(alpha: .1),
+                    height: 1,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        itemCount: sortedStops.length,
+        itemBuilder: (context, index) {
+          final stop = sortedStops[index];
+          final isSelected = selectedStop?.id == stop.id;
+
+          return IntrinsicHeight(
+            child: Row(
+              spacing: 20,
+              children: [
+                Stack(
+                  alignment: AlignmentDirectional.topCenter,
+                  children: [
+                    Align(
+                      alignment: index == 0
+                          ? Alignment.bottomCenter
+                          : Alignment.topCenter,
+                      child: FractionallySizedBox(
+                        heightFactor:
+                            index == 0 || index == sortedStops.length - 1
+                            ? .5
+                            : 1,
+                        child: Container(
+                          width: 5,
+                          color: context.colorScheme.primary.withValues(
+                            alpha: .5,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: GestureDetector(
+                        onTap: () => setSelectedStop(stop),
+                        child: Container(
+                          height: 25,
+                          width: 25,
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? context.colorScheme.primary
+                                : context.colorScheme.surfaceContainer,
+                            border: BoxBorder.all(
+                              color: isSelected
+                                  ? Colors.transparent
+                                  : context.colorScheme.primary,
+                              width: 3,
+                            ),
+                            borderRadius: BorderRadius.circular(12.5),
+                          ),
+                          child: Center(
+                            child: Text(
+                              (index + 1).toString(),
+                              style: TextStyle(
+                                color: isSelected
+                                    ? Colors.white
+                                    : context.colorScheme.primary,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                              ),
+                              overflow: TextOverflow.visible,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          width: double.infinity,
+                          child: CupertinoButton(
+                            padding: EdgeInsets.zero,
+                            minimumSize: Size.zero,
+                            alignment: Alignment.centerLeft,
+                            onPressed: () => setSelectedStop(stop),
+                            child: Text(
+                              context.getLocalizedString(stop.name ?? stop.id),
+                              style: context.textTheme.titleMedium?.copyWith(
+                                color: isSelected
+                                    ? context.colorScheme.primary
+                                    : null,
+                                fontWeight: isSelected
+                                    ? FontWeight.normal
+                                    : null,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ),
+                        if (isSelected)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 5),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Consumer<EtaService>(
+                                  builder: (context, etaService, child) {
+                                    final etas = etaService.getEta(
+                                      plugin,
+                                      route,
+                                      stop,
+                                    );
+
+                                    final now = DateTime.now();
+
+                                    return etas == null || etas.isEmpty
+                                        ? Text(
+                                            etas == null
+                                                ? context.l10n.loadingEta
+                                                : context.l10n.noEtaAvailable,
+                                            style: TextStyle(
+                                              color: context.textColor
+                                                  ?.withValues(alpha: .5),
+                                            ),
+                                          )
+                                        : Column(
+                                            spacing: 5,
+                                            mainAxisSize: MainAxisSize.min,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: etas
+                                                .map(
+                                                  (eta) => Row(
+                                                    spacing: 5,
+                                                    children: [
+                                                      Icon(
+                                                        eta.isRealTime
+                                                            ? LucideIcons.clock
+                                                            : LucideIcons
+                                                                  .calendar,
+                                                        color: context.textColor
+                                                            ?.withValues(
+                                                              alpha: .5,
+                                                            ),
+                                                        size: 16,
+                                                      ),
+                                                      Text(
+                                                        context.l10n.mins(
+                                                          DateTime.fromMillisecondsSinceEpoch(
+                                                                eta.arrivalTime,
+                                                              )
+                                                              .difference(now)
+                                                              .inMinutes,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                )
+                                                .toList(),
+                                          );
+                                  },
+                                ),
+                                Consumer<BookmarkService>(
+                                  builder: (context, bookmarkService, child) =>
+                                      CupertinoButton(
+                                        padding: EdgeInsets.zero,
+                                        minimumSize: Size.zero,
+                                        onPressed: () => showModalBottomSheet(
+                                          context: context,
+                                          builder: (context) =>
+                                              AddBookmarkModal(
+                                                plugin: plugin,
+                                                route: route,
+                                                stop: stop,
+                                              ),
+                                        ),
+                                        child: Icon(
+                                          bookmarkService.isBookmarked(
+                                                plugin: plugin,
+                                                route: route,
+                                                stop: stop,
+                                              )
+                                              ? LucideIcons.bookmarkCheck200
+                                              : LucideIcons.bookmark200,
+                                          color: context.textColor,
+                                        ),
+                                      ),
+                                ),
+                              ],
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
 class RouteDetailScreen extends StatefulWidget {
   final BasePlugin plugin;
   final Route route;
+  final Stop? stop;
 
   const RouteDetailScreen({
     super.key,
     required this.plugin,
     required this.route,
+    this.stop,
   });
 
   @override
@@ -226,8 +476,6 @@ class RouteDetailScreen extends StatefulWidget {
 }
 
 class _RouteDetailScreenState extends State<RouteDetailScreen> {
-  final ScrollController _scrollController = ScrollController();
-
   Stop? _destStop;
   Stop? _origStop;
   Stop? _selectedStop;
@@ -238,16 +486,20 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
   late final EtaService _etaService;
   Future<void> Function()? _unsubscribeToEta;
 
+  List<double> _weights = [.3, .7];
+
   @override
   void initState() {
     super.initState();
 
-    _sortedStops = widget.route.stops.sortedBy(
-      (stop) => widget.route.stopsOrder.indexOf(stop.id),
-    );
+    //  --------- Check if Route Valid ---------
 
     // Check if the route has any stops
     if (widget.route.stops.isEmpty) return;
+
+    _sortedStops = widget.route.stops.sortedBy(
+      (stop) => widget.route.stopsOrder.indexOf(stop.id),
+    );
 
     final String? dest =
         widget.route.dest ?? widget.route.stopsOrder.lastOrNull;
@@ -264,7 +516,16 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
     // If the destination stop is not found, show an error and return
     if (_destStop == null || _origStop == null) return;
 
+    // --------- Initialize  ---------
+
     _etaService = Provider.of<EtaService>(context, listen: false);
+
+    // If a stop is provided, check if it is valid and set it as selected
+    if (widget.stop != null &&
+        _sortedStops.firstWhereOrNull((stop) => stop.id == widget.stop!.id) !=
+            null) {
+      setSelectedStop(widget.stop!);
+    }
   }
 
   void setSelectedStop(Stop stop) async {
@@ -345,7 +606,15 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: SplitView(
-            controller: SplitViewController(weights: [.3, .7]),
+            onWeightChanged: (value) =>
+                _weights = value.whereType<double>().toList(),
+            controller: SplitViewController(
+              weights: _weights,
+              limits: [
+                WeightLimit(min: .1, max: .9),
+                WeightLimit(min: .1, max: .9),
+              ],
+            ),
             viewMode: SplitViewMode.Vertical,
             gripColor: Colors.transparent,
             gripColorActive: Colors.transparent,
@@ -386,243 +655,12 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 5),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  decoration: context.theme.boxDecoration,
-                  child: ListView.separated(
-                    controller: _scrollController,
-                    padding: EdgeInsets.symmetric(vertical: 20),
-                    separatorBuilder: (context, index) => IntrinsicHeight(
-                      child: Row(
-                        spacing: 20,
-                        children: [
-                          SizedBox(
-                            width: 25,
-                            child: Center(
-                              child: Container(
-                                width: 5,
-                                color: context.colorScheme.primary.withValues(
-                                  alpha: .5,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 5),
-                              child: Divider(
-                                color: context.textColor?.withValues(alpha: .1),
-                                height: 1,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    itemCount: _sortedStops.length,
-                    itemBuilder: (context, index) {
-                      final stop = _sortedStops[index];
-                      final isSelected = _selectedStop == stop;
-
-                      return IntrinsicHeight(
-                        child: Row(
-                          spacing: 20,
-                          children: [
-                            Stack(
-                              alignment: AlignmentDirectional.topCenter,
-                              children: [
-                                Align(
-                                  alignment: index == 0
-                                      ? Alignment.bottomCenter
-                                      : Alignment.topCenter,
-                                  child: FractionallySizedBox(
-                                    heightFactor:
-                                        index == 0 ||
-                                            index == _sortedStops.length - 1
-                                        ? .5
-                                        : 1,
-                                    child: Container(
-                                      width: 5,
-                                      color: context.colorScheme.primary
-                                          .withValues(alpha: .5),
-                                    ),
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.center,
-                                  child: CupertinoButton(
-                                    padding: EdgeInsets.zero,
-                                    minimumSize: Size.zero,
-                                    onPressed: () => setSelectedStop(stop),
-                                    child: Container(
-                                      height: 25,
-                                      width: 25,
-                                      decoration: BoxDecoration(
-                                        color: isSelected
-                                            ? context.colorScheme.primary
-                                            : context
-                                                  .colorScheme
-                                                  .surfaceContainer,
-                                        border: BoxBorder.all(
-                                          color: isSelected
-                                              ? Colors.transparent
-                                              : context.colorScheme.primary,
-                                          width: 3,
-                                        ),
-                                        borderRadius: BorderRadius.circular(
-                                          12.5,
-                                        ),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          (index + 1).toString(),
-                                          style: TextStyle(
-                                            color: isSelected
-                                                ? Colors.white
-                                                : context.colorScheme.primary,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 12,
-                                          ),
-                                          overflow: TextOverflow.visible,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 10,
-                                ),
-                                child: Column(
-                                  children: [
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child: CupertinoButton(
-                                        padding: EdgeInsets.zero,
-                                        minimumSize: Size.zero,
-                                        alignment: Alignment.centerLeft,
-                                        onPressed: () => setSelectedStop(stop),
-                                        child: Text(
-                                          context.getLocalizedString(
-                                            stop.name ?? stop.id,
-                                          ),
-                                          style: context.textTheme.titleMedium
-                                              ?.copyWith(
-                                                color: isSelected
-                                                    ? context
-                                                          .colorScheme
-                                                          .primary
-                                                    : null,
-                                                fontWeight: isSelected
-                                                    ? FontWeight.normal
-                                                    : null,
-                                              ),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                    ),
-                                    if (isSelected)
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 5),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Consumer<EtaService>(
-                                              builder: (context, etaService, child) {
-                                                final etas = etaService.getEta(
-                                                  widget.plugin,
-                                                  widget.route,
-                                                  stop,
-                                                );
-
-                                                final now = DateTime.now();
-
-                                                return etas == null ||
-                                                        etas.isEmpty
-                                                    ? Text(
-                                                        etas == null
-                                                            ? context
-                                                                  .l10n
-                                                                  .loadingEta
-                                                            : context
-                                                                  .l10n
-                                                                  .noEtaAvailable,
-                                                        style: TextStyle(
-                                                          color: context
-                                                              .textColor
-                                                              ?.withValues(
-                                                                alpha: .5,
-                                                              ),
-                                                        ),
-                                                      )
-                                                    : Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: etas
-                                                            .map(
-                                                              (eta) => Row(
-                                                                spacing: 5,
-                                                                children: [
-                                                                  Icon(
-                                                                    eta.isRealTime
-                                                                        ? LucideIcons
-                                                                              .clock
-                                                                        : LucideIcons
-                                                                              .calendar,
-                                                                    color: context
-                                                                        .textColor
-                                                                        ?.withValues(
-                                                                          alpha:
-                                                                              .5,
-                                                                        ),
-                                                                    size: 16,
-                                                                  ),
-                                                                  Text(
-                                                                    context.l10n.mins(
-                                                                      DateTime.fromMillisecondsSinceEpoch(
-                                                                            eta.arrivalTime,
-                                                                          )
-                                                                          .difference(
-                                                                            now,
-                                                                          )
-                                                                          .inMinutes,
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            )
-                                                            .toList(),
-                                                      );
-                                              },
-                                            ),
-                                            CupertinoButton(
-                                              padding: EdgeInsets.zero,
-                                              minimumSize: Size.zero,
-                                              onPressed: () {},
-                                              child: Icon(
-                                                LucideIcons.bookmark200,
-                                                color: context.textColor,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
+                child: StopsList(
+                  plugin: widget.plugin,
+                  route: widget.route,
+                  sortedStops: _sortedStops,
+                  selectedStop: _selectedStop,
+                  setSelectedStop: setSelectedStop,
                 ),
               ),
             ],

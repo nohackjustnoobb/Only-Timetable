@@ -22,7 +22,7 @@ class SettingsService extends ChangeNotifier {
   }
 
   // --------- Methods ---------
-  Future<void> init(DbService dbService) async {
+  void init(DbService dbService) {
     isar = dbService.appIsar;
   }
 

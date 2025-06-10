@@ -332,6 +332,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Loading ETA...'**
   String get loadingEta;
+
+  /// No description provided for @bookmark.
+  ///
+  /// In en, this message translates to:
+  /// **'Bookmark'**
+  String get bookmark;
+
+  /// No description provided for @createBookmark.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Bookmark'**
+  String get createBookmark;
+
+  /// No description provided for @bookmarkName.
+  ///
+  /// In en, this message translates to:
+  /// **'Bookmark Name'**
+  String get bookmarkName;
+
+  /// No description provided for @create.
+  ///
+  /// In en, this message translates to:
+  /// **'Create'**
+  String get create;
+
+  /// No description provided for @bookmarkNameRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Bookmark name is required.'**
+  String get bookmarkNameRequired;
+
+  /// No description provided for @defaultBookmark.
+  ///
+  /// In en, this message translates to:
+  /// **'Default'**
+  String get defaultBookmark;
+
+  /// No description provided for @deleteBookmarkConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this bookmark?'**
+  String get deleteBookmarkConfirm;
+
+  /// No description provided for @done.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get done;
+
+  /// No description provided for @bookmarkAlreadyExists.
+  ///
+  /// In en, this message translates to:
+  /// **'A bookmark with this name already exists.'**
+  String get bookmarkAlreadyExists;
+
+  /// No description provided for @min.
+  ///
+  /// In en, this message translates to:
+  /// **'min(s)'**
+  String get min;
 }
 
 class _AppLocalizationsDelegate

@@ -103,9 +103,11 @@ class EtaService extends ChangeNotifier {
             // Last successful update was a while ago
             (sub.lastUpdate != null &&
                 now.difference(sub.lastUpdate!) > ETA_UPDATE_INTERVAL) ||
-            // The latest ETA is already in the past
+            // The latest ETA is already in the past and the last try was a while ago
             (sub.etas.isNotEmpty &&
-                now.millisecondsSinceEpoch > sub.etas.first.arrivalTime);
+                now.millisecondsSinceEpoch > sub.etas.first.arrivalTime &&
+                now.difference(sub.lastTryUpdate!) >
+                    ETA_MINIMUM_UPDATE_INTERVAL);
 
         if (shouldUpdate) {
           sub.update().then((updated) {
