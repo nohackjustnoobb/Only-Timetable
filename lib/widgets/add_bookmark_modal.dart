@@ -27,96 +27,105 @@ class AddBookmarkModal extends StatelessWidget {
     return ModalBase(
       title: context.l10n.bookmark,
       children: [
-        Consumer<BookmarkService>(
-          builder: (context, bookmarkService, child) {
-            final bookmarks = bookmarkService
-                .getBookmarks(plugin: plugin, route: route, stop: stop)
-                .map((e) => e.name)
-                .toList();
+        Flexible(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Consumer<BookmarkService>(
+                  builder: (context, bookmarkService, child) {
+                    final bookmarks = bookmarkService
+                        .getBookmarks(plugin: plugin, route: route, stop: stop)
+                        .map((e) => e.name)
+                        .toList();
 
-            final allBookmarks = bookmarkService.bookmarks;
+                    final allBookmarks = bookmarkService.bookmarks;
 
-            return ListView.separated(
-              padding: EdgeInsets.zero,
-              shrinkWrap: true,
-              itemCount: allBookmarks.length,
-              itemBuilder: (context, index) {
-                final isBookmarked = bookmarks.contains(
-                  allBookmarks[index].name,
-                );
+                    return ListView.separated(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: allBookmarks.length,
+                      itemBuilder: (context, index) {
+                        final isBookmarked = bookmarks.contains(
+                          allBookmarks[index].name,
+                        );
 
-                return CupertinoButton(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  minimumSize: Size.zero,
-                  onPressed: () async {
-                    if (isBookmarked) {
-                      await bookmarkService.removeBookmark(
-                        plugin: plugin,
-                        route: route,
-                        stop: stop,
-                        bookmark: allBookmarks[index],
-                      );
-                    } else {
-                      await bookmarkService.addBookmark(
-                        plugin: plugin,
-                        route: route,
-                        stop: stop,
-                        bookmark: allBookmarks[index],
-                      );
-                    }
-                  },
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          allBookmarks[index].name == "default"
-                              ? context.l10n.defaultBookmark
-                              : allBookmarks[index].name,
-                          style: context.textTheme.titleMedium,
+                        return CupertinoButton(
+                          padding: const EdgeInsets.symmetric(vertical: 10),
+                          minimumSize: Size.zero,
+                          onPressed: () async {
+                            if (isBookmarked) {
+                              await bookmarkService.removeBookmark(
+                                plugin: plugin,
+                                route: route,
+                                stop: stop,
+                                bookmark: allBookmarks[index],
+                              );
+                            } else {
+                              await bookmarkService.addBookmark(
+                                plugin: plugin,
+                                route: route,
+                                stop: stop,
+                                bookmark: allBookmarks[index],
+                              );
+                            }
+                          },
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  allBookmarks[index].name == "default"
+                                      ? context.l10n.defaultBookmark
+                                      : allBookmarks[index].name,
+                                  style: context.textTheme.titleMedium,
+                                ),
+                              ),
+                              Icon(
+                                isBookmarked
+                                    ? LucideIcons.circleCheckBig200
+                                    : LucideIcons.circle200,
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: Divider(
+                          color: context.textColor?.withValues(alpha: .1),
+                          height: 1,
                         ),
                       ),
+                    );
+                  },
+                ),
+                CupertinoButton(
+                  padding: EdgeInsets.zero,
+                  minimumSize: Size.zero,
+                  onPressed: () => showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (BuildContext context) => CreateBookmarkModal(),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    spacing: 10,
+                    children: [
                       Icon(
-                        isBookmarked
-                            ? LucideIcons.circleCheckBig200
-                            : LucideIcons.circle200,
+                        LucideIcons.plus200,
+                        color: context.textColor?.withValues(alpha: .5),
+                      ),
+                      Text(
+                        context.l10n.createBookmark,
+                        style: context.textTheme.titleMedium?.copyWith(
+                          color: context.textColor?.withValues(alpha: .5),
+                        ),
                       ),
                     ],
                   ),
-                );
-              },
-              separatorBuilder: (context, index) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                child: Divider(
-                  color: context.textColor?.withValues(alpha: .1),
-                  height: 1,
                 ),
-              ),
-            );
-          },
-        ),
-        CupertinoButton(
-          padding: const EdgeInsets.only(bottom: 10),
-          minimumSize: Size.zero,
-          onPressed: () => showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            builder: (BuildContext context) => CreateBookmarkModal(),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            spacing: 10,
-            children: [
-              Icon(
-                LucideIcons.plus200,
-                color: context.textColor?.withValues(alpha: .5),
-              ),
-              Text(
-                context.l10n.createBookmark,
-                style: context.textTheme.titleMedium?.copyWith(
-                  color: context.textColor?.withValues(alpha: .5),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         CupertinoButton.filled(

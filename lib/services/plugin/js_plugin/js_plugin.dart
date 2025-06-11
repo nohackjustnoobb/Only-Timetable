@@ -104,7 +104,6 @@ class JsPlugin extends BasePlugin {
         updatesUrl: json['updatesUrl'] as String?,
       );
 
-  // TODO not tested
   static Future<JsPlugin> fromUri(Uri uri) async {
     final resp = await get(uri);
     if (resp.statusCode != 200) {

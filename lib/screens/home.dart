@@ -275,20 +275,27 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
-            Builder(
-              builder: (context) {
-                final items = _itemDetails.values;
-                final routes = items.map((item) => item.route).toList();
-                final stops = items.map((item) => item.stop).toList();
-                final plugins = items.map((item) => item.plugin).toList();
+            Flexible(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.only(
+                  bottom: context.mediaQuery.padding.bottom,
+                ),
+                child: Builder(
+                  builder: (context) {
+                    final items = _itemDetails.values;
+                    final routes = items.map((item) => item.route).toList();
+                    final stops = items.map((item) => item.stop).toList();
+                    final plugins = items.map((item) => item.plugin).toList();
 
-                return RoutesList(
-                  routes: routes,
-                  stops: stops,
-                  plugins: plugins,
-                  showContainer: false,
-                );
-              },
+                    return RoutesList(
+                      routes: routes,
+                      stops: stops,
+                      plugins: plugins,
+                      showContainer: false,
+                    );
+                  },
+                ),
+              ),
             ),
           ],
         ),
