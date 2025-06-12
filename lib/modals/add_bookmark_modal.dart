@@ -6,8 +6,8 @@ import 'package:only_timetable/models/route.dart';
 import 'package:only_timetable/models/stop.dart';
 import 'package:only_timetable/services/bookmark_service.dart';
 import 'package:only_timetable/services/plugin/base_plugin.dart';
-import 'package:only_timetable/widgets/create_bookmark_modal.dart';
-import 'package:only_timetable/widgets/modal_base.dart';
+import 'package:only_timetable/modals/create_bookmark_modal.dart';
+import 'package:only_timetable/modals/modal_base.dart';
 import 'package:provider/provider.dart';
 
 class AddBookmarkModal extends StatelessWidget {
@@ -92,7 +92,7 @@ class AddBookmarkModal extends StatelessWidget {
                       separatorBuilder: (context, index) => Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5),
                         child: Divider(
-                          color: context.textColor?.withValues(alpha: .1),
+                          color: context.textColor.withValues(alpha: .1),
                           height: 1,
                         ),
                       ),
@@ -111,14 +111,11 @@ class AddBookmarkModal extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     spacing: 10,
                     children: [
-                      Icon(
-                        LucideIcons.plus200,
-                        color: context.textColor?.withValues(alpha: .5),
-                      ),
+                      Icon(LucideIcons.plus200, color: context.subTextColor),
                       Text(
                         context.l10n.createBookmark,
                         style: context.textTheme.titleMedium?.copyWith(
-                          color: context.textColor?.withValues(alpha: .5),
+                          color: context.subTextColor,
                         ),
                       ),
                     ],

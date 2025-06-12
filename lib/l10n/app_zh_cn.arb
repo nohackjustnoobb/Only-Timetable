@@ -1,1 +1,82 @@
-{}
+{
+  "@@locale": "zh_CN",
+  "appName": "Only Timetable",
+  "saved": "已保存",
+  "nearby": "附近",
+  "settings": "设置",
+  "plugin": "插件",
+  "about": "关于",
+  "addPlugin": "添加插件",
+  "add": "添加",
+  "json": "JSON",
+  "url": "网址",
+  "failed": "失败",
+  "close": "关闭",
+  "noPluginAvailable": "没有可用插件",
+  "updatedOn": "更新于 {date}",
+  "@updatedOn": {
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yMd"
+      }
+    }
+  },
+  "neverUpdated": "从未更新",
+  "pluginInfo": "插件信息",
+  "removePlugin": "移除插件",
+  "author": "作者",
+  "id": "ID",
+  "name": "名称",
+  "version": "版本",
+  "repository": "仓库",
+  "description": "描述",
+  "confirmation": "确认",
+  "confirm": "确定",
+  "cancel": "取消",
+  "removePluginConfirm": "你确定要移除此插件吗？",
+  "failedToUpdateRoutes": "无法为 {pluginName} 更新线路。",
+  "@failedToUpdateRoutes": {
+    "placeholders": {
+      "pluginName": {
+        "type": "String"
+      }
+    }
+  },
+  "noRoutesFound": "未找到线路",
+  "viewAll": "查看全部",
+  "loadMore": "加载更多",
+  "general": "通用",
+  "alwaysUseOSM": "总是使用 OpenStreetMap",
+  "routeHasNoStops": "该线路没有站点。",
+  "routeHasNoValidStops": "该线路没有有效站点。",
+  "failedToLoadRoute": "无法加载线路。",
+  "mins": "{minutes} 分钟",
+  "@mins": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "noEtaAvailable": "没有预计到达时间",
+  "loadingEta": "正在加载预计到达时间...",
+  "bookmark": "书签",
+  "createBookmark": "创建书签",
+  "bookmarkName": "书签名称",
+  "create": "创建",
+  "bookmarkNameRequired": "书签名称为必填项。",
+  "defaultBookmark": "默认",
+  "deleteBookmarkConfirm": "你确定要删除此书签吗？",
+  "done": "完成",
+  "bookmarkAlreadyExists": "已存在同名书签。",
+  "min": "分钟",
+  "license": "许可证",
+  "themeMode": "主题模式",
+  "auto": "自动",
+  "light": "浅色",
+  "dark": "深色",
+  "language": "语言",
+  "primaryColor": "主色",
+  "colorPicker": "颜色选择器"
+}

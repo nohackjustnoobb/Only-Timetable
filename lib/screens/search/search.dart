@@ -102,8 +102,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                       .titleMedium
                                                       ?.copyWith(
                                                         color: context
-                                                            .colorScheme
-                                                            .primary,
+                                                            .primaryColor,
                                                         fontWeight:
                                                             FontWeight.normal,
                                                       ),
@@ -133,8 +132,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                                           .titleSmall
                                                           ?.copyWith(
                                                             color: context
-                                                                .colorScheme
-                                                                .primary,
+                                                                .primaryColor,
                                                             fontWeight:
                                                                 FontWeight
                                                                     .normal,

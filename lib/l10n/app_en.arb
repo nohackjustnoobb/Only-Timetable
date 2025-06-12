@@ -72,5 +72,11 @@
   "bookmarkAlreadyExists": "A bookmark with this name already exists.",
   "min": "min(s)",
   "license": "License",
-  "openInBrowser": "Open in Browser"
+  "themeMode": "Theme Mode",
+  "auto": "Auto",
+  "light": "Light",
+  "dark": "Dark",
+  "language": "Language",
+  "primaryColor": "Primary Color",
+  "colorPicker": "Color Picker"
 }

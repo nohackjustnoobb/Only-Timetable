@@ -4,7 +4,7 @@ import 'package:only_timetable/extensions/shortcut.dart';
 import 'package:only_timetable/globals.dart';
 import 'package:only_timetable/models/bookmark.dart';
 import 'package:only_timetable/services/bookmark_service.dart';
-import 'package:only_timetable/widgets/modal_base.dart';
+import 'package:only_timetable/modals/modal_base.dart';
 import 'package:provider/provider.dart';
 
 class CreateBookmarkModal extends StatefulWidget {
@@ -60,7 +60,7 @@ class _CreateBookmarkModalState extends State<CreateBookmarkModal> {
               border: InputBorder.none,
               hintText: context.l10n.bookmarkName,
               hintStyle: context.textTheme.titleMedium?.copyWith(
-                color: context.textColor?.withValues(alpha: .5),
+                color: context.subTextColor,
               ),
             ),
           ),

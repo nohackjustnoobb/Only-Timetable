@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:only_timetable/extensions/shortcut.dart';
-import 'package:only_timetable/extensions/theme.dart';
 
 class ModalBase extends StatelessWidget {
   final List<Widget> children;
@@ -41,7 +40,7 @@ class ModalBase extends StatelessWidget {
                   context.mediaQuery.padding.top) *
               0.85,
         ),
-        decoration: context.theme.boxDecoration.copyWith(
+        decoration: context.containerDecoration.copyWith(
           border: Border.all(color: Colors.transparent),
         ),
         child: Column(

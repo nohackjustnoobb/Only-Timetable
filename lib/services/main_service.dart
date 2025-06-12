@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:only_timetable/services/appearance_service.dart';
 import 'package:only_timetable/services/db_service.dart';
 import 'package:only_timetable/services/eta_service.dart';
 import 'package:only_timetable/services/plugin/plugin_service.dart';
@@ -13,18 +14,21 @@ class MainService extends ChangeNotifier {
   final settingsService = SettingsService();
   final etaService = EtaService();
   final bookmarkService = BookmarkService();
-
-  String? version;
-  String? repository;
-  String? license;
+  final appearanceService = AppearanceService();
 
   Future<void> init() async {
     await dbService.init();
     await pluginService.init(dbService);
     await bookmarkService.init(dbService);
+    await appearanceService.init(dbService);
     settingsService.init(dbService);
+
     await _loadPubspecInfo();
   }
+
+  String? version;
+  String? repository;
+  String? license;
 
   Future<void> _loadPubspecInfo() async {
     try {
@@ -38,7 +42,5 @@ class MainService extends ChangeNotifier {
       repository = null;
       license = null;
     }
-
-    notifyListeners();
   }
 }

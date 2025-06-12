@@ -7,7 +7,7 @@ import 'package:only_timetable/extensions/shortcut.dart';
 import 'package:only_timetable/services/plugin/base_plugin.dart';
 import 'package:only_timetable/services/plugin/js_plugin/js_plugin.dart';
 import 'package:only_timetable/services/plugin/plugin_service.dart';
-import 'package:only_timetable/widgets/modal_base.dart';
+import 'package:only_timetable/modals/modal_base.dart';
 import 'package:only_timetable/widgets/settings_group.dart';
 import 'package:provider/provider.dart';
 
@@ -78,7 +78,7 @@ class _AddPluginModalState extends State<AddPluginModal> {
               border: InputBorder.none,
               hintText: isRawJson ? context.l10n.json : context.l10n.url,
               hintStyle: context.textTheme.titleMedium?.copyWith(
-                color: context.textColor?.withValues(alpha: .5),
+                color: context.subTextColor,
               ),
             ),
             minLines: isRawJson ? 5 : 1,
@@ -135,7 +135,7 @@ class PluginInfoModal extends StatelessWidget {
                             Text(
                               info[1]!,
                               style: context.textTheme.titleMedium?.copyWith(
-                                color: context.textColor?.withValues(alpha: .5),
+                                color: context.subTextColor,
                               ),
                             ),
                           ],
@@ -210,7 +210,7 @@ class PluginGroup extends StatelessWidget {
                 child: Text(
                   context.l10n.noPluginAvailable,
                   style: context.textTheme.titleSmall?.copyWith(
-                    color: context.textColor?.withValues(alpha: .5),
+                    color: context.subTextColor,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -223,7 +223,7 @@ class PluginGroup extends StatelessWidget {
                 separatorBuilder: (context, index) => Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: Divider(
-                    color: context.textColor?.withValues(alpha: .1),
+                    color: context.textColor.withValues(alpha: .1),
                     height: 1,
                   ),
                 ),
@@ -257,9 +257,7 @@ class PluginGroup extends StatelessWidget {
                               Text(
                                 'v${plugin.version}',
                                 style: context.textTheme.titleMedium?.copyWith(
-                                  color: context.textColor?.withValues(
-                                    alpha: .5,
-                                  ),
+                                  color: context.subTextColor,
                                 ),
                               ),
                             ],

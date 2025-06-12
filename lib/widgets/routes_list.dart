@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart' hide Route;
 import 'package:flutter/material.dart' hide Route;
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:only_timetable/extensions/shortcut.dart';
-import 'package:only_timetable/extensions/theme.dart';
 import 'package:only_timetable/models/route.dart';
 import 'package:only_timetable/models/stop.dart';
 import 'package:only_timetable/screens/route_detail.dart';
@@ -35,7 +34,7 @@ class RoutesList extends StatelessWidget {
       padding: showContainer
           ? EdgeInsets.symmetric(horizontal: 20, vertical: 10)
           : EdgeInsets.zero,
-      decoration: showContainer ? context.theme.boxDecoration : null,
+      decoration: showContainer ? context.containerDecoration : null,
       child: routes.isEmpty
           ? SizedBox(
               width: double.infinity,
@@ -45,7 +44,7 @@ class RoutesList extends StatelessWidget {
                   context.l10n.noRoutesFound,
                   textAlign: TextAlign.center,
                   style: context.textTheme.titleSmall?.copyWith(
-                    color: context.textColor?.withValues(alpha: .5),
+                    color: context.subTextColor,
                   ),
                 ),
               ),
@@ -58,7 +57,7 @@ class RoutesList extends StatelessWidget {
               separatorBuilder: (context, index) => Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5),
                 child: Divider(
-                  color: context.textColor?.withValues(alpha: .1),
+                  color: context.textColor.withValues(alpha: .1),
                   height: 1,
                 ),
               ),
@@ -111,9 +110,7 @@ class RoutesList extends StatelessWidget {
                               Text(
                                 context.getLocalizedString(route.source!),
                                 style: context.textTheme.titleSmall?.copyWith(
-                                  color: context.textColor?.withValues(
-                                    alpha: .5,
-                                  ),
+                                  color: context.subTextColor,
                                 ),
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -134,9 +131,7 @@ class RoutesList extends StatelessWidget {
                               Text(
                                 context.getLocalizedString(origName),
                                 style: context.textTheme.titleSmall?.copyWith(
-                                  color: context.textColor?.withValues(
-                                    alpha: .5,
-                                  ),
+                                  color: context.subTextColor,
                                 ),
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -169,18 +164,12 @@ class RoutesList extends StatelessWidget {
                                       etas.first.arrivalTime,
                                     ).difference(now).inMinutes.toString(),
                                     style: context.textTheme.titleLarge
-                                        ?.copyWith(
-                                          color: context.colorScheme.primary,
-                                        ),
+                                        ?.copyWith(color: context.primaryColor),
                                   ),
                                   Text(
                                     context.l10n.min,
                                     style: context.textTheme.titleSmall
-                                        ?.copyWith(
-                                          color: context.textColor?.withValues(
-                                            alpha: .5,
-                                          ),
-                                        ),
+                                        ?.copyWith(color: context.subTextColor),
                                     overflow: TextOverflow.visible,
                                     softWrap: false,
                                   ),

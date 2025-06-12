@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import 'package:only_timetable/l10n/locale_names.dart';
+import 'package:only_timetable/modals/color_picker_modal.dart';
+import 'package:only_timetable/services/appearance_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:only_timetable/extensions/shortcut.dart';
@@ -10,7 +13,7 @@ import 'package:only_timetable/services/main_service.dart';
 import 'package:only_timetable/services/settings_service.dart';
 import 'package:only_timetable/widgets/settings_group.dart';
 import 'package:only_timetable/widgets/settings_options.dart';
-import 'package:only_timetable/widgets/create_bookmark_modal.dart';
+import 'package:only_timetable/modals/create_bookmark_modal.dart';
 import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -43,25 +46,106 @@ class SettingsScreen extends StatelessWidget {
             children: [
               SettingsGroup(
                 title: context.l10n.general,
-                child: Consumer<SettingsService>(
-                  builder: (context, settingsService, _) {
-                    return Column(
-                      children: [
-                        ToggleOption(
-                          title: context.l10n.alwaysUseOSM,
-                          value: settingsService.getSync<bool>(
-                            SettingsKey.alwaysUseOSM,
-                          ),
-                          onChanged: (value) async {
-                            await settingsService.set<bool>(
-                              SettingsKey.alwaysUseOSM,
-                              value,
-                            );
-                          },
+                child: Consumer<AppearanceService>(
+                  builder: (context, appearanceService, _) =>
+                      Consumer<SettingsService>(
+                        builder: (context, settingsService, _) => Column(
+                          spacing: 10,
+                          children: [
+                            DropdownOption<dynamic>(
+                              title: context.l10n.language,
+                              value: appearanceService.locale,
+                              options: Map.fromEntries([
+                                MapEntry(null, context.l10n.auto),
+                                ...context
+                                    .findAncestorWidgetOfExactType<
+                                      MaterialApp
+                                    >()!
+                                    .supportedLocales
+                                    .map(
+                                      (locale) => MapEntry(
+                                        locale,
+                                        localeNames[locale.toLanguageTag()] ??
+                                            locale.toLanguageTag(),
+                                      ),
+                                    ),
+                              ]),
+                              onChanged: (dynamic value) =>
+                                  appearanceService.setLocale(value as Locale?),
+                            ),
+                            DropdownOption(
+                              title: context.l10n.themeMode,
+                              value: appearanceService.themeMode,
+                              options: {
+                                ThemeMode.system: context.l10n.auto,
+                                ThemeMode.light: context.l10n.light,
+                                ThemeMode.dark: context.l10n.dark,
+                              },
+                              onChanged: (ThemeMode? value) => appearanceService
+                                  .setThemeMode(value ?? ThemeMode.system),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  context.l10n.primaryColor,
+                                  style: context.textTheme.titleMedium,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                CupertinoButton(
+                                  padding: EdgeInsets.zero,
+                                  minimumSize: Size.zero,
+                                  onPressed: () => showModalBottomSheet(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    builder: (BuildContext context) =>
+                                        ColorPickerModal(
+                                          initialColor:
+                                              appearanceService.primaryColor,
+                                          onDone: (color) => appearanceService
+                                              .setPrimaryColor(color),
+                                        ),
+                                  ),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      vertical: 5,
+                                      horizontal: 20,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: appearanceService.primaryColor,
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                        color: context.textColor.withValues(
+                                          alpha: .125,
+                                        ),
+                                        width: 2,
+                                      ),
+                                    ),
+                                    child: Icon(
+                                      LucideIcons.pipette300,
+                                      color:
+                                          context.colorScheme.surfaceContainer,
+                                      size: 15,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            ToggleOption(
+                              title: context.l10n.alwaysUseOSM,
+                              value: settingsService.getSync<bool>(
+                                SettingsKey.alwaysUseOSM,
+                              ),
+                              onChanged: (value) async {
+                                await settingsService.set<bool>(
+                                  SettingsKey.alwaysUseOSM,
+                                  value,
+                                );
+                              },
+                            ),
+                          ],
                         ),
-                      ],
-                    );
-                  },
+                      ),
                 ),
               ),
               PluginGroup(),
@@ -90,7 +174,7 @@ class SettingsScreen extends StatelessWidget {
                         separatorBuilder: (context, index) => Padding(
                           padding: const EdgeInsets.symmetric(vertical: 10),
                           child: Divider(
-                            color: context.textColor?.withValues(alpha: .1),
+                            color: context.textColor.withValues(alpha: .1),
                             height: 1,
                           ),
                         ),
@@ -125,7 +209,7 @@ class SettingsScreen extends StatelessWidget {
                                 child: Icon(
                                   LucideIcons.trash200,
                                   color: isDefault
-                                      ? context.textColor?.withValues(alpha: .5)
+                                      ? context.subTextColor
                                       : Colors.red,
                                 ),
                               ),
@@ -154,7 +238,7 @@ class SettingsScreen extends StatelessWidget {
                               Text(
                                 mainService.version!,
                                 style: context.textTheme.titleMedium?.copyWith(
-                                  color: context.colorScheme.primary,
+                                  color: context.primaryColor,
                                 ),
                               ),
                             ],
@@ -202,7 +286,7 @@ class SettingsScreen extends StatelessWidget {
                               Text(
                                 mainService.license!,
                                 style: context.textTheme.titleMedium?.copyWith(
-                                  color: context.colorScheme.primary,
+                                  color: context.primaryColor,
                                 ),
                               ),
                             ],

@@ -177,5 +177,23 @@ class AppLocalizationsEn extends AppLocalizations {
   String get license => 'License';
 
   @override
-  String get openInBrowser => 'Open in Browser';
+  String get themeMode => 'Theme Mode';
+
+  @override
+  String get auto => 'Auto';
+
+  @override
+  String get light => 'Light';
+
+  @override
+  String get dark => 'Dark';
+
+  @override
+  String get language => 'Language';
+
+  @override
+  String get primaryColor => 'Primary Color';
+
+  @override
+  String get colorPicker => 'Color Picker';
 }

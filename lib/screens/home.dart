@@ -99,6 +99,8 @@ class _HomeScreenState extends State<HomeScreen> {
           unsubscribe: unsubscribe,
         );
       }
+    } else {
+      // TODO: Implement nearby
     }
 
     for (final key in toRemove) {
@@ -236,7 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Radius.circular(10),
                                 ),
                                 color: _selected == key
-                                    ? context.colorScheme.primary
+                                    ? context.primaryColor
                                     : context.colorScheme.shadow,
                                 padding: EdgeInsets.symmetric(
                                   horizontal: 20,
@@ -248,7 +250,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   style: TextStyle(
                                     color: _selected == key
                                         ? context.colorScheme.inversePrimary
-                                        : context.textColor?.withValues(
+                                        : context.textColor.withValues(
                                             alpha: .3,
                                           ),
                                   ),

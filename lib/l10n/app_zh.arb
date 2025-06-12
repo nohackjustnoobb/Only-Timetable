@@ -1,1 +1,82 @@
-{}
+{
+  "@@locale": "zh",
+  "appName": "Only Timetable",
+  "saved": "已儲存",
+  "nearby": "附近",
+  "settings": "設定",
+  "plugin": "插件",
+  "about": "關於",
+  "addPlugin": "新增插件",
+  "add": "新增",
+  "json": "JSON",
+  "url": "網址",
+  "failed": "失敗",
+  "close": "關閉",
+  "noPluginAvailable": "沒有可用插件",
+  "updatedOn": "更新於 {date}",
+  "@updatedOn": {
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yMd"
+      }
+    }
+  },
+  "neverUpdated": "從未更新",
+  "pluginInfo": "插件資訊",
+  "removePlugin": "移除插件",
+  "author": "作者",
+  "id": "ID",
+  "name": "名稱",
+  "version": "版本",
+  "repository": "儲存庫",
+  "description": "描述",
+  "confirmation": "確認",
+  "confirm": "確定",
+  "cancel": "取消",
+  "removePluginConfirm": "你確定要移除此插件嗎？",
+  "failedToUpdateRoutes": "無法為 {pluginName} 更新路線。",
+  "@failedToUpdateRoutes": {
+    "placeholders": {
+      "pluginName": {
+        "type": "String"
+      }
+    }
+  },
+  "noRoutesFound": "找不到路線",
+  "viewAll": "檢視全部",
+  "loadMore": "載入更多",
+  "general": "一般",
+  "alwaysUseOSM": "總是使用 OpenStreetMap",
+  "routeHasNoStops": "此路線沒有站點。",
+  "routeHasNoValidStops": "此路線沒有有效站點。",
+  "failedToLoadRoute": "無法載入路線。",
+  "mins": "{minutes} 分鐘",
+  "@mins": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "noEtaAvailable": "沒有預計到達時間",
+  "loadingEta": "正在載入預計到達時間...",
+  "bookmark": "書籤",
+  "createBookmark": "建立書籤",
+  "bookmarkName": "書籤名稱",
+  "create": "建立",
+  "bookmarkNameRequired": "書籤名稱為必填項。",
+  "defaultBookmark": "預設",
+  "deleteBookmarkConfirm": "你確定要刪除此書籤嗎？",
+  "done": "完成",
+  "bookmarkAlreadyExists": "已存在同名書籤。",
+  "min": "分鐘",
+  "license": "授權條款",
+  "themeMode": "主題模式",
+  "auto": "自動",
+  "light": "淺色",
+  "dark": "深色",
+  "language": "語言",
+  "primaryColor": "主色",
+  "colorPicker": "顏色選擇器"
+}

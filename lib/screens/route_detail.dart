@@ -11,7 +11,6 @@ import 'package:latlong2/latlong.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:mutex/mutex.dart';
 import 'package:only_timetable/extensions/shortcut.dart';
-import 'package:only_timetable/extensions/theme.dart';
 import 'package:only_timetable/globals.dart';
 import 'package:only_timetable/models/route.dart';
 import 'package:only_timetable/models/stop.dart';
@@ -19,7 +18,7 @@ import 'package:only_timetable/services/bookmark_service.dart';
 import 'package:only_timetable/services/eta_service.dart';
 import 'package:only_timetable/services/plugin/base_plugin.dart';
 import 'package:only_timetable/services/settings_service.dart';
-import 'package:only_timetable/widgets/add_bookmark_modal.dart';
+import 'package:only_timetable/modals/add_bookmark_modal.dart';
 import 'package:provider/provider.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:split_view/split_view.dart';
@@ -84,7 +83,7 @@ class _RouteMapState extends State<RouteMap> {
   Widget build(BuildContext context) {
     return Container(
       clipBehavior: Clip.hardEdge,
-      decoration: context.theme.boxDecoration,
+      decoration: context.containerDecoration,
       child: Consumer<SettingsService>(
         builder: (context, settingsService, child) {
           final alwaysUseOSM = settingsService.getSync<bool>(
@@ -262,7 +261,7 @@ class _StopsListState extends State<StopsList> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      decoration: context.theme.boxDecoration,
+      decoration: context.containerDecoration,
       child: ListView.separated(
         controller: _controller,
         padding: EdgeInsets.symmetric(vertical: 20),
@@ -275,7 +274,7 @@ class _StopsListState extends State<StopsList> {
                 child: Center(
                   child: Container(
                     width: 5,
-                    color: context.colorScheme.primary.withValues(alpha: .5),
+                    color: context.primaryColor.withValues(alpha: .5),
                   ),
                 ),
               ),
@@ -283,7 +282,7 @@ class _StopsListState extends State<StopsList> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 5),
                   child: Divider(
-                    color: context.textColor?.withValues(alpha: .1),
+                    color: context.textColor.withValues(alpha: .1),
                     height: 1,
                   ),
                 ),
@@ -319,9 +318,7 @@ class _StopsListState extends State<StopsList> {
                               : 1,
                           child: Container(
                             width: 5,
-                            color: context.colorScheme.primary.withValues(
-                              alpha: .5,
-                            ),
+                            color: context.primaryColor.withValues(alpha: .5),
                           ),
                         ),
                       ),
@@ -334,12 +331,12 @@ class _StopsListState extends State<StopsList> {
                             width: 25,
                             decoration: BoxDecoration(
                               color: isSelected
-                                  ? context.colorScheme.primary
+                                  ? context.primaryColor
                                   : context.colorScheme.surfaceContainer,
                               border: BoxBorder.all(
                                 color: isSelected
                                     ? Colors.transparent
-                                    : context.colorScheme.primary,
+                                    : context.primaryColor,
                                 width: 3,
                               ),
                               borderRadius: BorderRadius.circular(12.5),
@@ -350,7 +347,7 @@ class _StopsListState extends State<StopsList> {
                                 style: TextStyle(
                                   color: isSelected
                                       ? Colors.white
-                                      : context.colorScheme.primary,
+                                      : context.primaryColor,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 12,
                                 ),
@@ -380,7 +377,7 @@ class _StopsListState extends State<StopsList> {
                                 ),
                                 style: context.textTheme.titleMedium?.copyWith(
                                   color: isSelected
-                                      ? context.colorScheme.primary
+                                      ? context.primaryColor
                                       : null,
                                   fontWeight: isSelected
                                       ? FontWeight.normal
@@ -414,8 +411,7 @@ class _StopsListState extends State<StopsList> {
                                                   ? context.l10n.loadingEta
                                                   : context.l10n.noEtaAvailable,
                                               style: TextStyle(
-                                                color: context.textColor
-                                                    ?.withValues(alpha: .5),
+                                                color: context.subTextColor,
                                               ),
                                             )
                                           : Column(
@@ -435,10 +431,7 @@ class _StopsListState extends State<StopsList> {
                                                               : LucideIcons
                                                                     .calendar,
                                                           color: context
-                                                              .textColor
-                                                              ?.withValues(
-                                                                alpha: .5,
-                                                              ),
+                                                              .subTextColor,
                                                           size: 16,
                                                         ),
                                                         Text(
@@ -631,7 +624,7 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
                 Text(
                   context.getLocalizedString(_destStop!.name!),
                   style: context.textTheme.titleSmall?.copyWith(
-                    color: context.textColor?.withValues(alpha: .5),
+                    color: context.subTextColor,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),

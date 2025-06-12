@@ -4,7 +4,7 @@ import 'package:only_timetable/extensions/shortcut.dart';
 import 'package:only_timetable/models/route.dart';
 import 'package:only_timetable/services/plugin/base_plugin.dart';
 import 'package:only_timetable/services/plugin/plugin_service.dart';
-import 'package:only_timetable/widgets/modal_base.dart';
+import 'package:only_timetable/modals/modal_base.dart';
 import 'package:only_timetable/widgets/routes_list.dart';
 import 'package:provider/provider.dart';
 
@@ -74,15 +74,11 @@ class _SearchByPluginModalState extends State<SearchByPluginModal> {
             mainAxisSize: MainAxisSize.min,
             spacing: 3,
             children: [
-              Icon(
-                LucideIcons.search,
-                color: context.textColor?.withValues(alpha: .5),
-                size: 12,
-              ),
+              Icon(LucideIcons.search, color: context.subTextColor, size: 12),
               Text(
                 widget.query,
                 style: context.textTheme.titleSmall?.copyWith(
-                  color: context.textColor?.withValues(alpha: .5),
+                  color: context.subTextColor,
                 ),
               ),
             ],
@@ -97,7 +93,7 @@ class _SearchByPluginModalState extends State<SearchByPluginModal> {
               context.l10n.noRoutesFound,
               textAlign: TextAlign.center,
               style: context.textTheme.titleSmall?.copyWith(
-                color: context.textColor?.withValues(alpha: .5),
+                color: context.subTextColor,
               ),
             ),
           )

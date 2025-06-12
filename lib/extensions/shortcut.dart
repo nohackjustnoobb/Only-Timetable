@@ -13,7 +13,22 @@ extension Shortcut on BuildContext {
   TextTheme get textTheme => Theme.of(this).textTheme;
   ColorScheme get colorScheme => Theme.of(this).colorScheme;
 
-  Color? get textColor => Theme.of(this).colorScheme.inverseSurface;
+  bool get isDarkMode => Theme.of(this).brightness == Brightness.dark;
+
+  BoxDecoration get containerDecoration => BoxDecoration(
+    border: BoxBorder.all(
+      color: isDarkMode
+          ? Colors.transparent
+          : colorScheme.inverseSurface.withValues(alpha: .125),
+    ),
+    borderRadius: BorderRadius.circular(10),
+    color: colorScheme.surfaceContainer,
+  );
+
+  Color get textColor => Theme.of(this).colorScheme.inverseSurface;
+  Color get subTextColor =>
+      Theme.of(this).colorScheme.inverseSurface.withValues(alpha: .5);
+  Color get primaryColor => Theme.of(this).colorScheme.primary;
 
   MediaQueryData get mediaQuery => MediaQuery.of(this);
 

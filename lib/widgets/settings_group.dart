@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:only_timetable/extensions/shortcut.dart';
-import 'package:only_timetable/extensions/theme.dart';
 
 class SettingsGroup extends StatelessWidget {
   final String title;
@@ -28,7 +27,7 @@ class SettingsGroup extends StatelessWidget {
                 Text(
                   title,
                   style: context.textTheme.titleSmall?.copyWith(
-                    color: context.colorScheme.primary,
+                    color: context.primaryColor,
                     fontWeight: FontWeight.normal,
                   ),
                 ),
@@ -38,7 +37,7 @@ class SettingsGroup extends StatelessWidget {
           ),
         ),
         Container(
-          decoration: context.theme.boxDecoration,
+          decoration: context.containerDecoration,
           padding: EdgeInsets.all(20),
           child: child,
         ),

@@ -12,6 +12,8 @@ dependencies:
   animated_snack_bar: ^0.4.0
   apple_maps_flutter: ^1.4.0
   collection: ^1.19.1
+  dropdown_button2: ^2.3.9
+  flex_color_picker: ^3.7.1
   flutter:
     sdk: flutter
   flutter_inappwebview: ^6.1.5

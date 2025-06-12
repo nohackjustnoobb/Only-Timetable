@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import 'package:only_timetable/extensions/shortcut.dart';
-import 'package:only_timetable/extensions/theme.dart';
 
 class SimpleSearchBar extends StatelessWidget {
   final bool appearanceOnly;
@@ -21,7 +20,7 @@ class SimpleSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: context.theme.boxDecoration.copyWith(
+      decoration: context.containerDecoration.copyWith(
         border: BoxBorder.all(
           color: context.theme.brightness == Brightness.dark
               ? Colors.transparent
