@@ -7,6 +7,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart' hide Route;
 import 'package:flutter/material.dart' hide Route;
 import 'package:flutter_map/flutter_map.dart';
+import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:mutex/mutex.dart';
@@ -414,39 +415,73 @@ class _StopsListState extends State<StopsList> {
                                                 color: context.subTextColor,
                                               ),
                                             )
-                                          : Column(
-                                              spacing: 5,
-                                              mainAxisSize: MainAxisSize.min,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: etas
-                                                  .map(
-                                                    (eta) => Row(
-                                                      spacing: 5,
-                                                      children: [
-                                                        Icon(
-                                                          eta.isRealTime
-                                                              ? LucideIcons
-                                                                    .clock
-                                                              : LucideIcons
-                                                                    .calendar,
-                                                          color: context
-                                                              .subTextColor,
-                                                          size: 16,
+                                          : Row(
+                                              spacing: 10,
+                                              children: [
+                                                Column(
+                                                  spacing: 5,
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: etas
+                                                      .map(
+                                                        (eta) => Row(
+                                                          spacing: 5,
+                                                          children: [
+                                                            Icon(
+                                                              eta.isRealTime
+                                                                  ? LucideIcons
+                                                                        .clock
+                                                                  : LucideIcons
+                                                                        .calendar,
+                                                              color: context
+                                                                  .subTextColor,
+                                                              size: 16,
+                                                            ),
+                                                            Text(
+                                                              context.l10n.mins(
+                                                                DateTime.fromMillisecondsSinceEpoch(
+                                                                      eta.arrivalTime,
+                                                                      isUtc:
+                                                                          true,
+                                                                    )
+                                                                    .difference(
+                                                                      now,
+                                                                    )
+                                                                    .inMinutes,
+                                                              ),
+                                                              style: TextStyle(
+                                                                fontFeatures: [
+                                                                  FontFeature.tabularFigures(),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ],
                                                         ),
-                                                        Text(
-                                                          context.l10n.mins(
-                                                            DateTime.fromMillisecondsSinceEpoch(
-                                                                  eta.arrivalTime,
-                                                                )
-                                                                .difference(now)
-                                                                .inMinutes,
+                                                      )
+                                                      .toList(),
+                                                ),
+                                                Column(
+                                                  spacing: 5,
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: etas
+                                                      .map(
+                                                        (eta) => Text(
+                                                          '(${DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(eta.arrivalTime, isUtc: true).toLocal())})',
+                                                          style: TextStyle(
+                                                            fontFeatures: [
+                                                              FontFeature.tabularFigures(),
+                                                            ],
                                                           ),
                                                         ),
-                                                      ],
-                                                    ),
-                                                  )
-                                                  .toList(),
+                                                      )
+                                                      .toList(),
+                                                ),
+                                              ],
                                             );
                                     },
                                   ),

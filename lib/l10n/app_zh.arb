@@ -13,12 +13,12 @@
   "failed": "失敗",
   "close": "關閉",
   "noPluginAvailable": "沒有可用插件",
-  "updatedOn": "更新於 {date}",
+  "updatedOn": "更新於{date}",
   "@updatedOn": {
     "placeholders": {
       "date": {
         "type": "DateTime",
-        "format": "yMd"
+        "format": "yMMMd"
       }
     }
   },

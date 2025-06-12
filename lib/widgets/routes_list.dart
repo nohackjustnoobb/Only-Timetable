@@ -162,6 +162,7 @@ class RoutesList extends StatelessWidget {
                                   Text(
                                     DateTime.fromMillisecondsSinceEpoch(
                                       etas.first.arrivalTime,
+                                      isUtc: true,
                                     ).difference(now).inMinutes.toString(),
                                     style: context.textTheme.titleLarge
                                         ?.copyWith(color: context.primaryColor),

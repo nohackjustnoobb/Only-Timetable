@@ -1,0 +1,82 @@
+{
+  "@@locale": "ja",
+  "appName": "オンリータイムテーブル",
+  "saved": "保存済み",
+  "nearby": "近く",
+  "settings": "設定",
+  "plugin": "プラグイン",
+  "about": "アプリについて",
+  "addPlugin": "プラグインを追加",
+  "add": "追加",
+  "json": "JSON",
+  "url": "URL",
+  "failed": "失敗しました",
+  "close": "閉じる",
+  "noPluginAvailable": "利用可能なプラグインはありません",
+  "updatedOn": "{date}に更新",
+  "@updatedOn": {
+    "placeholders": {
+      "date": {
+        "type": "DateTime",
+        "format": "yMMMd"
+      }
+    }
+  },
+  "neverUpdated": "一度も更新されていません",
+  "pluginInfo": "プラグイン情報",
+  "removePlugin": "プラグインを削除",
+  "author": "作者",
+  "id": "ID",
+  "name": "名前",
+  "version": "バージョン",
+  "repository": "リポジトリ",
+  "description": "説明",
+  "confirmation": "確認",
+  "confirm": "確認",
+  "cancel": "キャンセル",
+  "removePluginConfirm": "このプラグインを削除してもよろしいですか？",
+  "failedToUpdateRoutes": "{pluginName}のルート更新に失敗しました。",
+  "@failedToUpdateRoutes": {
+    "placeholders": {
+      "pluginName": {
+        "type": "String"
+      }
+    }
+  },
+  "noRoutesFound": "ルートが見つかりません",
+  "viewAll": "すべて表示",
+  "loadMore": "さらに読み込む",
+  "general": "一般",
+  "alwaysUseOSM": "常にOpenStreetMapを使用",
+  "routeHasNoStops": "このルートには停留所がありません。",
+  "routeHasNoValidStops": "このルートには有効な停留所がありません。",
+  "failedToLoadRoute": "ルートの読み込みに失敗しました。",
+  "mins": "{minutes}分",
+  "@mins": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "noEtaAvailable": "到着予想時刻はありません",
+  "loadingEta": "到着予想時刻を読み込み中...",
+  "bookmark": "ブックマーク",
+  "createBookmark": "ブックマークを作成",
+  "bookmarkName": "ブックマーク名",
+  "create": "作成",
+  "bookmarkNameRequired": "ブックマーク名は必須です。",
+  "defaultBookmark": "デフォルト",
+  "deleteBookmarkConfirm": "このブックマークを削除してもよろしいですか？",
+  "done": "完了",
+  "bookmarkAlreadyExists": "この名前のブックマークは既に存在します。",
+  "min": "分",
+  "license": "ライセンス",
+  "themeMode": "テーマモード",
+  "auto": "自動",
+  "light": "ライト",
+  "dark": "ダーク",
+  "language": "言語",
+  "primaryColor": "テーマカラー",
+  "colorPicker": "カラーピッカー"
+}

@@ -49,10 +49,10 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String updatedOn(DateTime date) {
-    final intl.DateFormat dateDateFormat = intl.DateFormat.yMd(localeName);
+    final intl.DateFormat dateDateFormat = intl.DateFormat.yMMMd(localeName);
     final String dateString = dateDateFormat.format(date);
 
-    return '更新於 $dateString';
+    return '更新於$dateString';
   }
 
   @override
@@ -234,10 +234,10 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String updatedOn(DateTime date) {
-    final intl.DateFormat dateDateFormat = intl.DateFormat.yMd(localeName);
+    final intl.DateFormat dateDateFormat = intl.DateFormat.yMMMd(localeName);
     final String dateString = dateDateFormat.format(date);
 
-    return '更新于 $dateString';
+    return '更新于$dateString';
   }
 
   @override
