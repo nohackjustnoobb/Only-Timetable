@@ -4,25 +4,27 @@ Only Timetable is a flexible, plugin-based timetable application for bus and oth
 
 ## Features
 
-1. **Plugin-based architecture:** Easily extend support to new transport providers or regions by adding plugins. The app is designed to be minimal and adaptable, with all timetable data provided by plugins.
+1. **Plugin-based & Extensible:** Easily extend support to new transport providers or regions by adding plugins. The app is designed to be minimal and adaptable, with all timetable data provided by plugins.
 
 <p align="center">
-  <img src="doc/plugin.png" width="250px" />
-  <img src="doc/add_plugin.png" width="250px" />
+  <img src="doc/plugin.png" width="200px" />
+  <img src="doc/add_plugin.png" width="200px" />
 </p>
 
-2. **Light & Dark Mode:** Enjoy a beautiful, modern interface that automatically adapts to your device's light or dark theme for comfortable viewing anytime.
+2. **Modern, Customizable UI:** Enjoy a beautiful, modern interface that automatically adapts to your device's light or dark theme. Personalize your experience by choosing your preferred theme color with a simple color picker.
 
 <p align="center">
-  <img src="doc/light_theme.png" width="250px" />
-  <img src="doc/dark_theme.png" width="250px" />
+  <img src="doc/light_theme.png" width="200px" />
+  <img src="doc/dark_theme.png" width="200px" />
+  <img src="doc/theme_color.png" width="200px" />
 </p>
 
-3. **Easy to use:** Focused on simplicity—no distractions, just the essential features for managing and viewing transport schedules. Intuitive design makes it easy for anyone to get started quickly.
+3. **Multilanguage & Easy to Use:** Use the app in your preferred language—Only Timetable supports multiple languages, making it accessible worldwide. The intuitive design ensures anyone can get started quickly, focusing on simplicity and essential features for managing and viewing transport schedules.
 
 <p align="center">
-  <img src="doc/search.png" width="250px" />
-  <img src="doc/route.png" width="250px" />
+  <img src="doc/multilanguage.png" width="200px" />
+  <img src="doc/search.png" width="200px" />
+  <img src="doc/route.png" width="200px" />
 </p>
 
 ## Getting Started

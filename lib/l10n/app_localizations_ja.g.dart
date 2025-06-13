@@ -187,4 +187,10 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get colorPicker => 'カラーピッカー';
+
+  @override
+  String get filter => 'Filter';
+
+  @override
+  String get showRoutesFrom => 'Show Routes From:';
 }

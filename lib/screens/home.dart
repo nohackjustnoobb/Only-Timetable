@@ -5,7 +5,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:mutex/mutex.dart';
 
 import 'package:only_timetable/extensions/shortcut.dart';
-import 'package:only_timetable/globals.dart';
+import 'package:only_timetable/modals/filter_modal.dart';
 import 'package:only_timetable/models/bookmark.dart';
 import 'package:only_timetable/models/fast_hash.dart';
 import 'package:only_timetable/models/route.dart';
@@ -54,6 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late final PluginService _pluginService;
   late final EtaService _etaService;
 
+  late List<String> _diaplayFromPlugins;
   final Map<int, _ItemDetail> _itemDetails = {};
   final _lock = Mutex();
 
@@ -71,7 +72,9 @@ class _HomeScreenState extends State<HomeScreen> {
         return _bookmarkServiceListener();
       }
 
-      for (final bookmarked in bookmark.bookmarkeds) {
+      for (final bookmarked in bookmark.bookmarkeds.where(
+        (b) => _diaplayFromPlugins.contains(b.pluginId),
+      )) {
         final key = _ItemDetail.getId(
           bookmarked.pluginId,
           bookmarked.routeId,
@@ -125,6 +128,8 @@ class _HomeScreenState extends State<HomeScreen> {
     _pluginService = Provider.of<PluginService>(context, listen: false);
     _etaService = Provider.of<EtaService>(context, listen: false);
 
+    _diaplayFromPlugins = _pluginService.plugins.map((e) => e.id).toList();
+
     _bookmarkServiceListener();
   }
 
@@ -169,7 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 actions: [
                   CupertinoButton(
                     padding: EdgeInsets.zero,
-                    minimumSize: Size.zero,
+                    alignment: Alignment.centerRight,
                     child: Icon(
                       LucideIcons.settings200,
                       color: context.textColor,
@@ -203,79 +208,118 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: SimpleSearchBar(appearanceOnly: true),
               ),
             ),
-            Row(
-              spacing: 15,
-              children: [
-                Expanded(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Consumer<BookmarkService>(
-                      builder: (context, bookmarkService, child) => Row(
-                        spacing: 15,
-                        children:
-                            [
-                              ...buttonText,
-                              ...bookmarkService.bookmarks.skip(1),
-                            ].mapIndexed((idx, obj) {
-                              final text = idx < 2
-                                  ? obj as String
-                                  : (obj as Bookmark).name;
+            IntrinsicHeight(
+              child: Row(
+                spacing:
+                    _diaplayFromPlugins.length != _pluginService.plugins.length
+                    ? 10
+                    : 0,
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Consumer<BookmarkService>(
+                        builder: (context, bookmarkService, child) => Row(
+                          spacing: 15,
+                          children:
+                              [
+                                ...buttonText,
+                                ...bookmarkService.bookmarks.skip(1),
+                              ].mapIndexed((idx, obj) {
+                                final text = idx < 2
+                                    ? obj as String
+                                    : (obj as Bookmark).name;
 
-                              final String key;
-                              switch (idx) {
-                                case 0:
-                                  key = "default";
-                                  break;
-                                case 1:
-                                  key = "nearby";
-                                  break;
-                                default:
-                                  key = (obj as Bookmark).name;
-                              }
+                                final String key;
+                                switch (idx) {
+                                  case 0:
+                                    key = "default";
+                                    break;
+                                  case 1:
+                                    key = "nearby";
+                                    break;
+                                  default:
+                                    key = (obj as Bookmark).name;
+                                }
 
-                              return CupertinoButton.filled(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10),
-                                ),
-                                color: _selected == key
-                                    ? context.primaryColor
-                                    : context.colorScheme.shadow,
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 20,
-                                  vertical: 5,
-                                ),
-                                minimumSize: Size.zero,
-                                child: Text(
-                                  text,
-                                  style: TextStyle(
-                                    color: _selected == key
-                                        ? context.colorScheme.inversePrimary
-                                        : context.textColor.withValues(
-                                            alpha: .3,
-                                          ),
+                                return CupertinoButton.filled(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10),
                                   ),
-                                ),
-                                onPressed: () => select(key),
-                              );
-                            }).toList(),
+                                  color: _selected == key
+                                      ? context.primaryColor
+                                      : context.colorScheme.shadow,
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 20,
+                                    vertical: 5,
+                                  ),
+                                  minimumSize: Size.zero,
+                                  child: Text(
+                                    text,
+                                    style: TextStyle(
+                                      color: _selected == key
+                                          ? context.colorScheme.inversePrimary
+                                          : context.textColor.withValues(
+                                              alpha: .3,
+                                            ),
+                                    ),
+                                  ),
+                                  onPressed: () => select(key),
+                                );
+                              }).toList(),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                CupertinoButton(
-                  padding: EdgeInsets.zero,
-                  minimumSize: const Size(25, 0),
-                  onPressed: () {
-                    showErrorSnackbar("This feature is not implemented yet.");
-                  },
-                  child: Icon(
-                    LucideIcons.listFilter200,
-                    weight: 250,
-                    color: context.textColor,
-                    size: 20,
+                  SizedBox(
+                    height: double.infinity,
+                    child: CupertinoButton(
+                      padding: EdgeInsets.zero,
+                      alignment: Alignment.centerRight,
+                      minimumSize: const Size(40, 0),
+                      onPressed: () => showModalBottomSheet(
+                        context: context,
+                        builder: (context) => FilterModal(
+                          options: _pluginService.plugins,
+                          selectedOptions: _diaplayFromPlugins,
+                          onFilterChanged: (filter) => setState(() {
+                            _diaplayFromPlugins = filter;
+                            _bookmarkServiceListener();
+                          }),
+                        ),
+                      ),
+                      child: Row(
+                        spacing: 5,
+                        children: [
+                          if (_diaplayFromPlugins.length !=
+                              _pluginService.plugins.length)
+                            Container(
+                              padding: const EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: context.primaryColor,
+                              ),
+                              child: Text(
+                                (_pluginService.plugins.length -
+                                        _diaplayFromPlugins.length)
+                                    .toString(),
+                                style: TextStyle(
+                                  color: context.colorScheme.inversePrimary,
+                                  fontSize: 8,
+                                ),
+                              ),
+                            ),
+                          Icon(
+                            LucideIcons.listFilter200,
+                            weight: 250,
+                            color: context.textColor,
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             Flexible(
               child: SingleChildScrollView(

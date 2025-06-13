@@ -442,6 +442,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Color Picker'**
   String get colorPicker;
+
+  /// No description provided for @filter.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter'**
+  String get filter;
+
+  /// No description provided for @showRoutesFrom.
+  ///
+  /// In en, this message translates to:
+  /// **'Show Routes From:'**
+  String get showRoutesFrom;
 }
 
 class _AppLocalizationsDelegate

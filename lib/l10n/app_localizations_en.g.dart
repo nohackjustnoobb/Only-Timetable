@@ -196,4 +196,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get colorPicker => 'Color Picker';
+
+  @override
+  String get filter => 'Filter';
+
+  @override
+  String get showRoutesFrom => 'Show Routes From:';
 }

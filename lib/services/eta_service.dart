@@ -15,9 +15,9 @@ const MAX_CACHED_ETA = 100;
 
 class _EtaSubscription {
   // This class is used to store the parameters of an ETA subscription.
-  final BasePlugin plugin;
-  final Route route;
-  final Stop stop;
+  BasePlugin plugin;
+  Route route;
+  Stop stop;
 
   // The ETA data for this subscription.
   List<Eta> etas = [];
@@ -136,6 +136,11 @@ class EtaService extends ChangeNotifier {
 
     if (_etaSubscription.containsKey(id)) {
       await _etaSubscription[id]!.incrementCounter();
+      // Update the reference to the plugin, route, and stop
+      // As the plugin, route, and stop might have changed
+      _etaSubscription[id]!.plugin = plugin;
+      _etaSubscription[id]!.route = route;
+      _etaSubscription[id]!.stop = stop;
     } else {
       _etaSubscription[id] = _EtaSubscription(
         plugin: plugin,

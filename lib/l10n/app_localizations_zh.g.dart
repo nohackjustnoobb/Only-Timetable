@@ -187,6 +187,12 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get colorPicker => '顏色選擇器';
+
+  @override
+  String get filter => 'Filter';
+
+  @override
+  String get showRoutesFrom => 'Show Routes From:';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).

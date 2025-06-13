@@ -78,5 +78,7 @@
   "dark": "Dark",
   "language": "Language",
   "primaryColor": "Primary Color",
-  "colorPicker": "Color Picker"
+  "colorPicker": "Color Picker",
+  "filter": "Filter",
+  "showRoutesFrom": "Show Routes From:"
 }

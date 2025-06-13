@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart' hide Route;
 import 'package:flutter/material.dart' hide Route;
 import 'package:only_timetable/extensions/shortcut.dart';
 import 'package:only_timetable/models/route.dart';
-import 'package:only_timetable/screens/search/search_by_plugin.dart';
+import 'package:only_timetable/modals/search_by_plugin_modal.dart';
 import 'package:only_timetable/services/plugin/plugin_service.dart';
 import 'package:only_timetable/widgets/routes_list.dart';
 import 'package:only_timetable/widgets/simple_search_bar.dart';

@@ -391,131 +391,143 @@ class _StopsListState extends State<StopsList> {
                           if (isSelected)
                             Padding(
                               padding: const EdgeInsets.only(top: 5),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Consumer<EtaService>(
-                                    builder: (context, etaService, child) {
-                                      final etas = etaService.getEta(
-                                        widget.plugin,
-                                        widget.route,
-                                        stop,
-                                      );
+                              child: IntrinsicHeight(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Consumer<EtaService>(
+                                      builder: (context, etaService, child) {
+                                        final etas = etaService.getEta(
+                                          widget.plugin,
+                                          widget.route,
+                                          stop,
+                                        );
 
-                                      final now = DateTime.now();
+                                        final now = DateTime.now();
 
-                                      return etas == null || etas.isEmpty
-                                          ? Text(
-                                              etas == null
-                                                  ? context.l10n.loadingEta
-                                                  : context.l10n.noEtaAvailable,
-                                              style: TextStyle(
-                                                color: context.subTextColor,
-                                              ),
-                                            )
-                                          : Row(
-                                              spacing: 10,
-                                              children: [
-                                                Column(
-                                                  spacing: 5,
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: etas
-                                                      .map(
-                                                        (eta) => Row(
-                                                          spacing: 5,
-                                                          children: [
-                                                            Icon(
-                                                              eta.isRealTime
-                                                                  ? LucideIcons
-                                                                        .clock
-                                                                  : LucideIcons
-                                                                        .calendar,
-                                                              color: context
-                                                                  .subTextColor,
-                                                              size: 16,
-                                                            ),
-                                                            Text(
-                                                              context.l10n.mins(
-                                                                DateTime.fromMillisecondsSinceEpoch(
-                                                                      eta.arrivalTime,
-                                                                      isUtc:
-                                                                          true,
-                                                                    )
-                                                                    .difference(
-                                                                      now,
-                                                                    )
-                                                                    .inMinutes,
-                                                              ),
-                                                              style: TextStyle(
-                                                                fontFeatures: [
-                                                                  FontFeature.tabularFigures(),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      )
-                                                      .toList(),
+                                        return etas == null || etas.isEmpty
+                                            ? Text(
+                                                etas == null
+                                                    ? context.l10n.loadingEta
+                                                    : context
+                                                          .l10n
+                                                          .noEtaAvailable,
+                                                style: TextStyle(
+                                                  color: context.subTextColor,
                                                 ),
-                                                Column(
-                                                  spacing: 5,
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: etas
-                                                      .map(
-                                                        (eta) => Text(
-                                                          '(${DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(eta.arrivalTime, isUtc: true).toLocal())})',
-                                                          style: TextStyle(
-                                                            fontFeatures: [
-                                                              FontFeature.tabularFigures(),
+                                              )
+                                            : Row(
+                                                spacing: 10,
+                                                children: [
+                                                  Column(
+                                                    spacing: 5,
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: etas
+                                                        .map(
+                                                          (eta) => Row(
+                                                            spacing: 5,
+                                                            children: [
+                                                              Icon(
+                                                                eta.isRealTime
+                                                                    ? LucideIcons
+                                                                          .clock
+                                                                    : LucideIcons
+                                                                          .calendar,
+                                                                color: context
+                                                                    .subTextColor,
+                                                                size: 16,
+                                                              ),
+                                                              Text(
+                                                                context.l10n.mins(
+                                                                  DateTime.fromMillisecondsSinceEpoch(
+                                                                        eta.arrivalTime,
+                                                                        isUtc:
+                                                                            true,
+                                                                      )
+                                                                      .difference(
+                                                                        now,
+                                                                      )
+                                                                      .inMinutes,
+                                                                ),
+                                                                style: TextStyle(
+                                                                  fontFeatures: [
+                                                                    FontFeature.tabularFigures(),
+                                                                  ],
+                                                                ),
+                                                              ),
                                                             ],
                                                           ),
+                                                        )
+                                                        .toList(),
+                                                  ),
+                                                  Column(
+                                                    spacing: 5,
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: etas
+                                                        .map(
+                                                          (eta) => Text(
+                                                            '(${DateFormat.Hm().format(DateTime.fromMillisecondsSinceEpoch(eta.arrivalTime, isUtc: true).toLocal())})',
+                                                            style: TextStyle(
+                                                              fontFeatures: [
+                                                                FontFeature.tabularFigures(),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        )
+                                                        .toList(),
+                                                  ),
+                                                ],
+                                              );
+                                      },
+                                    ),
+                                    Consumer<BookmarkService>(
+                                      builder:
+                                          (
+                                            context,
+                                            bookmarkService,
+                                            child,
+                                          ) => SizedBox(
+                                            height: double.infinity,
+                                            child: CupertinoButton(
+                                              padding: EdgeInsets.zero,
+                                              minimumSize: Size(50, 0),
+                                              alignment: Alignment.topRight,
+                                              onPressed: () =>
+                                                  showModalBottomSheet(
+                                                    context: context,
+                                                    builder: (context) =>
+                                                        AddBookmarkModal(
+                                                          plugin: widget.plugin,
+                                                          route: widget.route,
+                                                          stop: stop,
                                                         ),
-                                                      )
-                                                      .toList(),
-                                                ),
-                                              ],
-                                            );
-                                    },
-                                  ),
-                                  Consumer<BookmarkService>(
-                                    builder:
-                                        (
-                                          context,
-                                          bookmarkService,
-                                          child,
-                                        ) => CupertinoButton(
-                                          padding: EdgeInsets.zero,
-                                          minimumSize: Size.zero,
-                                          onPressed: () => showModalBottomSheet(
-                                            context: context,
-                                            builder: (context) =>
-                                                AddBookmarkModal(
-                                                  plugin: widget.plugin,
-                                                  route: widget.route,
-                                                  stop: stop,
-                                                ),
+                                                  ),
+                                              child: Icon(
+                                                bookmarkService.isBookmarked(
+                                                      plugin: widget.plugin,
+                                                      route: widget.route,
+                                                      stop: stop,
+                                                    )
+                                                    ? LucideIcons
+                                                          .bookmarkCheck200
+                                                    : LucideIcons.bookmark200,
+                                                color: context.textColor,
+                                              ),
+                                            ),
                                           ),
-                                          child: Icon(
-                                            bookmarkService.isBookmarked(
-                                                  plugin: widget.plugin,
-                                                  route: widget.route,
-                                                  stop: stop,
-                                                )
-                                                ? LucideIcons.bookmarkCheck200
-                                                : LucideIcons.bookmark200,
-                                            color: context.textColor,
-                                          ),
-                                        ),
-                                  ),
-                                ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                         ],
