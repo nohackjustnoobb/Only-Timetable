@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:apple_maps_flutter/apple_maps_flutter.dart'
@@ -7,6 +8,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart' hide Route;
 import 'package:flutter/material.dart' hide Route;
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -34,6 +36,7 @@ class RouteMap extends StatefulWidget {
   final Stop destStop;
   final Function(Stop) onStopTapped;
   final Stop? selectedStop;
+  final bool showUserLocation;
 
   late final List<Stop> _stopsList;
 
@@ -43,6 +46,7 @@ class RouteMap extends StatefulWidget {
     required this.origStop,
     required this.destStop,
     required this.onStopTapped,
+    required this.showUserLocation,
     this.selectedStop,
   }) {
     _stopsList = route.stops
@@ -57,6 +61,21 @@ class RouteMap extends StatefulWidget {
 
 class _RouteMapState extends State<RouteMap> {
   dynamic _controller;
+
+  Stream<LocationMarkerPosition?>? _positionStream;
+  StreamSubscription? _subscription;
+  LatLng? _location;
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    _subscription?.cancel();
+
+    if (_controller is MapController) {
+      (_controller as MapController).dispose();
+    }
+  }
 
   @override
   void didUpdateWidget(covariant RouteMap oldWidget) {
@@ -95,65 +114,112 @@ class _RouteMapState extends State<RouteMap> {
           if (useOSM &&
               (_controller == null || _controller is! MapController)) {
             _controller = MapController();
+
+            _positionStream ??= LocationMarkerDataStreamFactory()
+                .fromGeolocatorPositionStream()
+                .asBroadcastStream();
+
+            _subscription ??= _positionStream!.listen(
+              (location) => _location ??= location?.latLng,
+            );
           }
 
           return useOSM
-              ? FlutterMap(
-                  mapController: _controller,
-                  options: MapOptions(
-                    initialCenter: LatLng(
-                      widget.selectedStop?.lat ?? widget.origStop.lat!,
-                      widget.selectedStop?.long ?? widget.origStop.long!,
-                    ),
-                    initialZoom: 15,
-                  ),
+              ? Stack(
                   children: [
-                    TileLayer(
-                      urlTemplate:
-                          'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                    ),
-                    PolylineLayer(
-                      polylines: [
-                        Polyline(
-                          points: widget._stopsList
-                              .map((stop) => LatLng(stop.lat!, stop.long!))
+                    FlutterMap(
+                      mapController: _controller,
+                      options: MapOptions(
+                        initialCenter: LatLng(
+                          widget.selectedStop?.lat ?? widget.origStop.lat!,
+                          widget.selectedStop?.long ?? widget.origStop.long!,
+                        ),
+                        initialZoom: 15,
+                      ),
+                      children: [
+                        TileLayer(
+                          urlTemplate:
+                              'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                        ),
+                        PolylineLayer(
+                          polylines: [
+                            Polyline(
+                              points: widget._stopsList
+                                  .map((stop) => LatLng(stop.lat!, stop.long!))
+                                  .toList(),
+                              strokeWidth: 5,
+                              color: Colors.red,
+                            ),
+                          ],
+                        ),
+                        MarkerLayer(
+                          markers: widget._stopsList
+                              .map(
+                                (stop) => Marker(
+                                  point: LatLng(stop.lat!, stop.long!),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      _toStop(stop);
+
+                                      widget.onStopTapped(stop);
+                                    },
+                                    child: Icon(
+                                      Icons.location_on,
+                                      shadows: [
+                                        Shadow(
+                                          color: Colors.black,
+                                          blurRadius: 5,
+                                        ),
+                                      ],
+                                      color:
+                                          widget.selectedStop == null ||
+                                              widget._stopsList.indexOf(
+                                                    widget.selectedStop!,
+                                                  ) <=
+                                                  widget._stopsList.indexOf(
+                                                    stop,
+                                                  )
+                                          ? Colors.red
+                                          : Colors.grey,
+                                      size: 35,
+                                    ),
+                                  ),
+                                ),
+                              )
                               .toList(),
-                          strokeWidth: 5,
-                          color: Colors.red,
+                        ),
+                        if (widget.showUserLocation)
+                          CurrentLocationLayer(positionStream: _positionStream),
+                        SimpleAttributionWidget(
+                          source: Text('OpenStreetMap contributors'),
+                          backgroundColor: context.colorScheme.surfaceContainer
+                              .withValues(alpha: 0.75),
                         ),
                       ],
                     ),
-                    MarkerLayer(
-                      markers: widget._stopsList
-                          .map(
-                            (stop) => Marker(
-                              point: LatLng(stop.lat!, stop.long!),
-                              child: GestureDetector(
-                                onTap: () {
-                                  _toStop(stop);
+                    if (widget.showUserLocation && _location != null)
+                      Positioned(
+                        top: 15,
+                        right: 15,
+                        child: CupertinoButton(
+                          padding: EdgeInsets.zero,
+                          minimumSize: Size.zero,
+                          onPressed: () {
+                            if (_controller is! MapController) return;
 
-                                  widget.onStopTapped(stop);
-                                },
-                                child: Icon(
-                                  Icons.location_on,
-                                  shadows: [
-                                    Shadow(color: Colors.black, blurRadius: 5),
-                                  ],
-                                  color:
-                                      widget.selectedStop == null ||
-                                          widget._stopsList.indexOf(
-                                                widget.selectedStop!,
-                                              ) <=
-                                              widget._stopsList.indexOf(stop)
-                                      ? Colors.red
-                                      : Colors.grey,
-                                  size: 35,
-                                ),
-                              ),
+                            (_controller as MapController).move(_location!, 15);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: context.colorScheme.surfaceContainer
+                                  .withValues(alpha: 0.85),
+                              shape: BoxShape.circle,
                             ),
-                          )
-                          .toList(),
-                    ),
+                            padding: const EdgeInsets.all(5),
+                            child: Icon(LucideIcons.locateFixed, size: 25),
+                          ),
+                        ),
+                      ),
                   ],
                 )
               : AppleMap(
@@ -166,6 +232,7 @@ class _RouteMapState extends State<RouteMap> {
                       widget.selectedStop?.long ?? widget.origStop.long!,
                     ).toAppleMapLatLng(),
                   ),
+                  myLocationEnabled: widget.showUserLocation,
                   annotations: widget._stopsList
                       .map(
                         (stop) => Annotation(
@@ -259,6 +326,13 @@ class _StopsListState extends State<StopsList> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -311,48 +385,54 @@ class _StopsListState extends State<StopsList> {
                         alignment: index == 0
                             ? Alignment.bottomCenter
                             : Alignment.topCenter,
-                        child: FractionallySizedBox(
-                          heightFactor:
-                              index == 0 ||
-                                  index == widget.sortedStops.length - 1
-                              ? .5
-                              : 1,
-                          child: Container(
-                            width: 5,
-                            color: context.primaryColor.withValues(alpha: .5),
+                        child: SizedBox(
+                          height: index == widget.sortedStops.length - 1
+                              ? 12.5
+                              : double.infinity,
+                          child: Padding(
+                            padding: EdgeInsets.only(
+                              top: index == 0 ? 12.5 : 0,
+                            ),
+                            child: Container(
+                              width: 5,
+                              color: context.primaryColor.withValues(alpha: .5),
+                            ),
                           ),
                         ),
                       ),
                       Align(
-                        alignment: Alignment.center,
+                        alignment: Alignment.topCenter,
                         child: GestureDetector(
                           onTap: () => widget.setSelectedStop(stop),
-                          child: Container(
-                            height: 25,
-                            width: 25,
-                            decoration: BoxDecoration(
-                              color: isSelected
-                                  ? context.primaryColor
-                                  : context.colorScheme.surfaceContainer,
-                              border: BoxBorder.all(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 12.5),
+                            child: Container(
+                              height: 25,
+                              width: 25,
+                              decoration: BoxDecoration(
                                 color: isSelected
-                                    ? Colors.transparent
-                                    : context.primaryColor,
-                                width: 3,
-                              ),
-                              borderRadius: BorderRadius.circular(12.5),
-                            ),
-                            child: Center(
-                              child: Text(
-                                (index + 1).toString(),
-                                style: TextStyle(
+                                    ? context.primaryColor
+                                    : context.colorScheme.surfaceContainer,
+                                border: BoxBorder.all(
                                   color: isSelected
-                                      ? Colors.white
+                                      ? Colors.transparent
                                       : context.primaryColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12,
+                                  width: 3,
                                 ),
-                                overflow: TextOverflow.visible,
+                                borderRadius: BorderRadius.circular(12.5),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  (index + 1).toString(),
+                                  style: TextStyle(
+                                    color: isSelected
+                                        ? Colors.white
+                                        : context.primaryColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12,
+                                  ),
+                                  overflow: TextOverflow.visible,
+                                ),
                               ),
                             ),
                           ),
@@ -564,6 +644,7 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
   Stop? _destStop;
   Stop? _origStop;
   Stop? _selectedStop;
+  bool _showUserLocation = false;
 
   late final List<Stop> _sortedStops;
 
@@ -686,6 +767,19 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
           ),
           onPressed: () => context.pop(),
         ),
+        actions: [
+          CupertinoButton(
+            child: Icon(
+              _showUserLocation
+                  ? LucideIcons.mapPin200
+                  : LucideIcons.mapPinOff200,
+              size: 25,
+              color: context.textColor,
+            ),
+            onPressed: () =>
+                setState(() => _showUserLocation = !_showUserLocation),
+          ),
+        ],
       ),
       body: SafeArea(
         child: Container(
@@ -736,6 +830,7 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
                   destStop: _destStop!,
                   onStopTapped: setSelectedStop,
                   selectedStop: _selectedStop,
+                  showUserLocation: _showUserLocation,
                 ),
               ),
               Padding(

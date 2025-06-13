@@ -78,5 +78,7 @@
   "dark": "ダーク",
   "language": "言語",
   "primaryColor": "テーマカラー",
-  "colorPicker": "カラーピッカー"
+  "colorPicker": "カラーピッカー",
+  "filter": "フィルター",
+  "showRoutesFrom": "表示するルート元："
 }

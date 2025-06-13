@@ -189,10 +189,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get colorPicker => '顏色選擇器';
 
   @override
-  String get filter => 'Filter';
+  String get filter => '篩選';
 
   @override
-  String get showRoutesFrom => 'Show Routes From:';
+  String get showRoutesFrom => '僅顯示路線來自：';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).
@@ -378,4 +378,10 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get colorPicker => '颜色选择器';
+
+  @override
+  String get filter => '筛选';
+
+  @override
+  String get showRoutesFrom => '仅显示线路来自：';
 }

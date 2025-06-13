@@ -44,6 +44,13 @@ class _AddPluginModalState extends State<AddPluginModal> {
   }
 
   @override
+  void dispose() {
+    _textController.dispose();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ModalBase(
       title: context.l10n.addPlugin,

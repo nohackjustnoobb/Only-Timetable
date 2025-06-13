@@ -9,7 +9,14 @@ PODS:
   - flutter_inappwebview_ios/Core (0.0.1):
     - Flutter
     - OrderedSet (~> 6.0.3)
+  - flutter_rotation_sensor (0.0.1):
+    - Flutter
+  - geolocator_apple (1.2.0):
+    - Flutter
+    - FlutterMacOS
   - isar_flutter_libs (1.0.0):
+    - Flutter
+  - native_device_orientation (0.0.1):
     - Flutter
   - OrderedSet (6.0.3)
   - path_provider_foundation (0.0.1):
@@ -22,7 +29,10 @@ DEPENDENCIES:
   - apple_maps_flutter (from `.symlinks/plugins/apple_maps_flutter/ios`)
   - Flutter (from `Flutter`)
   - flutter_inappwebview_ios (from `.symlinks/plugins/flutter_inappwebview_ios/ios`)
+  - flutter_rotation_sensor (from `.symlinks/plugins/flutter_rotation_sensor/ios`)
+  - geolocator_apple (from `.symlinks/plugins/geolocator_apple/darwin`)
   - isar_flutter_libs (from `.symlinks/plugins/isar_flutter_libs/ios`)
+  - native_device_orientation (from `.symlinks/plugins/native_device_orientation/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
 
@@ -37,8 +47,14 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_inappwebview_ios:
     :path: ".symlinks/plugins/flutter_inappwebview_ios/ios"
+  flutter_rotation_sensor:
+    :path: ".symlinks/plugins/flutter_rotation_sensor/ios"
+  geolocator_apple:
+    :path: ".symlinks/plugins/geolocator_apple/darwin"
   isar_flutter_libs:
     :path: ".symlinks/plugins/isar_flutter_libs/ios"
+  native_device_orientation:
+    :path: ".symlinks/plugins/native_device_orientation/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
   url_launcher_ios:
@@ -48,11 +64,14 @@ SPEC CHECKSUMS:
   apple_maps_flutter: c59725efea39e13e703cde52a1d2b14866ad68a8
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_inappwebview_ios: 6f63631e2c62a7c350263b13fa5427aedefe81d4
+  flutter_rotation_sensor: f37d8d24050572029bdd2d55a93e0f334e2eeac6
+  geolocator_apple: 66b711889fd333205763b83c9dcf0a57a28c7afd
   isar_flutter_libs: fdf730ca925d05687f36d7f1d355e482529ed097
+  native_device_orientation: 348b10c346a60ebbc62fb235a4fdb5d1b61a8f55
   OrderedSet: e539b66b644ff081c73a262d24ad552a69be3a94
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
   url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
 
-PODFILE CHECKSUM: 4305caec6b40dde0ae97be1573c53de1882a07e5
+PODFILE CHECKSUM: 30beb6f498ac73495d47e6e53fc67a2ccf1cd4f0
 
 COCOAPODS: 1.16.2

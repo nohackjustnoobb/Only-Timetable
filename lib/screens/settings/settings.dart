@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -131,18 +133,19 @@ class SettingsScreen extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            ToggleOption(
-                              title: context.l10n.alwaysUseOSM,
-                              value: settingsService.getSync<bool>(
-                                SettingsKey.alwaysUseOSM,
-                              ),
-                              onChanged: (value) async {
-                                await settingsService.set<bool>(
+                            if (Platform.isIOS)
+                              ToggleOption(
+                                title: context.l10n.alwaysUseOSM,
+                                value: settingsService.getSync<bool>(
                                   SettingsKey.alwaysUseOSM,
-                                  value,
-                                );
-                              },
-                            ),
+                                ),
+                                onChanged: (value) async {
+                                  await settingsService.set<bool>(
+                                    SettingsKey.alwaysUseOSM,
+                                    value,
+                                  );
+                                },
+                              ),
                           ],
                         ),
                       ),

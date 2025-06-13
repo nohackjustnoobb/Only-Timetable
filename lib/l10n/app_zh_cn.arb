@@ -78,5 +78,7 @@
   "dark": "深色",
   "language": "语言",
   "primaryColor": "主色",
-  "colorPicker": "颜色选择器"
+  "colorPicker": "颜色选择器",
+  "filter": "筛选",
+  "showRoutesFrom": "仅显示线路来自："
 }

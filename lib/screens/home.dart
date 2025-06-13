@@ -118,6 +118,11 @@ class _HomeScreenState extends State<HomeScreen> {
     _lock.release();
   }
 
+  void _pluginServiceListener() {
+    _diaplayFromPlugins = _pluginService.plugins.map((e) => e.id).toList();
+    _bookmarkServiceListener();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -128,13 +133,13 @@ class _HomeScreenState extends State<HomeScreen> {
     _pluginService = Provider.of<PluginService>(context, listen: false);
     _etaService = Provider.of<EtaService>(context, listen: false);
 
-    _diaplayFromPlugins = _pluginService.plugins.map((e) => e.id).toList();
-
-    _bookmarkServiceListener();
+    _pluginService.addListener(_pluginServiceListener);
+    _pluginServiceListener();
   }
 
   @override
   void dispose() {
+    _pluginService.removeListener(_pluginServiceListener);
     _bookmarkService.removeListener(_bookmarkServiceListener);
     for (final itemDetail in _itemDetails.values) {
       itemDetail.unsubscribe();

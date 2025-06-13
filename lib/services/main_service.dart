@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:only_timetable/services/appearance_service.dart';
 import 'package:only_timetable/services/db_service.dart';
 import 'package:only_timetable/services/eta_service.dart';
@@ -42,5 +43,23 @@ class MainService extends ChangeNotifier {
       repository = null;
       license = null;
     }
+  }
+
+  static Future<Position?> getPosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) return null;
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) return null;
+    }
+
+    if (permission == LocationPermission.deniedForever) return null;
+
+    return await Geolocator.getCurrentPosition();
   }
 }

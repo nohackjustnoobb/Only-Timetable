@@ -29,6 +29,8 @@ Only Timetable is a flexible, plugin-based timetable application for bus and oth
 
 ## Getting Started
 
+> **Note:** If you are running the app on an iOS 18.5 simulator, the `flutter_inappwebview` plugin may cause the app to crash. This issue does not occur on real devices or other iOS versions. If you encounter crashes, try using a different simulator version or a physical device.
+
 1. **Clone the repository:**
 
    ```sh

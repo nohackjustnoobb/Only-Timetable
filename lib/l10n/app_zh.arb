@@ -78,5 +78,7 @@
   "dark": "深色",
   "language": "語言",
   "primaryColor": "主色",
-  "colorPicker": "顏色選擇器"
+  "colorPicker": "顏色選擇器",
+  "filter": "篩選",
+  "showRoutesFrom": "僅顯示路線來自："
 }
