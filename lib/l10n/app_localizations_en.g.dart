@@ -205,4 +205,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get showRoutesFrom => 'Show Routes From:';
+
+  @override
+  String failedToUpdateEta(String routeId) {
+    return 'Failed to update ETA for $routeId.';
+  }
 }

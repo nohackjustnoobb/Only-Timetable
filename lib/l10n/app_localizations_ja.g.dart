@@ -52,7 +52,7 @@ class AppLocalizationsJa extends AppLocalizations {
     final intl.DateFormat dateDateFormat = intl.DateFormat.yMMMd(localeName);
     final String dateString = dateDateFormat.format(date);
 
-    return '$dateStringに更新';
+    return '$dateString に更新';
   }
 
   @override
@@ -196,4 +196,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get showRoutesFrom => '表示するルート元：';
+
+  @override
+  String failedToUpdateEta(String routeId) {
+    return '$routeIdの到着予想時刻の更新に失敗しました。';
+  }
 }

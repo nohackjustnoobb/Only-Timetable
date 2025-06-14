@@ -13,7 +13,7 @@
   "failed": "失敗しました",
   "close": "閉じる",
   "noPluginAvailable": "利用可能なプラグインはありません",
-  "updatedOn": "{date}に更新",
+  "updatedOn": "{date} に更新",
   "@updatedOn": {
     "placeholders": {
       "date": {
@@ -81,5 +81,13 @@
   "primaryColor": "テーマカラー",
   "colorPicker": "カラーピッカー",
   "filter": "フィルター",
-  "showRoutesFrom": "表示するルート元："
+  "showRoutesFrom": "表示するルート元：",
+  "failedToUpdateEta": "{routeId}の到着予想時刻の更新に失敗しました。",
+  "@failedToUpdateEta": {
+    "placeholders": {
+      "routeId": {
+        "type": "String"
+      }
+    }
+  }
 }

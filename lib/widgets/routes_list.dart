@@ -96,7 +96,7 @@ class RoutesList extends StatelessWidget {
                     spacing: 20,
                     children: [
                       SizedBox(
-                        width: 45,
+                        width: 50,
                         child: Column(
                           children: [
                             Text(
@@ -107,12 +107,14 @@ class RoutesList extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                             ),
                             if (route.source != null)
-                              Text(
-                                context.getLocalizedString(route.source!),
-                                style: context.textTheme.titleSmall?.copyWith(
-                                  color: context.subTextColor,
+                              FittedBox(
+                                fit: BoxFit.fitWidth,
+                                child: Text(
+                                  context.getLocalizedString(route.source!),
+                                  style: context.textTheme.titleSmall?.copyWith(
+                                    color: context.subTextColor,
+                                  ),
                                 ),
-                                overflow: TextOverflow.ellipsis,
                               ),
                           ],
                         ),

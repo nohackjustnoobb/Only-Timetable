@@ -13,7 +13,7 @@
   "failed": "失败",
   "close": "关闭",
   "noPluginAvailable": "没有可用插件",
-  "updatedOn": "更新于{date}",
+  "updatedOn": "更新于 {date}",
   "@updatedOn": {
     "placeholders": {
       "date": {
@@ -81,5 +81,13 @@
   "primaryColor": "主色",
   "colorPicker": "颜色选择器",
   "filter": "筛选",
-  "showRoutesFrom": "仅显示线路来自："
+  "showRoutesFrom": "仅显示线路来自：",
+  "failedToUpdateEta": "Failed to update ETA for {routeId}.",
+  "@failedToUpdateEta": {
+    "placeholders": {
+      "routeId": {
+        "type": "String"
+      }
+    }
+  }
 }

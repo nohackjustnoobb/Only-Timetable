@@ -1,5 +1,4 @@
 name: only_timetable
-description: "A timetable app."
 publish_to: "none"
 version: 1.0.0-beta.0
 repository: https://github.com/nohackjustnoobb/Only-Timetable
@@ -17,6 +16,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_inappwebview: ^6.1.5
+  flutter_launcher_icons: ^0.14.4
   flutter_localizations:
     sdk: flutter
   flutter_map: ^8.1.1
@@ -55,3 +55,9 @@ flutter:
   generate: true
   assets:
     - pubspec.yaml
+
+flutter_launcher_icons:
+  image_path: "assets/icon.png"
+  android: true
+  ios: true
+  remove_alpha_ios: true

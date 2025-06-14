@@ -52,7 +52,7 @@ class AppLocalizationsZh extends AppLocalizations {
     final intl.DateFormat dateDateFormat = intl.DateFormat.yMMMd(localeName);
     final String dateString = dateDateFormat.format(date);
 
-    return '更新於$dateString';
+    return '更新於 $dateString';
   }
 
   @override
@@ -196,6 +196,11 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get showRoutesFrom => '僅顯示路線來自：';
+
+  @override
+  String failedToUpdateEta(String routeId) {
+    return '無法為 $routeId 更新預計到達時間。';
+  }
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).
@@ -246,7 +251,7 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
     final intl.DateFormat dateDateFormat = intl.DateFormat.yMMMd(localeName);
     final String dateString = dateDateFormat.format(date);
 
-    return '更新于$dateString';
+    return '更新于 $dateString';
   }
 
   @override
@@ -390,4 +395,9 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get showRoutesFrom => '仅显示线路来自：';
+
+  @override
+  String failedToUpdateEta(String routeId) {
+    return 'Failed to update ETA for $routeId.';
+  }
 }

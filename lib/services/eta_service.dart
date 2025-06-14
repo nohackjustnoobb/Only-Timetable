@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart' hide Route;
 import 'package:mutex/mutex.dart';
+import 'package:only_timetable/extensions/shortcut.dart';
+import 'package:only_timetable/globals.dart';
 import 'package:only_timetable/models/eta.dart';
 import 'package:only_timetable/models/fast_hash.dart';
 import 'package:only_timetable/models/route.dart';
@@ -51,6 +53,14 @@ class _EtaSubscription {
 
       return true;
     } catch (e) {
+      if (navigatorKey.currentContext != null) {
+        showErrorSnackbar(
+          navigatorKey.currentContext!.l10n.failedToUpdateEta(
+            route.displayId ?? route.id,
+          ),
+        );
+      }
+
       return false;
     }
   }

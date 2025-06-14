@@ -460,6 +460,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Show Routes From:'**
   String get showRoutesFrom;
+
+  /// No description provided for @failedToUpdateEta.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to update ETA for {routeId}.'**
+  String failedToUpdateEta(String routeId);
 }
 
 class _AppLocalizationsDelegate

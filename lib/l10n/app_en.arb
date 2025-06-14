@@ -81,5 +81,13 @@
   "primaryColor": "Primary Color",
   "colorPicker": "Color Picker",
   "filter": "Filter",
-  "showRoutesFrom": "Show Routes From:"
+  "showRoutesFrom": "Show Routes From:",
+  "failedToUpdateEta": "Failed to update ETA for {routeId}.",
+  "@failedToUpdateEta": {
+    "placeholders": {
+      "routeId": {
+        "type": "String"
+      }
+    }
+  }
 }

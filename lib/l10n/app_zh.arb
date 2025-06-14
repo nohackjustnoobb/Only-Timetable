@@ -13,7 +13,7 @@
   "failed": "失敗",
   "close": "關閉",
   "noPluginAvailable": "沒有可用插件",
-  "updatedOn": "更新於{date}",
+  "updatedOn": "更新於 {date}",
   "@updatedOn": {
     "placeholders": {
       "date": {
@@ -81,5 +81,13 @@
   "primaryColor": "主色",
   "colorPicker": "顏色選擇器",
   "filter": "篩選",
-  "showRoutesFrom": "僅顯示路線來自："
+  "showRoutesFrom": "僅顯示路線來自：",
+  "failedToUpdateEta": "無法為 {routeId} 更新預計到達時間。",
+  "@failedToUpdateEta": {
+    "placeholders": {
+      "routeId": {
+        "type": "String"
+      }
+    }
+  }
 }

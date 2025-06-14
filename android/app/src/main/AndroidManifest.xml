@@ -1,8 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
-        android:label="only_timetable"
+        android:label="Only Timetable"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
