@@ -22,6 +22,7 @@ void main() async {
         ChangeNotifierProvider.value(value: mainService.etaService),
         ChangeNotifierProvider.value(value: mainService.bookmarkService),
         ChangeNotifierProvider.value(value: mainService.appearanceService),
+        ChangeNotifierProvider.value(value: mainService.nearbyService),
       ],
       child: const App(),
     ),
@@ -37,7 +38,6 @@ class App extends StatelessWidget {
       builder: (context, appearanceService, child) => MaterialApp(
         title: "Only Timetable",
         themeMode: appearanceService.themeMode,
-        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           brightness: Brightness.light,
           colorScheme: ColorScheme.light(

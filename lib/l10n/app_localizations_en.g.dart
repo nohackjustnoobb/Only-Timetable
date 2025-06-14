@@ -174,6 +174,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get min => 'min(s)';
 
   @override
+  String get hour => 'hour(s)';
+
+  @override
   String get license => 'License';
 
   @override

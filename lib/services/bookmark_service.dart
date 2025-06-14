@@ -39,8 +39,27 @@ class BookmarkService extends ChangeNotifier {
     ..._bookmarks.values.where((bookmark) => bookmark.name != "default"),
   ];
 
+  /// Retrieves a bookmark by its name.
+  ///
+  /// This method looks up a bookmark in the internal collection using the
+  /// provided name as the key. If a bookmark with the specified name exists,
+  /// it is returned; otherwise, `null` is returned.
+  ///
+  /// - Parameter name: The name of the bookmark to retrieve.
+  /// - Returns: The `Bookmark` object associated with the given name, or `null`
+  ///   if no bookmark with that name exists.
   Bookmark? getBookmark(String name) => _bookmarks[name];
 
+  /// Creates a new bookmark.
+  ///
+  /// This method takes a [Bookmark] object and saves it asynchronously.
+  /// It does not return any value upon completion.
+  ///
+  /// Throws:
+  /// - [Exception] if the bookmark creation fails.
+  ///
+  /// Parameters:
+  /// - [bookmark]: The bookmark object to be created.
   Future<void> createBookmark(Bookmark bookmark) async {
     if (_bookmarks[bookmark.name] != null) {
       throw Exception("bookmark ${bookmark.name} already exists");
@@ -53,6 +72,15 @@ class BookmarkService extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Deletes the specified bookmark from the storage.
+  ///
+  /// This method removes the given [bookmark] from the list of saved bookmarks.
+  /// It performs the operation asynchronously and does not return any value.
+  ///
+  /// - Parameter [bookmark]: The bookmark object to be deleted.
+  ///
+  /// Throws:
+  /// - An exception if the deletion process encounters an error.
   Future<void> deleteBookmark(Bookmark bookmark) async {
     if (_bookmarks[bookmark.name] == null) {
       throw Exception("bookmark ${bookmark.name} does not exist");
@@ -68,6 +96,20 @@ class BookmarkService extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Renames an existing bookmark.
+  ///
+  /// This method allows you to update the name of a bookmark.
+  ///
+  /// Parameters:
+  /// - `bookmarkId`: The unique identifier of the bookmark to be renamed.
+  /// - `newName`: The new name to assign to the bookmark.
+  ///
+  /// Returns:
+  /// A `Future<void>` indicating the completion of the operation.
+  ///
+  /// Throws:
+  /// - `BookmarkNotFoundException` if the bookmark with the given ID does not exist.
+  /// - `InvalidNameException` if the new name is invalid or empty.
   Future<void> renameBookmark({
     required String oldName,
     required String newName,
@@ -88,6 +130,18 @@ class BookmarkService extends ChangeNotifier {
   }
 
   // --------- Bookmarkeds Management ---------
+  /// Adds an item to a bookmark.
+  ///
+  /// This method allows you to associate a route, stop, and plugin with a specific bookmark.
+  ///
+  /// Parameters:
+  /// - `plugin`: The plugin associated with the bookmarked item.
+  /// - `route`: The route to be bookmarked.
+  /// - `stop`: The stop to be bookmarked.
+  /// - `bookmark`: The bookmark to which the item will be added.
+  ///
+  /// Throws:
+  /// - `Exception` if the specified bookmark does not exist.
   Future<void> addBookmark({
     required BasePlugin plugin,
     required Route route,
@@ -113,6 +167,18 @@ class BookmarkService extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Removes a bookmarked item from a specific bookmark.
+  ///
+  /// This method removes the association of a route, stop, and plugin from the specified bookmark.
+  ///
+  /// Parameters:
+  /// - `plugin`: The plugin associated with the bookmarked item.
+  /// - `route`: The route to be removed from the bookmark.
+  /// - `stop`: The stop to be removed from the bookmark.
+  /// - `bookmark`: The bookmark from which the item will be removed.
+  ///
+  /// Throws:
+  /// - `Exception` if the specified bookmark does not exist or the item is not found.
   Future<void> removeBookmark({
     required BasePlugin plugin,
     required Route route,
@@ -146,6 +212,11 @@ class BookmarkService extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Checks if a specific item is bookmarked.
+  ///
+  /// This method determines whether the given item is marked as a bookmark.
+  ///
+  /// Returns `true` if the item is bookmarked, otherwise `false`.
   bool isBookmarked({
     required BasePlugin plugin,
     required Route route,
@@ -164,6 +235,18 @@ class BookmarkService extends ChangeNotifier {
     return bookmarks != null;
   }
 
+  /// Retrieves a list of bookmarks that a specific item belongs to.
+  ///
+  /// This method returns a list of `Bookmark` objects associated with the given
+  /// route, stop, and plugin. It helps identify which bookmarks contain the specified item.
+  ///
+  /// Parameters:
+  /// - `plugin`: The plugin associated with the item.
+  /// - `route`: The route of the item.
+  /// - `stop`: The stop of the item.
+  ///
+  /// Returns:
+  ///   A list of `Bookmark` objects containing the specified item.
   List<Bookmark> getBookmarks({
     required BasePlugin plugin,
     required Route route,

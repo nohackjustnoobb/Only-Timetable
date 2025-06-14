@@ -33,6 +33,7 @@ class JsPluginHandler extends Handler<JsPlugin> {
       initialData: InAppWebViewInitialData(data: ""),
       onWebViewCreated: (controller) {
         // TODO override fetch to bypass cors
+        // TODO maybe this is lagging the UI if too many data is passed through the bridge
         // TODO The type of data is changed to JavaScriptHandlerFunctionData after 6.2.0
         controller.addJavaScriptHandler(
           handlerName: "saveStops",

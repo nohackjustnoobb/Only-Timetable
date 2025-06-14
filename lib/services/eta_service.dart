@@ -158,6 +158,8 @@ class EtaService extends ChangeNotifier {
   ///
   /// This method returns a list of [Eta] objects, which represent the
   /// estimated times of arrival for a specific service or location.
+  ///
+  /// Subscribe to the ETA service using [subscribe] before calling this method.
   List<Eta>? getEta(BasePlugin plugin, Route route, Stop stop) {
     final id = _EtaSubscription.getId(plugin, route, stop);
 

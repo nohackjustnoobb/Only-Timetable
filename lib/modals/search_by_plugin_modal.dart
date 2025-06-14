@@ -108,7 +108,6 @@ class _SearchByPluginModalState extends State<SearchByPluginModal> {
                     routes: _results,
                     showContainer: false,
                   ),
-                  // TODO automatically load more when reaching the end
                   if (!reachingEnd)
                     CupertinoButton(
                       padding: EdgeInsets.only(top: 20),

@@ -52,6 +52,14 @@ class AppearanceService extends ChangeNotifier {
     }
   }
 
+  /// Sets the application's locale to the specified [locale].
+  ///
+  /// This method updates the locale used throughout the application.
+  /// If [locale] is `null`, the default locale will be used.
+  ///
+  /// [locale]: The new locale to set, or `null` to reset to the default locale.
+  ///
+  /// Returns a [Future] that completes when the locale has been set.
   Future<void> setLocale(Locale? locale) async {
     if (locale == null) {
       _locale = null;
@@ -75,6 +83,15 @@ class AppearanceService extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Sets the primary color for the application.
+  ///
+  /// This method allows updating the primary color used in the application's
+  /// appearance settings. The provided [color] can be null, in which case
+  /// the primary color will be reset or left unchanged depending on the implementation.
+  ///
+  /// [color]: The new primary color to set, or null to reset.
+  ///
+  /// Returns a [Future] that completes when the operation is finished.
   Future<void> setPrimaryColor(Color? color) async {
     if (color == null) {
       _primaryColor = DEAFULT_PRIMARY_COLOR;
@@ -98,6 +115,16 @@ class AppearanceService extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Sets the application's theme mode.
+  ///
+  /// This method allows you to change the theme mode of the application
+  /// to the specified [mode]. The [mode] can be one of the following:
+  /// - [ThemeMode.system]: Uses the system's theme setting.
+  /// - [ThemeMode.light]: Forces the application to use the light theme.
+  /// - [ThemeMode.dark]: Forces the application to use the dark theme.
+  ///
+  /// This operation is asynchronous and may involve saving the theme mode
+  /// to persistent storage or applying it to the app's appearance.
   Future<void> setThemeMode(ThemeMode mode) async {
     _themeMode = mode;
 

@@ -71,6 +71,7 @@
   "done": "完成",
   "bookmarkAlreadyExists": "已存在同名書籤。",
   "min": "分鐘",
+  "hour": "小時",
   "license": "授權條款",
   "themeMode": "主題模式",
   "auto": "自動",

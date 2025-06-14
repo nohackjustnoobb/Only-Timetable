@@ -165,6 +165,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get min => '分鐘';
 
   @override
+  String get hour => '小時';
+
+  @override
   String get license => '授權條款';
 
   @override
@@ -354,6 +357,9 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get min => '分钟';
+
+  @override
+  String get hour => '小時';
 
   @override
   String get license => '许可证';

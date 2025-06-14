@@ -71,6 +71,7 @@
   "done": "Done",
   "bookmarkAlreadyExists": "A bookmark with this name already exists.",
   "min": "min(s)",
+  "hour": "hour(s)",
   "license": "License",
   "themeMode": "Theme Mode",
   "auto": "Auto",

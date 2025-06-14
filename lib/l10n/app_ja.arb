@@ -71,6 +71,7 @@
   "done": "完了",
   "bookmarkAlreadyExists": "この名前のブックマークは既に存在します。",
   "min": "分",
+  "hour": "時間",
   "license": "ライセンス",
   "themeMode": "テーマモード",
   "auto": "自動",

@@ -14,6 +14,7 @@ import 'package:only_timetable/screens/search/search.dart';
 import 'package:only_timetable/screens/settings/settings.dart';
 import 'package:only_timetable/services/bookmark_service.dart';
 import 'package:only_timetable/services/eta_service.dart';
+import 'package:only_timetable/services/nearby_service.dart';
 import 'package:only_timetable/services/plugin/base_plugin.dart';
 import 'package:only_timetable/services/plugin/plugin_service.dart';
 import 'package:only_timetable/widgets/routes_list.dart';
@@ -53,6 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late final BookmarkService _bookmarkService;
   late final PluginService _pluginService;
   late final EtaService _etaService;
+  late final NearbyService _nearbyService;
 
   late List<String> _diaplayFromPlugins;
   final Map<int, _ItemDetail> _itemDetails = {};
@@ -80,9 +82,8 @@ class _HomeScreenState extends State<HomeScreen> {
           bookmarked.routeId,
           bookmarked.stopId,
         );
-        toRemove.remove(key);
-
-        if (_itemDetails.containsKey(key)) continue;
+        final exist = toRemove.remove(key);
+        if (exist) continue;
 
         final plugin = _pluginService.getPluginById(bookmarked.pluginId);
         if (plugin == null) continue;
@@ -103,7 +104,28 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       }
     } else {
-      // TODO: Implement nearby
+      final nearbyRoutes = await _nearbyService.getNearbyRoute();
+
+      for (final nearbyRoute in nearbyRoutes) {
+        final exist = toRemove.remove(nearbyRoute.id);
+        if (exist) continue;
+
+        final unsubscribe = await _etaService.subscribe(
+          nearbyRoute.plugin,
+          nearbyRoute.route,
+          nearbyRoute.stop,
+        );
+
+        _itemDetails[nearbyRoute.id] = _ItemDetail(
+          plugin: nearbyRoute.plugin,
+          route: nearbyRoute.route,
+          stop: nearbyRoute.stop,
+          unsubscribe: unsubscribe,
+        );
+      }
+
+      // Update the nearby routes every 1 minute
+      Future.delayed(const Duration(minutes: 1), _bookmarkServiceListener);
     }
 
     for (final key in toRemove) {
@@ -126,6 +148,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+
+    _nearbyService = Provider.of<NearbyService>(context, listen: false);
 
     _bookmarkService = Provider.of<BookmarkService>(context, listen: false);
     _bookmarkService.addListener(_bookmarkServiceListener);

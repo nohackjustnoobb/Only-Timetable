@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:isar/isar.dart';
 import 'package:only_timetable/models/kv_pair.dart';
 import 'package:only_timetable/models/route.dart';
@@ -18,11 +19,22 @@ class DbService {
 
   Future<void> init() async {
     _dir = await getApplicationDocumentsDirectory();
-    appIsar = await Isar.open([
-      KvPairSchema,
-      BookmarkSchema,
-      BookmarkedSchema,
-    ], directory: _dir.path);
+
+    if (kDebugMode) {
+      appIsar = await Isar.open([
+        KvPairSchema,
+        BookmarkSchema,
+        BookmarkedSchema,
+        RouteSchema,
+        StopSchema,
+      ], directory: _dir.path);
+    } else {
+      appIsar = await Isar.open([
+        KvPairSchema,
+        BookmarkSchema,
+        BookmarkedSchema,
+      ], directory: _dir.path);
+    }
   }
 
   /// Asynchronously retrieves an [Isar] database instance associated with the given [pluginHandler].

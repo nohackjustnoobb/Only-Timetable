@@ -157,18 +157,30 @@ class RoutesList extends StatelessWidget {
                                 return Icon(LucideIcons.clockAlert200);
                               }
 
+                              final duration =
+                                  DateTime.fromMillisecondsSinceEpoch(
+                                    etas.first.arrivalTime,
+                                    isUtc: true,
+                                  ).difference(now);
+
+                              final inHour = duration.inMinutes > 99;
+
                               return Column(
                                 children: [
                                   Text(
-                                    DateTime.fromMillisecondsSinceEpoch(
-                                      etas.first.arrivalTime,
-                                      isUtc: true,
-                                    ).difference(now).inMinutes.toString(),
+                                    (inHour
+                                            ? duration.inHours
+                                            : duration.inMinutes)
+                                        .toString(),
                                     style: context.textTheme.titleLarge
                                         ?.copyWith(color: context.primaryColor),
+                                    overflow: TextOverflow.visible,
+                                    softWrap: false,
                                   ),
                                   Text(
-                                    context.l10n.min,
+                                    inHour
+                                        ? context.l10n.hour
+                                        : context.l10n.min,
                                     style: context.textTheme.titleSmall
                                         ?.copyWith(color: context.subTextColor),
                                     overflow: TextOverflow.visible,

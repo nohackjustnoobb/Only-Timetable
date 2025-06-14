@@ -165,6 +165,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get min => '分';
 
   @override
+  String get hour => '時間';
+
+  @override
   String get license => 'ライセンス';
 
   @override

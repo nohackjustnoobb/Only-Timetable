@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:only_timetable/services/appearance_service.dart';
 import 'package:only_timetable/services/db_service.dart';
 import 'package:only_timetable/services/eta_service.dart';
+import 'package:only_timetable/services/nearby_service.dart';
 import 'package:only_timetable/services/plugin/plugin_service.dart';
 import 'package:only_timetable/services/settings_service.dart';
 import 'package:only_timetable/services/bookmark_service.dart';
@@ -16,6 +16,7 @@ class MainService extends ChangeNotifier {
   final etaService = EtaService();
   final bookmarkService = BookmarkService();
   final appearanceService = AppearanceService();
+  final nearbyService = NearbyService();
 
   Future<void> init() async {
     await dbService.init();
@@ -23,6 +24,7 @@ class MainService extends ChangeNotifier {
     await bookmarkService.init(dbService);
     await appearanceService.init(dbService);
     settingsService.init(dbService);
+    nearbyService.init(pluginService);
 
     await _loadPubspecInfo();
   }
@@ -43,23 +45,5 @@ class MainService extends ChangeNotifier {
       repository = null;
       license = null;
     }
-  }
-
-  static Future<Position?> getPosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) return null;
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) return null;
-    }
-
-    if (permission == LocationPermission.deniedForever) return null;
-
-    return await Geolocator.getCurrentPosition();
   }
 }

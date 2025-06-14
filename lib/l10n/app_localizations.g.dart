@@ -395,6 +395,12 @@ abstract class AppLocalizations {
   /// **'min(s)'**
   String get min;
 
+  /// No description provided for @hour.
+  ///
+  /// In en, this message translates to:
+  /// **'hour(s)'**
+  String get hour;
+
   /// No description provided for @license.
   ///
   /// In en, this message translates to:
