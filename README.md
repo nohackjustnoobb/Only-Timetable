@@ -1,4 +1,12 @@
+<div align="center">
+
 # Only Timetable
+
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/nohackjustnoobb/Only-Timetable/main.yml?style=for-the-badge)](https://github.com/nohackjustnoobb/Only-Timetable/actions/workflows/main.yml)
+[![GitHub License](https://img.shields.io/github/license/nohackjustnoobb/Only-Timetable?style=for-the-badge)](https://github.com/nohackjustnoobb/Only-Timetable/blob/master/LICENSE)
+[![Docker Release](https://img.shields.io/github/v/release/nohackjustnoobb/Only-Timetable?style=for-the-badge)](https://github.com/nohackjustnoobb/Only-Timetable/releases)
+
+</div>
 
 Only Timetable is a flexible, plugin-based timetable application for bus and other public transport systems. The name "Only Timetable" reflects the app's purpose: it is the **ONLY** app you need for bus and public transport timetables, and it is focused **ONLY** on providing timetable information. There are no distractions—just the essential features for managing and viewing transport schedules. The core app does not include any routes or ETA data by default; all transport information is provided via plugins. This design allows support for any bus company or region simply by adding or developing the appropriate plugin.
 
@@ -26,6 +34,29 @@ Only Timetable is a flexible, plugin-based timetable application for bus and oth
   <img src="doc/search.png" width="200px" />
   <img src="doc/route.png" width="200px" />
 </p>
+
+## Download
+
+### Android
+
+- **AAB (Google Play format):** [app-release.aab](https://github.com/nohackjustnoobb/Only-Timetable/releases/latest/download/app-release.aab)
+- **APK (Direct install):** [app-release.apk](https://github.com/nohackjustnoobb/Only-Timetable/releases/latest/download/app-release.apk)
+
+You can install the APK directly on your device, or use the AAB for distribution via Google Play or compatible stores.
+
+### iOS
+
+- **IPA (Sideload only, not tested):** [app-release.ipa](https://github.com/nohackjustnoobb/Only-Timetable/releases/latest/download/app-release.ipa)
+
+> ⚠️ The IPA file is **not tested** and can only be installed via sideloading (e.g., using AltStore, Sideloadly, or Xcode). For most users, it is easier and more reliable to build and install the app yourself using Flutter:
+>
+> ```sh
+> flutter run --release
+> ```
+>
+> This will build and install the app directly to your connected iOS device.
+
+For all available downloads, visit the [Releases Page](https://github.com/nohackjustnoobb/Only-Timetable/releases).
 
 ## Getting Started
 

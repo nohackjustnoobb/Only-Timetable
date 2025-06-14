@@ -9,7 +9,8 @@ jobs:
     name: Build & Release
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v3
 
       - name: Set Up Java
         uses: actions/setup-java@v3.12.0
@@ -17,12 +18,19 @@ jobs:
           distribution: "oracle"
           java-version: "17"
 
-      - uses: subosito/flutter-action@v2
+      - name: Set Up Flutter
+        uses: subosito/flutter-action@v2
         with:
           channel: "stable"
 
-      - run: flutter build apk --release --split-per-abi
-      - run: |
+      - name: Build APK
+        run: flutter build apk
+
+      - name: Build appBundle
+        run: flutter build appbundle
+
+      - name: Build IPA
+        run: |
           flutter build ios --no-codesign
           cd build/ios/iphoneos
           mkdir Payload
@@ -40,7 +48,7 @@ jobs:
       - name: Push to Releases
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/app/outputs/apk/release/*,build/ios/iphoneos/app-release.ipa"
+          artifacts: "build/app/outputs/bundle/release/app-release.aab,build/app/outputs/apk/release/app-release.apk,build/ios/iphoneos/app-release.ipa"
           tag: v${{ env.VERSION }}
           token: ${{ secrets.TOKEN }}
           allowUpdates: true
