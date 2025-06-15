@@ -48,6 +48,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noPluginAvailable => 'No Plugin Available';
 
   @override
+  String get noPluginAvailableDescription =>
+      'There are no plugins available. Please add a plugin to continue.';
+
+  @override
+  String get addLater => 'Add Later';
+
+  @override
   String updatedOn(DateTime date) {
     final intl.DateFormat dateDateFormat = intl.DateFormat.yMd(localeName);
     final String dateString = dateDateFormat.format(date);
@@ -209,5 +216,10 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String failedToUpdateEta(String routeId) {
     return 'Failed to update ETA for $routeId.';
+  }
+
+  @override
+  String routesUpdated(String pluginName) {
+    return 'Routes updated for $pluginName.';
   }
 }

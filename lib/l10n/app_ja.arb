@@ -12,7 +12,9 @@
   "url": "URL",
   "failed": "失敗しました",
   "close": "閉じる",
-  "noPluginAvailable": "利用可能なプラグインはありません",
+  "noPluginAvailable": "プラグインなし",
+  "noPluginAvailableDescription": "利用可能なプラグインがありません。続行するにはプラグインを追加してください。",
+  "addLater": "後で追加",
   "updatedOn": "{date} に更新",
   "@updatedOn": {
     "placeholders": {
@@ -35,7 +37,7 @@
   "confirm": "確認",
   "cancel": "キャンセル",
   "removePluginConfirm": "このプラグインを削除してもよろしいですか？",
-  "failedToUpdateRoutes": "{pluginName}のルート更新に失敗しました。",
+  "failedToUpdateRoutes": "{pluginName} のルート更新に失敗しました。",
   "@failedToUpdateRoutes": {
     "placeholders": {
       "pluginName": {
@@ -51,7 +53,7 @@
   "routeHasNoStops": "このルートには停留所がありません。",
   "routeHasNoValidStops": "このルートには有効な停留所がありません。",
   "failedToLoadRoute": "ルートの読み込みに失敗しました。",
-  "mins": "{minutes}分",
+  "mins": "{minutes} 分",
   "@mins": {
     "placeholders": {
       "minutes": {
@@ -82,10 +84,18 @@
   "colorPicker": "カラーピッカー",
   "filter": "フィルター",
   "showRoutesFrom": "表示するルート元：",
-  "failedToUpdateEta": "{routeId}の到着予想時刻の更新に失敗しました。",
+  "failedToUpdateEta": "{routeId} の到着予想時刻の更新に失敗しました。",
   "@failedToUpdateEta": {
     "placeholders": {
       "routeId": {
+        "type": "String"
+      }
+    }
+  },
+  "routesUpdated": "{pluginName} のルートが更新されました。",
+  "@routesUpdated": {
+    "placeholders": {
+      "pluginName": {
         "type": "String"
       }
     }

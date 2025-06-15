@@ -48,6 +48,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get noPluginAvailable => '沒有可用插件';
 
   @override
+  String get noPluginAvailableDescription => '目前沒有可用的插件。請新增插件以繼續。';
+
+  @override
+  String get addLater => '稍後新增';
+
+  @override
   String updatedOn(DateTime date) {
     final intl.DateFormat dateDateFormat = intl.DateFormat.yMMMd(localeName);
     final String dateString = dateDateFormat.format(date);
@@ -201,6 +207,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String failedToUpdateEta(String routeId) {
     return '無法為 $routeId 更新預計到達時間。';
   }
+
+  @override
+  String routesUpdated(String pluginName) {
+    return '$pluginName 的路線已更新。';
+  }
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).
@@ -245,6 +256,12 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get noPluginAvailable => '没有可用插件';
+
+  @override
+  String get noPluginAvailableDescription => '当前没有可用插件。请添加插件以继续。';
+
+  @override
+  String get addLater => '稍后添加';
 
   @override
   String updatedOn(DateTime date) {
@@ -399,5 +416,10 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   @override
   String failedToUpdateEta(String routeId) {
     return 'Failed to update ETA for $routeId.';
+  }
+
+  @override
+  String routesUpdated(String pluginName) {
+    return '已为 $pluginName 更新线路。';
   }
 }

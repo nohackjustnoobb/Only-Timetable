@@ -153,6 +153,12 @@ class PluginService extends ChangeNotifier {
         await _saveRouteUpdateTimestamp();
 
         notifyListeners();
+
+        if (navigatorKey.currentContext != null) {
+          showSuccessSnackbar(
+            navigatorKey.currentContext!.l10n.routesUpdated(plugin.name),
+          );
+        }
       } catch (e) {
         if (navigatorKey.currentContext != null) {
           showErrorSnackbar(
