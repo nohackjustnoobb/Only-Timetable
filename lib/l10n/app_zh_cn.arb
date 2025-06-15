@@ -13,6 +13,8 @@
   "failed": "失败",
   "close": "关闭",
   "noPluginAvailable": "没有可用插件",
+  "noPluginAvailableDescription": "当前没有可用插件。请添加插件以继续。",
+  "addLater": "稍后添加",
   "updatedOn": "更新于 {date}",
   "@updatedOn": {
     "placeholders": {
@@ -86,6 +88,14 @@
   "@failedToUpdateEta": {
     "placeholders": {
       "routeId": {
+        "type": "String"
+      }
+    }
+  },
+  "routesUpdated": "已为 {pluginName} 更新线路。",
+  "@routesUpdated": {
+    "placeholders": {
+      "pluginName": {
         "type": "String"
       }
     }

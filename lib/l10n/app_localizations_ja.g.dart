@@ -45,7 +45,14 @@ class AppLocalizationsJa extends AppLocalizations {
   String get close => '閉じる';
 
   @override
-  String get noPluginAvailable => '利用可能なプラグインはありません';
+  String get noPluginAvailable => 'プラグインなし';
+
+  @override
+  String get noPluginAvailableDescription =>
+      '利用可能なプラグインがありません。続行するにはプラグインを追加してください。';
+
+  @override
+  String get addLater => '後で追加';
 
   @override
   String updatedOn(DateTime date) {
@@ -96,7 +103,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String failedToUpdateRoutes(String pluginName) {
-    return '$pluginNameのルート更新に失敗しました。';
+    return '$pluginName のルート更新に失敗しました。';
   }
 
   @override
@@ -125,7 +132,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String mins(int minutes) {
-    return '$minutes分';
+    return '$minutes 分';
   }
 
   @override
@@ -199,6 +206,11 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String failedToUpdateEta(String routeId) {
-    return '$routeIdの到着予想時刻の更新に失敗しました。';
+    return '$routeId の到着予想時刻の更新に失敗しました。';
+  }
+
+  @override
+  String routesUpdated(String pluginName) {
+    return '$pluginName のルートが更新されました。';
   }
 }

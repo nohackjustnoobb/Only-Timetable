@@ -7,7 +7,11 @@ import 'package:only_timetable/extensions/shortcut.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
-void showErrorSnackbar(String message) {
+void showSnackbar({
+  required String message,
+  required Color color,
+  required IconData icon,
+}) {
   if (navigatorKey.currentContext == null) return;
 
   AnimatedSnackBar(
@@ -20,14 +24,14 @@ void showErrorSnackbar(String message) {
           filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
           child: Container(
             decoration: BoxDecoration(
-              color: context.colorScheme.error.withValues(alpha: .75),
+              color: color.withValues(alpha: .75),
               borderRadius: BorderRadius.circular(10),
             ),
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             child: Row(
               spacing: 10,
               children: [
-                Icon(LucideIcons.ban, color: context.colorScheme.surface),
+                Icon(icon, color: context.colorScheme.surface),
                 Expanded(
                   child: Text(
                     message,
@@ -41,4 +45,22 @@ void showErrorSnackbar(String message) {
       );
     }),
   ).show(navigatorKey.currentContext!);
+}
+
+void showSuccessSnackbar(String message) {
+  showSnackbar(
+    message: message,
+    color: Colors.green,
+    icon: LucideIcons.circleCheck,
+  );
+}
+
+void showErrorSnackbar(String message) {
+  if (navigatorKey.currentContext == null) return;
+
+  showSnackbar(
+    message: message,
+    color: navigatorKey.currentContext!.colorScheme.error,
+    icon: LucideIcons.ban,
+  );
 }

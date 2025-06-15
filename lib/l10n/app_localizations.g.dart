@@ -179,6 +179,18 @@ abstract class AppLocalizations {
   /// **'No Plugin Available'**
   String get noPluginAvailable;
 
+  /// No description provided for @noPluginAvailableDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'There are no plugins available. Please add a plugin to continue.'**
+  String get noPluginAvailableDescription;
+
+  /// No description provided for @addLater.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Later'**
+  String get addLater;
+
   /// No description provided for @updatedOn.
   ///
   /// In en, this message translates to:
@@ -466,6 +478,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Failed to update ETA for {routeId}.'**
   String failedToUpdateEta(String routeId);
+
+  /// No description provided for @routesUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Routes updated for {pluginName}.'**
+  String routesUpdated(String pluginName);
 }
 
 class _AppLocalizationsDelegate

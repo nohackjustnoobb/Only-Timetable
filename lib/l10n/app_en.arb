@@ -13,6 +13,8 @@
   "failed": "Failed",
   "close": "Close",
   "noPluginAvailable": "No Plugin Available",
+  "noPluginAvailableDescription": "There are no plugins available. Please add a plugin to continue.",
+  "addLater": "Add Later",
   "updatedOn": "Updated on {date}",
   "@updatedOn": {
     "placeholders": {
@@ -86,6 +88,14 @@
   "@failedToUpdateEta": {
     "placeholders": {
       "routeId": {
+        "type": "String"
+      }
+    }
+  },
+  "routesUpdated": "Routes updated for {pluginName}.",
+  "@routesUpdated": {
+    "placeholders": {
+      "pluginName": {
         "type": "String"
       }
     }

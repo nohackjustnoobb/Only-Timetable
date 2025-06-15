@@ -88,7 +88,12 @@ class NearbyService extends ChangeNotifier {
       );
 
       for (final stop in stops) {
-        for (final route in stop.routes) {
+        for (final route
+            in await stop.routes
+                .filter()
+                .not()
+                .destEqualTo(stop.id)
+                .findAll()) {
           if (nearbyRoutes.containsKey('${plugin.id}_${route.id}')) {
             continue;
           }

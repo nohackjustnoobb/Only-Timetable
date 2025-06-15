@@ -6,6 +6,7 @@ import 'package:mutex/mutex.dart';
 
 import 'package:only_timetable/extensions/shortcut.dart';
 import 'package:only_timetable/modals/filter_modal.dart';
+import 'package:only_timetable/modals/no_plugins_modal.dart';
 import 'package:only_timetable/models/bookmark.dart';
 import 'package:only_timetable/models/fast_hash.dart';
 import 'package:only_timetable/models/route.dart';
@@ -159,6 +160,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
     _pluginService.addListener(_pluginServiceListener);
     _pluginServiceListener();
+
+    if (_pluginService.plugins.isEmpty) {
+      Future.delayed(Duration.zero, () {
+        if (!mounted) return;
+        showModalBottomSheet(
+          context: context,
+          builder: (context) => NoPluginsModal(),
+        );
+      });
+    }
   }
 
   @override
