@@ -23,6 +23,31 @@ class JsPluginHandler extends Handler<JsPlugin> {
 
   final Map<String, Isar> _pluginsIsar = {};
 
+  Future<CallAsyncJavaScriptResult?> _callAsyncJavaScript(
+    String functionBody,
+  ) async {
+    if (controller == null) {
+      await disposeWebView();
+      await initWebView();
+    }
+
+    CallAsyncJavaScriptResult? result = await controller!.callAsyncJavaScript(
+      functionBody: functionBody,
+    );
+
+    // If the result is null or has an error, try reinitialize the webview
+    if (result == null || result.error != null) {
+      disposeWebView();
+      await initWebView();
+
+      result = await controller!.callAsyncJavaScript(
+        functionBody: functionBody,
+      );
+    }
+
+    return result;
+  }
+
   Future<void> initWebView() async {
     if (headlessWebView != null) return;
 
@@ -33,7 +58,6 @@ class JsPluginHandler extends Handler<JsPlugin> {
       initialData: InAppWebViewInitialData(data: ""),
       onWebViewCreated: (controller) {
         // TODO override fetch to bypass cors
-        // TODO The type of data is changed to JavaScriptHandlerFunctionData after 6.2.0
         controller.addJavaScriptHandler(
           handlerName: "saveStops",
           callback: (data) async {
@@ -113,11 +137,15 @@ class JsPluginHandler extends Handler<JsPlugin> {
   }
 
   Future<void> disposeWebView() async {
-    if (headlessWebView == null) return;
+    if (headlessWebView != null) {
+      await headlessWebView!.dispose();
+      headlessWebView = null;
+    }
 
-    await headlessWebView!.dispose();
-    headlessWebView = null;
-    controller = null;
+    if (controller != null) {
+      controller!.dispose();
+      controller = null;
+    }
   }
 
   @override
@@ -139,7 +167,7 @@ class JsPluginHandler extends Handler<JsPlugin> {
     if (plugin is! JsPlugin) return;
 
     await initWebView();
-    plugin.controller = controller;
+    plugin.callAsyncJavaScript = _callAsyncJavaScript;
     _pluginsIsar[plugin.id] = plugin.isar;
   }
 

@@ -25,6 +25,7 @@ class MainService extends ChangeNotifier {
     await appearanceService.init(dbService);
     settingsService.init(dbService);
     nearbyService.init(pluginService);
+    etaService.init();
 
     await _loadPubspecInfo();
   }

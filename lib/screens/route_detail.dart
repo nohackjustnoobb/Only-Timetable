@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:apple_maps_flutter/apple_maps_flutter.dart'
     hide LatLng, Polyline;
@@ -90,6 +91,10 @@ class _RouteMapState extends State<RouteMap> {
     if (_controller is MapController) {
       (_controller as MapController).move(LatLng(stop.lat!, stop.long!), 15);
     } else if (_controller is AppleMapController) {
+      (_controller as AppleMapController).showMarkerInfoWindow(
+        AnnotationId(stop.id),
+      );
+
       (_controller as AppleMapController).animateCamera(
         CameraUpdate.newLatLngZoom(
           LatLng(stop.lat!, stop.long!).toAppleMapLatLng(),
@@ -153,40 +158,75 @@ class _RouteMapState extends State<RouteMap> {
                           ],
                         ),
                         MarkerLayer(
-                          markers: widget._stopsList
-                              .map(
-                                (stop) => Marker(
-                                  point: LatLng(stop.lat!, stop.long!),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      _toStop(stop);
-
-                                      widget.onStopTapped(stop);
-                                    },
-                                    child: Icon(
-                                      Icons.location_on,
-                                      shadows: [
-                                        Shadow(
-                                          color: Colors.black,
-                                          blurRadius: 5,
+                          markers: [
+                            ...widget._stopsList.map(
+                              (stop) => Marker(
+                                alignment: Alignment.topCenter,
+                                rotate: true,
+                                point: LatLng(stop.lat!, stop.long!),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    _toStop(stop);
+                                    widget.onStopTapped(stop);
+                                  },
+                                  child: Icon(
+                                    Icons.location_on,
+                                    shadows: [
+                                      Shadow(
+                                        color: Colors.black,
+                                        blurRadius: 5,
+                                      ),
+                                    ],
+                                    color:
+                                        widget.selectedStop == null ||
+                                            widget._stopsList.indexOf(
+                                                  widget.selectedStop!,
+                                                ) <=
+                                                widget._stopsList.indexOf(stop)
+                                        ? Colors.red
+                                        : Colors.grey,
+                                    size: 35,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            if (widget.selectedStop != null &&
+                                widget.selectedStop!.lat != null &&
+                                widget.selectedStop!.long != null &&
+                                widget.selectedStop!.name != null)
+                              Marker(
+                                width: 200,
+                                rotate: true,
+                                alignment: Alignment.bottomCenter,
+                                point: LatLng(
+                                  widget.selectedStop!.lat!,
+                                  widget.selectedStop!.long!,
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 5),
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: BackdropFilter(
+                                        filter: ImageFilter.blur(
+                                          sigmaX: 5,
+                                          sigmaY: 5,
                                         ),
-                                      ],
-                                      color:
-                                          widget.selectedStop == null ||
-                                              widget._stopsList.indexOf(
-                                                    widget.selectedStop!,
-                                                  ) <=
-                                                  widget._stopsList.indexOf(
-                                                    stop,
-                                                  )
-                                          ? Colors.red
-                                          : Colors.grey,
-                                      size: 35,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(5),
+                                          child: Text(
+                                            context.getLocalizedString(
+                                              widget.selectedStop!.name!,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              )
-                              .toList(),
+                              ),
+                          ],
                         ),
                         if (widget.showUserLocation)
                           CurrentLocationLayer(positionStream: _positionStream),
@@ -223,7 +263,12 @@ class _RouteMapState extends State<RouteMap> {
                   ],
                 )
               : AppleMap(
-                  onMapCreated: (controller) => _controller = controller,
+                  onMapCreated: (controller) {
+                    _controller = controller;
+                    if (widget.selectedStop != null) {
+                      _toStop(widget.selectedStop!);
+                    }
+                  },
                   minMaxZoomPreference: MinMaxZoomPreference(10, null),
                   initialCameraPosition: CameraPosition(
                     zoom: 15,
@@ -236,17 +281,13 @@ class _RouteMapState extends State<RouteMap> {
                   annotations: widget._stopsList
                       .map(
                         (stop) => Annotation(
-                          // FIXME the color of the icon is not changing
-                          // icon: BitmapDescriptor.defaultAnnotationWithHue(
-                          //   widget.selectedStop == null ||
-                          //           widget._stopsList.indexOf(
-                          //                 widget.selectedStop!,
-                          //               ) <=
-                          //               widget._stopsList.indexOf(stop)
-                          //       ? BitmapDescriptor.hueRed
-                          //       : BitmapDescriptor.hueGreen,
-                          // ),
                           annotationId: AnnotationId(stop.id),
+                          icon: BitmapDescriptor.markerAnnotation,
+                          infoWindow: InfoWindow(
+                            title: context.getLocalizedString(
+                              stop.name ?? stop.id,
+                            ),
+                          ),
                           position: LatLng(
                             stop.lat!,
                             stop.long!,

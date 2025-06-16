@@ -484,6 +484,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Routes updated for {pluginName}.'**
   String routesUpdated(String pluginName);
+
+  /// No description provided for @checkForUpdates.
+  ///
+  /// In en, this message translates to:
+  /// **'Check for Updates'**
+  String get checkForUpdates;
+
+  /// No description provided for @pluginUpToDate.
+  ///
+  /// In en, this message translates to:
+  /// **'{pluginName} is up to date.'**
+  String pluginUpToDate(String pluginName);
+
+  /// No description provided for @failedToCheckForUpdates.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to check for updates.'**
+  String get failedToCheckForUpdates;
+
+  /// No description provided for @pluginUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Updated {pluginName} to version {version}.'**
+  String pluginUpdated(String pluginName, String version);
 }
 
 class _AppLocalizationsDelegate

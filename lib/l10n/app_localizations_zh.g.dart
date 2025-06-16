@@ -212,6 +212,22 @@ class AppLocalizationsZh extends AppLocalizations {
   String routesUpdated(String pluginName) {
     return '$pluginName 的路線已更新。';
   }
+
+  @override
+  String get checkForUpdates => 'Check for Updates';
+
+  @override
+  String pluginUpToDate(String pluginName) {
+    return '$pluginName is up to date.';
+  }
+
+  @override
+  String get failedToCheckForUpdates => 'Failed to check for updates.';
+
+  @override
+  String pluginUpdated(String pluginName, String version) {
+    return 'Updated $pluginName to version $version.';
+  }
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).

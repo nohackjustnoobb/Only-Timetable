@@ -213,4 +213,20 @@ class AppLocalizationsJa extends AppLocalizations {
   String routesUpdated(String pluginName) {
     return '$pluginName のルートが更新されました。';
   }
+
+  @override
+  String get checkForUpdates => 'Check for Updates';
+
+  @override
+  String pluginUpToDate(String pluginName) {
+    return '$pluginName is up to date.';
+  }
+
+  @override
+  String get failedToCheckForUpdates => 'Failed to check for updates.';
+
+  @override
+  String pluginUpdated(String pluginName, String version) {
+    return 'Updated $pluginName to version $version.';
+  }
 }

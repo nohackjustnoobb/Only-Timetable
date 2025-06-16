@@ -76,12 +76,21 @@ class _FilterModalState extends State<FilterModal> {
             ),
           ],
         ),
-        CupertinoButton.filled(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        CupertinoButton(
           minimumSize: const Size(double.infinity, 0),
+          padding: EdgeInsets.zero,
           onPressed: () => context.pop(),
-          child: Text(context.l10n.done),
+          child: SizedBox(
+            width: double.infinity,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              decoration: BoxDecoration(
+                border: Border.all(color: context.primaryColor),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Text(context.l10n.done, textAlign: TextAlign.center),
+            ),
+          ),
         ),
       ],
     );

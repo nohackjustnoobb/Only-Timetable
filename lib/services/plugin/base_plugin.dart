@@ -5,8 +5,8 @@ import '../../models/route.dart';
 import '../../models/stop.dart';
 
 abstract class BasePlugin {
-  // -------- Plugin Handler Metadata ---------
-  static const String pluginType = "BasePlugin";
+  // -------- Callback ---------
+  Function()? updatedCallback;
 
   // --------- Metadata ---------
   String get id;
