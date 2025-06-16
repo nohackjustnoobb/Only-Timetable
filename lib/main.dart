@@ -12,7 +12,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(systemNavigationBarColor: Colors.transparent),
+    const SystemUiOverlayStyle(
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarContrastEnforced: false,
+    ),
   );
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
@@ -44,7 +47,6 @@ class App extends StatelessWidget {
       builder: (context, appearanceService, child) => MaterialApp(
         title: "Only Timetable",
         themeMode: appearanceService.themeMode,
-        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           brightness: Brightness.light,
           colorScheme: ColorScheme.light(
