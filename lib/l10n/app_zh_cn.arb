@@ -99,5 +99,26 @@
         "type": "String"
       }
     }
+  },
+  "checkForUpdates": "检查更新",
+  "pluginUpToDate": "{pluginName} 已是最新版本。",
+  "@pluginUpToDate": {
+    "placeholders": {
+      "pluginName": {
+        "type": "String"
+      }
+    }
+  },
+  "failedToCheckForUpdates": "检查更新失败。",
+  "pluginUpdated": "已将 {pluginName} 更新到 {version} 版本。",
+  "@pluginUpdated": {
+    "placeholders": {
+      "pluginName": {
+        "type": "String"
+      },
+      "version": {
+        "type": "String"
+      }
+    }
   }
 }

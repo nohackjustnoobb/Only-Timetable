@@ -99,5 +99,26 @@
         "type": "String"
       }
     }
+  },
+  "checkForUpdates": "アップデートを確認",
+  "pluginUpToDate": "{pluginName} は最新です。",
+  "@pluginUpToDate": {
+    "placeholders": {
+      "pluginName": {
+        "type": "String"
+      }
+    }
+  },
+  "failedToCheckForUpdates": "アップデートの確認に失敗しました。",
+  "pluginUpdated": "{pluginName} をバージョン {version} に更新しました。",
+  "@pluginUpdated": {
+    "placeholders": {
+      "pluginName": {
+        "type": "String"
+      },
+      "version": {
+        "type": "String"
+      }
+    }
   }
 }
