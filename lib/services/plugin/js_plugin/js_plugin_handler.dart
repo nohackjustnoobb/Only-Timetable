@@ -23,6 +23,33 @@ class JsPluginHandler extends Handler<JsPlugin> {
 
   final Map<String, Isar> _pluginsIsar = {};
 
+  Future<CallAsyncJavaScriptResult?> _callAsyncJavaScript(
+    String functionBody,
+  ) async {
+    if (controller == null) {
+      await disposeWebView();
+      await initWebView();
+    }
+
+    CallAsyncJavaScriptResult? result = await controller!.callAsyncJavaScript(
+      functionBody: functionBody,
+    );
+
+    // If the result is null or has an error, reinitialize the webview
+    // TODO dont know if this fix the bug that after long time running in the background,
+    //  the result will always be a error that said the type is not unsupported.
+    if (result == null || result.error != null) {
+      disposeWebView();
+      await initWebView();
+
+      result = await controller!.callAsyncJavaScript(
+        functionBody: functionBody,
+      );
+    }
+
+    return result;
+  }
+
   Future<void> initWebView() async {
     if (headlessWebView != null) return;
 
@@ -113,11 +140,15 @@ class JsPluginHandler extends Handler<JsPlugin> {
   }
 
   Future<void> disposeWebView() async {
-    if (headlessWebView == null) return;
+    if (headlessWebView != null) {
+      await headlessWebView!.dispose();
+      headlessWebView = null;
+    }
 
-    await headlessWebView!.dispose();
-    headlessWebView = null;
-    controller = null;
+    if (controller != null) {
+      controller!.dispose();
+      controller = null;
+    }
   }
 
   @override
@@ -139,7 +170,7 @@ class JsPluginHandler extends Handler<JsPlugin> {
     if (plugin is! JsPlugin) return;
 
     await initWebView();
-    plugin.controller = controller;
+    plugin.callAsyncJavaScript = _callAsyncJavaScript;
     _pluginsIsar[plugin.id] = plugin.isar;
   }
 

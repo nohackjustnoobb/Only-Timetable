@@ -44,7 +44,8 @@ class JsPlugin extends BasePlugin {
   late final String _injectHandler;
 
   // --------- JavaScript Runtime ---------
-  InAppWebViewController? controller;
+  Future<CallAsyncJavaScriptResult?> Function(String functionBody)?
+  callAsyncJavaScript;
 
   // --------- Constructor ---------
   JsPlugin({
@@ -117,13 +118,12 @@ class JsPlugin extends BasePlugin {
   // --------- Methods ---------
   @override
   Future<void> updateRoutes() async {
-    if (controller == null) {
-      throw Exception('Controller is not initialized');
+    if (callAsyncJavaScript == null) {
+      throw Exception('Javascript Runtime is not initialized');
     }
 
-    final result = await controller!.callAsyncJavaScript(
-      functionBody:
-          "$_injectHandler $_updateRoutesScript return await $_updateRoutesFunctionName();",
+    final result = await callAsyncJavaScript!(
+      "$_injectHandler $_updateRoutesScript return await $_updateRoutesFunctionName();",
     );
 
     if (result == null) {
@@ -137,15 +137,15 @@ class JsPlugin extends BasePlugin {
 
   @override
   Future<List<Eta>> getEta(Route route, Stop stop) async {
-    if (controller == null) {
-      throw Exception('Controller is not initialized');
+    if (callAsyncJavaScript == null) {
+      throw Exception('Javascript Runtime is not initialized');
     }
 
     final encodedRoute = jsonEncode(route.toJson());
     final encodedStop = jsonEncode(stop.toJson());
     final body =
         "$_injectHandler $_getEtaScript return await $_getEtaFunctionName($encodedRoute,$encodedStop);";
-    final result = await controller!.callAsyncJavaScript(functionBody: body);
+    final result = await callAsyncJavaScript!(body);
 
     if (result == null) {
       throw Exception('Failed to get ETA: result is null');
