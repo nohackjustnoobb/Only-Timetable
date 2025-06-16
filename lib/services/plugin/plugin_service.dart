@@ -160,6 +160,8 @@ class PluginService extends ChangeNotifier {
           );
         }
       } catch (e) {
+        if (kDebugMode) print(e);
+
         if (navigatorKey.currentContext != null) {
           showErrorSnackbar(
             navigatorKey.currentContext!.l10n.failedToUpdateRoutes(plugin.name),

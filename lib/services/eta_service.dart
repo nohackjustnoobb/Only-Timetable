@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart' hide Route;
+import 'package:flutter/foundation.dart';
 import 'package:mutex/mutex.dart';
 import 'package:only_timetable/extensions/shortcut.dart';
 import 'package:only_timetable/globals.dart';
@@ -53,6 +53,8 @@ class _EtaSubscription {
 
       return true;
     } catch (e) {
+      if (kDebugMode) print(e);
+
       if (navigatorKey.currentContext != null) {
         showErrorSnackbar(
           navigatorKey.currentContext!.l10n.failedToUpdateEta(
@@ -80,15 +82,13 @@ class _EtaSubscription {
 
 class EtaService extends ChangeNotifier {
   final Map<int, _EtaSubscription> _etaSubscription = {};
-  final Mutex _etaLock = Mutex();
+
+  void init() {
+    _updateEta();
+  }
 
   void _updateEta() async {
-    if (_etaLock.isLocked) return;
-    await _etaLock.acquire();
-
-    while (_etaSubscription.values
-        .where((sub) => sub.counter != 0)
-        .isNotEmpty) {
+    while (true) {
       final now = DateTime.now();
 
       // Remove subscriptions that have no active counters
@@ -128,8 +128,6 @@ class EtaService extends ChangeNotifier {
 
       await Future.delayed(Duration(seconds: 1));
     }
-
-    _etaLock.release();
   }
 
   /// Subscribes to a eta and returns a function that can be used to unsubscribe.
@@ -158,8 +156,6 @@ class EtaService extends ChangeNotifier {
         stop: stop,
       );
     }
-
-    _updateEta();
 
     return unsubcribe;
   }

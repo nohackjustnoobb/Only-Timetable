@@ -28,8 +28,6 @@ class RoutesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final now = DateTime.now();
-
     return Container(
       padding: showContainer
           ? EdgeInsets.symmetric(horizontal: 20, vertical: 10)
@@ -163,7 +161,7 @@ class RoutesList extends StatelessWidget {
                                   DateTime.fromMillisecondsSinceEpoch(
                                     etas.first.arrivalTime,
                                     isUtc: true,
-                                  ).difference(now);
+                                  ).difference(DateTime.now());
 
                               final inHour = duration.inMinutes > 99;
 
