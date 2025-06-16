@@ -35,9 +35,7 @@ class JsPluginHandler extends Handler<JsPlugin> {
       functionBody: functionBody,
     );
 
-    // If the result is null or has an error, reinitialize the webview
-    // TODO dont know if this fix the bug that after long time running in the background,
-    //  the result will always be a error that said the type is not unsupported.
+    // If the result is null or has an error, try reinitialize the webview
     if (result == null || result.error != null) {
       disposeWebView();
       await initWebView();
@@ -60,7 +58,6 @@ class JsPluginHandler extends Handler<JsPlugin> {
       initialData: InAppWebViewInitialData(data: ""),
       onWebViewCreated: (controller) {
         // TODO override fetch to bypass cors
-        // TODO The type of data is changed to JavaScriptHandlerFunctionData after 6.2.0
         controller.addJavaScriptHandler(
           handlerName: "saveStops",
           callback: (data) async {

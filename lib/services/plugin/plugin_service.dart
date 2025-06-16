@@ -90,6 +90,7 @@ class PluginService extends ChangeNotifier {
 
       for (final plugin in loadedPlugins) {
         plugin.isar = await dbService.getPluginIsar(plugin.id);
+        plugin.updatedCallback = notifyListeners;
         await pluginHandler.initPlugin(plugin);
       }
 
@@ -199,6 +200,8 @@ class PluginService extends ChangeNotifier {
   Future<void> addPlugin(BasePlugin plugin) async {
     _plugins[plugin.id] = plugin;
     plugin.isar = await dbService.getPluginIsar(plugin.id);
+    plugin.updatedCallback = notifyListeners;
+
     for (final pluginHandler in pluginHandlers) {
       await pluginHandler.initPlugin(plugin);
     }

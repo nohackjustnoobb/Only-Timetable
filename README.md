@@ -15,8 +15,9 @@ Only Timetable is a flexible, plugin-based timetable application for bus and oth
 1. **Plugin-based & Extensible:** Easily extend support to new transport providers or regions by adding plugins. The app is designed to be minimal and adaptable, with all timetable data provided by plugins.
 
 <p align="center">
-  <img src="doc/plugin.png" width="200px" />
   <img src="doc/add_plugin.png" width="200px" />
+  <img src="doc/plugin.png" width="200px" />
+  <img src="doc/search_by_plugin.png" width="200px" />
 </p>
 
 2. **Modern, Customizable UI:** Enjoy a beautiful, modern interface that automatically adapts to your device's light or dark theme. Personalize your experience by choosing your preferred theme color with a simple color picker.

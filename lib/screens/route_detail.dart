@@ -279,8 +279,8 @@ class _RouteMapState extends State<RouteMap> {
                   ),
                   myLocationEnabled: widget.showUserLocation,
                   annotations: widget._stopsList
-                      .mapIndexed(
-                        (idx, stop) => Annotation(
+                      .map(
+                        (stop) => Annotation(
                           annotationId: AnnotationId(stop.id),
                           icon: BitmapDescriptor.markerAnnotation,
                           infoWindow: InfoWindow(

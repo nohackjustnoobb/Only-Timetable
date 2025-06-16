@@ -99,5 +99,26 @@
         "type": "String"
       }
     }
+  },
+  "checkForUpdates": "Check for Updates",
+  "pluginUpToDate": "{pluginName} is up to date.",
+  "@pluginUpToDate": {
+    "placeholders": {
+      "pluginName": {
+        "type": "String"
+      }
+    }
+  },
+  "failedToCheckForUpdates": "Failed to check for updates.",
+  "pluginUpdated": "Updated {pluginName} to version {version}.",
+  "@pluginUpdated": {
+    "placeholders": {
+      "pluginName": {
+        "type": "String"
+      },
+      "version": {
+        "type": "String"
+      }
+    }
   }
 }
