@@ -214,19 +214,19 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get checkForUpdates => 'Check for Updates';
+  String get checkForUpdates => '檢查更新';
 
   @override
   String pluginUpToDate(String pluginName) {
-    return '$pluginName is up to date.';
+    return '$pluginName 已是最新版本。';
   }
 
   @override
-  String get failedToCheckForUpdates => 'Failed to check for updates.';
+  String get failedToCheckForUpdates => '檢查更新失敗。';
 
   @override
   String pluginUpdated(String pluginName, String version) {
-    return 'Updated $pluginName to version $version.';
+    return '已將 $pluginName 更新到 $version 版本。';
   }
 }
 
@@ -437,5 +437,21 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   @override
   String routesUpdated(String pluginName) {
     return '已为 $pluginName 更新线路。';
+  }
+
+  @override
+  String get checkForUpdates => '检查更新';
+
+  @override
+  String pluginUpToDate(String pluginName) {
+    return '$pluginName 已是最新版本。';
+  }
+
+  @override
+  String get failedToCheckForUpdates => '检查更新失败。';
+
+  @override
+  String pluginUpdated(String pluginName, String version) {
+    return '已将 $pluginName 更新到 $version 版本。';
   }
 }
