@@ -231,8 +231,8 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get marketplace => 'Marketplace';
+  String get marketplace => 'プラグインストア';
 
   @override
-  String get details => 'Details';
+  String get details => '詳細情報';
 }

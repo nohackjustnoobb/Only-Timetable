@@ -230,10 +230,10 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get marketplace => 'Marketplace';
+  String get marketplace => '插件商店';
 
   @override
-  String get details => 'Details';
+  String get details => '詳細';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).
@@ -460,4 +460,10 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
   String pluginUpdated(String pluginName, String version) {
     return '已将 $pluginName 更新到 $version 版本。';
   }
+
+  @override
+  String get marketplace => '插件商店';
+
+  @override
+  String get details => '详细';
 }

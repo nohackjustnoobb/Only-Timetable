@@ -219,6 +219,9 @@ class _RouteMapState extends State<RouteMap> {
                                             context.getLocalizedString(
                                               widget.selectedStop!.name!,
                                             ),
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                            ),
                                           ),
                                         ),
                                       ),
