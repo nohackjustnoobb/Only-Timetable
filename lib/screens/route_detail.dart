@@ -786,6 +786,9 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
             maxWidth: MediaQuery.of(context).size.width - 125,
           ),
           child: Column(
+            crossAxisAlignment: Platform.isAndroid
+                ? CrossAxisAlignment.start
+                : CrossAxisAlignment.center,
             children: [
               Text(
                 widget.route.displayId ?? widget.route.id,
