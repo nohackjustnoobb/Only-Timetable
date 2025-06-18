@@ -235,7 +235,7 @@ class SettingsScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                context.l10n.version,
+                                'v${context.l10n.version}',
                                 style: context.textTheme.titleMedium,
                               ),
                               Text(

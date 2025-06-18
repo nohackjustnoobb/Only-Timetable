@@ -120,5 +120,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "marketplace": "Marketplace",
+  "details": "Details"
 }

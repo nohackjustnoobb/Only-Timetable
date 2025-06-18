@@ -215,18 +215,24 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
-  String get checkForUpdates => 'Check for Updates';
+  String get checkForUpdates => 'アップデートを確認';
 
   @override
   String pluginUpToDate(String pluginName) {
-    return '$pluginName is up to date.';
+    return '$pluginName は最新です。';
   }
 
   @override
-  String get failedToCheckForUpdates => 'Failed to check for updates.';
+  String get failedToCheckForUpdates => 'アップデートの確認に失敗しました。';
 
   @override
   String pluginUpdated(String pluginName, String version) {
-    return 'Updated $pluginName to version $version.';
+    return '$pluginName をバージョン $version に更新しました。';
   }
+
+  @override
+  String get marketplace => 'プラグインストア';
+
+  @override
+  String get details => '詳細情報';
 }

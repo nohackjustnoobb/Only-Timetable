@@ -28,14 +28,6 @@ abstract class BasePlugin {
     return _isar!;
   }
 
-  // --------- Language Settings ---------
-  String? _lang;
-  set lang(String? lang) => _lang = lang;
-  String? get lang {
-    if (_lang == null) throw Exception("Language not set");
-    return _lang;
-  }
-
   // --------- Methods required to be overridden ---------
 
   /// _This method must be implemented by subclasses._

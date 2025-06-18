@@ -508,6 +508,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Updated {pluginName} to version {version}.'**
   String pluginUpdated(String pluginName, String version);
+
+  /// No description provided for @marketplace.
+  ///
+  /// In en, this message translates to:
+  /// **'Marketplace'**
+  String get marketplace;
+
+  /// No description provided for @details.
+  ///
+  /// In en, this message translates to:
+  /// **'Details'**
+  String get details;
 }
 
 class _AppLocalizationsDelegate

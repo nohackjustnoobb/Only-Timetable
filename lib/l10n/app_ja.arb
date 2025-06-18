@@ -120,5 +120,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "marketplace": "プラグインストア",
+  "details": "詳細情報"
 }

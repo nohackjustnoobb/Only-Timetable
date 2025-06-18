@@ -219,6 +219,9 @@ class _RouteMapState extends State<RouteMap> {
                                             context.getLocalizedString(
                                               widget.selectedStop!.name!,
                                             ),
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -783,6 +786,9 @@ class _RouteDetailScreenState extends State<RouteDetailScreen> {
             maxWidth: MediaQuery.of(context).size.width - 125,
           ),
           child: Column(
+            crossAxisAlignment: Platform.isAndroid
+                ? CrossAxisAlignment.start
+                : CrossAxisAlignment.center,
             children: [
               Text(
                 widget.route.displayId ?? widget.route.id,
