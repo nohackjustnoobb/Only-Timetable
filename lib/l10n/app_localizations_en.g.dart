@@ -238,4 +238,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String pluginUpdated(String pluginName, String version) {
     return 'Updated $pluginName to version $version.';
   }
+
+  @override
+  String get marketplace => 'Marketplace';
+
+  @override
+  String get details => 'Details';
 }

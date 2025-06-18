@@ -120,5 +120,7 @@
         "type": "String"
       }
     }
-  }
+  },
+  "marketplace": "插件商店",
+  "details": "詳細"
 }

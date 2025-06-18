@@ -8,16 +8,20 @@
 
 </div>
 
+<p align="center">
+  <b>🌐 Visit the Plugin Marketplace & Website: <a href="https://nohackjustnoobb.github.io/Only-Timetable-Website/">Here</a></b>
+</p>
+
 Only Timetable is a flexible, plugin-based timetable application for bus and other public transport systems. The name "Only Timetable" reflects the app's purpose: it is the **ONLY** app you need for bus and public transport timetables, and it is focused **ONLY** on providing timetable information. There are no distractions—just the essential features for managing and viewing transport schedules. The core app does not include any routes or ETA data by default; all transport information is provided via plugins. This design allows support for any bus company or region simply by adding or developing the appropriate plugin.
 
 ## Features
 
-1. **Plugin-based & Extensible:** Easily extend support to new transport providers or regions by adding plugins. The app is designed to be minimal and adaptable, with all timetable data provided by plugins.
+1. **Plugin-based, Extensible & Marketplace:** Easily extend support to new transport providers or regions by adding plugins. Discover, install, and manage plugins directly within the app using the built-in Plugin Marketplace. The app is designed to be minimal and adaptable, with all timetable data provided by plugins, and the marketplace makes it easy to find and update plugins for any transport provider or region.
 
 <p align="center">
+  <img src="doc/marketplace.png" width="200px" />
   <img src="doc/add_plugin.png" width="200px" />
   <img src="doc/plugin.png" width="200px" />
-  <img src="doc/search_by_plugin.png" width="200px" />
 </p>
 
 2. **Modern, Customizable UI:** Enjoy a beautiful, modern interface that automatically adapts to your device's light or dark theme. Personalize your experience by choosing your preferred theme color with a simple color picker.
@@ -89,3 +93,5 @@ To develop a plugin for Only Timetable, use the official plugin template:
 [Only-Timetable-Plugin-Template](https://github.com/nohackjustnoobb/Only-Timetable-Plugin-Template)
 
 The template repository contains detailed instructions and boilerplate code to help you get started quickly. Follow the steps in the template's README to create and publish your own plugin for any transport provider or region.
+
+Plugins can be distributed and discovered through the built-in Plugin Marketplace in the app. If you want your plugin to be listed in the marketplace, submit a pull request to [Only-Timetable-Website](https://github.com/nohackjustnoobb/Only-Timetable-Website) with your plugin links.

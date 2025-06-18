@@ -229,4 +229,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String pluginUpdated(String pluginName, String version) {
     return '$pluginName をバージョン $version に更新しました。';
   }
+
+  @override
+  String get marketplace => 'Marketplace';
+
+  @override
+  String get details => 'Details';
 }

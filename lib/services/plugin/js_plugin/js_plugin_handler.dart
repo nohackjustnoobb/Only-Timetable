@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:isar/isar.dart';
+import 'package:mutex/mutex.dart';
 import 'package:only_timetable/models/kv_pair.dart';
 import 'package:only_timetable/models/route.dart';
 import 'package:only_timetable/models/stop.dart';
@@ -22,6 +23,7 @@ class JsPluginHandler extends Handler<JsPlugin> {
   InAppWebViewController? controller;
 
   final Map<String, Isar> _pluginsIsar = {};
+  final lock = Mutex();
 
   Future<CallAsyncJavaScriptResult?> _callAsyncJavaScript(
     String functionBody,
@@ -37,7 +39,7 @@ class JsPluginHandler extends Handler<JsPlugin> {
 
     // If the result is null or has an error, try reinitialize the webview
     if (result == null || result.error != null) {
-      disposeWebView();
+      await disposeWebView();
       await initWebView();
 
       result = await controller!.callAsyncJavaScript(
@@ -49,7 +51,11 @@ class JsPluginHandler extends Handler<JsPlugin> {
   }
 
   Future<void> initWebView() async {
-    if (headlessWebView != null) return;
+    await lock.acquire();
+    if (headlessWebView != null) {
+      lock.release();
+      return;
+    }
 
     final completer = Completer<InAppWebViewController>();
 
@@ -134,6 +140,7 @@ class JsPluginHandler extends Handler<JsPlugin> {
     await headlessWebView!.run();
 
     controller = await completer.future;
+    lock.release();
   }
 
   Future<void> disposeWebView() async {

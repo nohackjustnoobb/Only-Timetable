@@ -9,6 +9,7 @@ class ModalBase extends StatelessWidget {
   final Widget? titleWidget;
   final EdgeInsetsGeometry? padding;
   final double spacing;
+  final Widget? leading;
 
   const ModalBase({
     super.key,
@@ -17,6 +18,7 @@ class ModalBase extends StatelessWidget {
     this.titleWidget,
     this.padding,
     this.spacing = 20,
+    this.leading,
   });
 
   @override
@@ -57,6 +59,8 @@ class ModalBase extends StatelessWidget {
                         titleWidget ??
                         Text(title ?? "", style: context.textTheme.titleLarge),
                   ),
+                  if (leading != null)
+                    Align(alignment: Alignment.centerLeft, child: leading!),
                   Align(
                     alignment: Alignment.centerRight,
                     child: CupertinoButton(

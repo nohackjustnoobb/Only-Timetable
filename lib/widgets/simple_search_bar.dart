@@ -8,6 +8,9 @@ class SimpleSearchBar extends StatelessWidget {
   final void Function(String)? onSubmitted;
   final void Function(String)? onChanged;
   final TextEditingController? controller;
+  final Color? backgroundColor;
+  final bool autoFocus;
+  final bool alwaysHideBorder;
 
   const SimpleSearchBar({
     super.key,
@@ -15,6 +18,9 @@ class SimpleSearchBar extends StatelessWidget {
     this.onSubmitted,
     this.onChanged,
     this.controller,
+    this.backgroundColor,
+    this.autoFocus = true,
+    this.alwaysHideBorder = false,
   });
 
   @override
@@ -22,10 +28,11 @@ class SimpleSearchBar extends StatelessWidget {
     return Container(
       decoration: context.containerDecoration.copyWith(
         border: BoxBorder.all(
-          color: context.theme.brightness == Brightness.dark
+          color: context.isDarkMode || alwaysHideBorder
               ? Colors.transparent
               : context.colorScheme.inverseSurface.withValues(alpha: .25),
         ),
+        color: backgroundColor,
       ),
       padding: EdgeInsets.all(0),
       child: Padding(
@@ -44,7 +51,7 @@ class SimpleSearchBar extends StatelessWidget {
                     onSubmitted: onSubmitted,
                     onChanged: onChanged,
                     controller: controller,
-                    autofocus: true,
+                    autofocus: autoFocus,
                     decoration: InputDecoration(
                       isDense: true,
                       border: InputBorder.none,

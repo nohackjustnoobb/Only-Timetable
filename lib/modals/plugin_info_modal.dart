@@ -11,8 +11,13 @@ import 'package:url_launcher/url_launcher.dart';
 
 class PluginInfoModal extends StatefulWidget {
   final BasePlugin plugin;
+  final bool previewOnly;
 
-  const PluginInfoModal({super.key, required this.plugin});
+  const PluginInfoModal({
+    super.key,
+    required this.plugin,
+    this.previewOnly = false,
+  });
 
   @override
   State<PluginInfoModal> createState() => _PluginInfoModalState();
@@ -113,40 +118,41 @@ class _PluginInfoModalState extends State<PluginInfoModal> {
                 },
                 child: Text(context.l10n.checkForUpdates),
               ),
-            CupertinoButton(
-              minimumSize: const Size(double.infinity, 0),
-              padding: EdgeInsets.zero,
-              onPressed: () => context.showConfirm(
-                context.l10n.removePluginConfirm,
-                () async {
-                  if (!context.mounted) return;
+            if (!widget.previewOnly)
+              CupertinoButton(
+                minimumSize: const Size(double.infinity, 0),
+                padding: EdgeInsets.zero,
+                onPressed: () => context.showConfirm(
+                  context.l10n.removePluginConfirm,
+                  () async {
+                    if (!context.mounted) return;
 
-                  final pluginService = Provider.of<PluginService>(
-                    context,
-                    listen: false,
-                  );
-                  await pluginService.removePlugin(widget.plugin);
+                    final pluginService = Provider.of<PluginService>(
+                      context,
+                      listen: false,
+                    );
+                    await pluginService.removePlugin(widget.plugin);
 
-                  // ignore: use_build_context_synchronously
-                  context.pop();
-                },
-              ),
-              child: SizedBox(
-                width: double.infinity,
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: context.colorScheme.error),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    context.l10n.removePlugin,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: context.colorScheme.error),
+                    // ignore: use_build_context_synchronously
+                    context.pop();
+                  },
+                ),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: context.colorScheme.error),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Text(
+                      context.l10n.removePlugin,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: context.colorScheme.error),
+                    ),
                   ),
                 ),
               ),
-            ),
           ],
         ),
       ],

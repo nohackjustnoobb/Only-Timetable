@@ -228,6 +228,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String pluginUpdated(String pluginName, String version) {
     return '已將 $pluginName 更新到 $version 版本。';
   }
+
+  @override
+  String get marketplace => 'Marketplace';
+
+  @override
+  String get details => 'Details';
 }
 
 /// The translations for Chinese, as used in China (`zh_CN`).
