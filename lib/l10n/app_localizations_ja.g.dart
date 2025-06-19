@@ -235,4 +235,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get details => '詳細情報';
+
+  @override
+  String get added => '追加済み';
 }

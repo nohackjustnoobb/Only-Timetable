@@ -122,5 +122,6 @@
     }
   },
   "marketplace": "Marketplace",
-  "details": "Details"
+  "details": "Details",
+  "added": "Added"
 }
