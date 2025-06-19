@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:animated_size_and_fade/animated_size_and_fade.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -36,8 +37,14 @@ class _DirectInputState extends State<_DirectInput> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 20 + context.mediaQuery.padding.bottom),
+      padding: EdgeInsets.only(
+        bottom:
+            20 +
+            context.mediaQuery.padding.bottom +
+            context.mediaQuery.viewInsets.bottom,
+      ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         spacing: 20,
         children: [
           SizedBox(
@@ -155,112 +162,110 @@ class _MarketplaceState extends State<_Marketplace> {
             ),
             child: Center(child: CupertinoActivityIndicator()),
           )
-        : Flexible(
-            child: Column(
-              spacing: 20,
-              children: [
-                SimpleSearchBar(
-                  autoFocus: false,
-                  controller: _controller,
-                  backgroundColor: context.colorScheme.surface,
-                  alwaysHideBorder: true,
-                ),
-                if (_plugins!.isEmpty)
-                  Padding(
+        : Column(
+            spacing: 20,
+            children: [
+              SimpleSearchBar(
+                autoFocus: false,
+                controller: _controller,
+                backgroundColor: context.colorScheme.surface,
+                alwaysHideBorder: true,
+              ),
+              if (_plugins!.isEmpty)
+                Padding(
+                  padding: EdgeInsets.only(
+                    bottom: 20 + context.mediaQuery.padding.bottom,
+                  ),
+                  child: Text(
+                    context.l10n.noPluginAvailable,
+                    style: context.textTheme.titleMedium,
+                  ),
+                )
+              else
+                Flexible(
+                  child: SingleChildScrollView(
                     padding: EdgeInsets.only(
                       bottom: 20 + context.mediaQuery.padding.bottom,
                     ),
-                    child: Text(
-                      context.l10n.noPluginAvailable,
-                      style: context.textTheme.titleMedium,
-                    ),
-                  )
-                else
-                  Flexible(
-                    child: SingleChildScrollView(
-                      padding: EdgeInsets.only(
-                        bottom: 20 + context.mediaQuery.padding.bottom,
-                      ),
-                      // TODO add lazy loading
-                      child: ListView.separated(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: _plugins!.length,
-                        separatorBuilder: (context, index) => Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 20),
-                          child: Divider(
-                            color: context.textColor.withValues(alpha: .1),
-                            height: 1,
-                          ),
+                    // TODO add lazy loading
+                    child: ListView.separated(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: _plugins!.length,
+                      separatorBuilder: (context, index) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Divider(
+                          color: context.textColor.withValues(alpha: .1),
+                          height: 1,
                         ),
-                        itemBuilder: (context, index) {
-                          final plugin = _plugins!.values.elementAt(index);
+                      ),
+                      itemBuilder: (context, index) {
+                        final plugin = _plugins!.values.elementAt(index);
 
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                spacing: 10,
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              spacing: 10,
+                              children: [
+                                Text(
+                                  plugin.meta.name,
+                                  style: context.textTheme.titleMedium,
+                                ),
+                                Text(
+                                  'v${plugin.meta.version}',
+                                  style: context.textTheme.titleMedium
+                                      ?.copyWith(color: context.subTextColor),
+                                ),
+                              ],
+                            ),
+                            if (plugin.meta.description != null)
+                              Text(
+                                plugin.meta.description!,
+                                style: context.textTheme.titleSmall?.copyWith(
+                                  color: context.subTextColor,
+                                ),
+                              ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 10),
+                              child: Row(
+                                spacing: 20,
                                 children: [
-                                  Text(
-                                    plugin.meta.name,
-                                    style: context.textTheme.titleMedium,
+                                  CupertinoButton.filled(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10),
+                                    ),
+                                    minimumSize: Size.zero,
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 25,
+                                      vertical: 5,
+                                    ),
+                                    child: Text(context.l10n.add),
+                                    onPressed: () =>
+                                        widget.submit(plugin.link, false),
                                   ),
-                                  Text(
-                                    'v${plugin.meta.version}',
-                                    style: context.textTheme.titleMedium
-                                        ?.copyWith(color: context.subTextColor),
+                                  CupertinoButton(
+                                    minimumSize: Size.zero,
+                                    padding: EdgeInsets.zero,
+                                    child: Text(context.l10n.details),
+                                    onPressed: () => showModalBottomSheet(
+                                      context: context,
+                                      builder: (context) => PluginInfoModal(
+                                        plugin: plugin.meta,
+                                        previewOnly: true,
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
-                              if (plugin.meta.description != null)
-                                Text(
-                                  plugin.meta.description!,
-                                  style: context.textTheme.titleSmall?.copyWith(
-                                    color: context.subTextColor,
-                                  ),
-                                ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 10),
-                                child: Row(
-                                  spacing: 20,
-                                  children: [
-                                    CupertinoButton.filled(
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(10),
-                                      ),
-                                      minimumSize: Size.zero,
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 25,
-                                        vertical: 5,
-                                      ),
-                                      child: Text(context.l10n.add),
-                                      onPressed: () =>
-                                          widget.submit(plugin.link, false),
-                                    ),
-                                    CupertinoButton(
-                                      minimumSize: Size.zero,
-                                      padding: EdgeInsets.zero,
-                                      child: Text(context.l10n.details),
-                                      onPressed: () => showModalBottomSheet(
-                                        context: context,
-                                        builder: (context) => PluginInfoModal(
-                                          plugin: plugin.meta,
-                                          previewOnly: true,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
+                            ),
+                          ],
+                        );
+                      },
                     ),
                   ),
-              ],
-            ),
+                ),
+            ],
           );
   }
 }
@@ -313,9 +318,15 @@ class _AddPluginModalState extends State<AddPluginModal> {
         onPressed: () => setState(() => _isMarketplace = !_isMarketplace),
       ),
       children: [
-        _isMarketplace
-            ? _Marketplace(submit: submit)
-            : _DirectInput(submit: submit),
+        Flexible(
+          child: AnimatedSizeAndFade(
+            fadeDuration: const Duration(milliseconds: 200),
+            sizeDuration: const Duration(milliseconds: 200),
+            child: _isMarketplace
+                ? _Marketplace(submit: submit)
+                : _DirectInput(submit: submit),
+          ),
+        ),
       ],
     );
   }

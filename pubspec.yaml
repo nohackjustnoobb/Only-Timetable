@@ -1,6 +1,6 @@
 name: only_timetable
 publish_to: "none"
-version: 1.0.0-beta.3
+version: 1.0.0-beta.4
 repository: https://github.com/nohackjustnoobb/Only-Timetable
 license: "MIT"
 plugin_marketplace: https://raw.githubusercontent.com/nohackjustnoobb/Only-Timetable-Website/refs/heads/static/plugins.json
@@ -9,6 +9,7 @@ environment:
   sdk: ^3.8.0
 
 dependencies:
+  animated_size_and_fade: ^5.1.1
   animated_snack_bar: ^0.4.0
   apple_maps_flutter: ^1.4.0
   collection: ^1.19.1
