@@ -70,6 +70,7 @@ class DropdownOption<T> extends StatelessWidget {
               iconEnabledColor: context.primaryColor,
             ),
             dropdownStyleData: DropdownStyleData(
+              openInterval: const Interval(.25, .25),
               decoration: context.containerDecoration.copyWith(
                 border: Border.all(
                   color: context.colorScheme.inverseSurface.withValues(

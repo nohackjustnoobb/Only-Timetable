@@ -20,6 +20,22 @@ class _SearchScreenState extends State<SearchScreen> {
   PluginService? _pluginService;
   String? _query;
 
+  Future<void> search(String query) async {
+    _pluginService ??= Provider.of<PluginService>(context, listen: false);
+
+    _searchResults = await _pluginService!.searchRoute(query, limit: 5);
+    _query = query;
+
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    search("");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,43 +46,16 @@ class _SearchScreenState extends State<SearchScreen> {
           child: Column(
             spacing: 20,
             children: [
-              Row(
-                spacing: 10,
-                children: [
-                  Expanded(
-                    child: Hero(
-                      tag: "searchbar",
-                      child: SimpleSearchBar(
-                        onChanged: (query) async {
-                          _pluginService ??= Provider.of<PluginService>(
-                            context,
-                            listen: false,
-                          );
-
-                          _searchResults = await _pluginService!.searchRoute(
-                            query,
-                            limit: 5,
-                          );
-                          _query = query;
-
-                          setState(() {});
-                        },
-                      ),
-                    ),
-                  ),
-                  CupertinoButton(
-                    padding: EdgeInsets.zero,
-                    minimumSize: Size.zero,
-                    child: Text(context.l10n.close),
-                    onPressed: () => context.pop(),
-                  ),
-                ],
+              SimpleSearchBar(
+                onChanged: search,
+                enableHero: true,
+                showCloseButton: true,
               ),
               Expanded(
                 child: GestureDetector(
                   onTap: () => context.pop(),
                   child: _searchResults == null || _searchResults!.isEmpty
-                      ? Container(color: Colors.transparent)
+                      ? CupertinoActivityIndicator()
                       : SingleChildScrollView(
                           keyboardDismissBehavior:
                               ScrollViewKeyboardDismissBehavior.onDrag,

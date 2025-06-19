@@ -235,11 +235,11 @@ class SettingsScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                'v${context.l10n.version}',
+                                context.l10n.version,
                                 style: context.textTheme.titleMedium,
                               ),
                               Text(
-                                mainService.version!,
+                                'v${mainService.version!}',
                                 style: context.textTheme.titleMedium?.copyWith(
                                   color: context.primaryColor,
                                 ),

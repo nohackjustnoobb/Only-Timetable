@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:animated_size_and_fade/animated_size_and_fade.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
@@ -36,8 +37,14 @@ class _DirectInputState extends State<_DirectInput> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 20 + context.mediaQuery.padding.bottom),
+      padding: EdgeInsets.only(
+        bottom:
+            20 +
+            context.mediaQuery.padding.bottom +
+            context.mediaQuery.viewInsets.bottom,
+      ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         spacing: 20,
         children: [
           SizedBox(
@@ -313,9 +320,15 @@ class _AddPluginModalState extends State<AddPluginModal> {
         onPressed: () => setState(() => _isMarketplace = !_isMarketplace),
       ),
       children: [
-        _isMarketplace
-            ? _Marketplace(submit: submit)
-            : _DirectInput(submit: submit),
+        Flexible(
+          child: AnimatedSizeAndFade(
+            fadeDuration: const Duration(milliseconds: 200),
+            sizeDuration: const Duration(milliseconds: 200),
+            child: _isMarketplace
+                ? _Marketplace(submit: submit)
+                : _DirectInput(submit: submit),
+          ),
+        ),
       ],
     );
   }

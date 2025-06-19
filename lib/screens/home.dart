@@ -11,7 +11,7 @@ import 'package:only_timetable/models/bookmark.dart';
 import 'package:only_timetable/models/fast_hash.dart';
 import 'package:only_timetable/models/route.dart';
 import 'package:only_timetable/models/stop.dart';
-import 'package:only_timetable/screens/search/search.dart';
+import 'package:only_timetable/screens/search.dart';
 import 'package:only_timetable/screens/settings/settings.dart';
 import 'package:only_timetable/services/bookmark_service.dart';
 import 'package:only_timetable/services/eta_service.dart';
@@ -243,10 +243,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       FadeTransition(opacity: animation, child: child),
                 ),
               ),
-              child: Hero(
-                tag: "searchbar",
-                child: SimpleSearchBar(appearanceOnly: true),
-              ),
+              child: SimpleSearchBar(appearanceOnly: true, enableHero: true),
             ),
             IntrinsicHeight(
               child: Row(
