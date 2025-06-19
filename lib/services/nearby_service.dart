@@ -58,6 +58,15 @@ class NearbyService extends ChangeNotifier {
     return await Geolocator.getCurrentPosition();
   }
 
+  /// Fetches a list of nearby routes.
+  ///
+  /// This method retrieves a list of nearby routes with a maximum number of results
+  /// specified by the [maxResult] parameter.
+  ///
+  /// [maxResult] determines the maximum number of nearby routes to return.
+  /// Defaults to 10 if not provided.
+  ///
+  /// Returns a [Future] that resolves to a list of [NearbyRoute] objects.
   Future<List<NearbyRoute>> getNearbyRoute({int maxResult = 10}) async {
     Position? position = await getPosition();
     if (position == null) return [];

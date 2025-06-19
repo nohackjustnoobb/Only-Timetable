@@ -124,6 +124,15 @@ class MainService extends ChangeNotifier {
 
   Map<String, PluginItem>? _marketplacePlugins;
 
+  /// Fetches the marketplace plugins.
+  ///
+  /// This method retrieves a map of marketplace plugins, where the keys are
+  /// plugin identifiers (as `String`) and the values are `PluginItem` objects
+  /// representing the details of each plugin.
+  ///
+  /// Returns:
+  ///   A `Future` that resolves to a `Map<String, PluginItem>` containing the
+  ///   marketplace plugins.
   Future<Map<String, PluginItem>> getMarketplacePlugins() async {
     if (marketplaceUrl == null) {
       throw Exception('Marketplace URL is not defined in pubspec.yaml');
