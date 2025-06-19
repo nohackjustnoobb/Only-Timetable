@@ -147,10 +147,6 @@ class JsPluginHandler extends Handler<JsPlugin> {
     if (headlessWebView != null) {
       await headlessWebView!.dispose();
       headlessWebView = null;
-    }
-
-    if (controller != null) {
-      controller!.dispose();
       controller = null;
     }
   }
