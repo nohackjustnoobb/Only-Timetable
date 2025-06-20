@@ -234,11 +234,14 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get details => '詳細';
+
+  @override
+  String get added => '已新增';
 }
 
-/// The translations for Chinese, as used in China (`zh_CN`).
-class AppLocalizationsZhCn extends AppLocalizationsZh {
-  AppLocalizationsZhCn() : super('zh_CN');
+/// The translations for Chinese, using the Han script (`zh_Hans`).
+class AppLocalizationsZhHans extends AppLocalizationsZh {
+  AppLocalizationsZhHans() : super('zh_Hans');
 
   @override
   String get appName => 'Only Timetable';
@@ -466,4 +469,7 @@ class AppLocalizationsZhCn extends AppLocalizationsZh {
 
   @override
   String get details => '详细';
+
+  @override
+  String get added => '已添加';
 }

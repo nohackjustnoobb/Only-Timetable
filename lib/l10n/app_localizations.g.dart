@@ -98,7 +98,7 @@ abstract class AppLocalizations {
     Locale('en'),
     Locale('ja'),
     Locale('zh'),
-    Locale('zh', 'CN'),
+    Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hans'),
   ];
 
   /// No description provided for @appName.
@@ -520,6 +520,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Details'**
   String get details;
+
+  /// No description provided for @added.
+  ///
+  /// In en, this message translates to:
+  /// **'Added'**
+  String get added;
 }
 
 class _AppLocalizationsDelegate
@@ -540,13 +546,13 @@ class _AppLocalizationsDelegate
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
-  // Lookup logic when language+country codes are specified.
+  // Lookup logic when language+script codes are specified.
   switch (locale.languageCode) {
     case 'zh':
       {
-        switch (locale.countryCode) {
-          case 'CN':
-            return AppLocalizationsZhCn();
+        switch (locale.scriptCode) {
+          case 'Hans':
+            return AppLocalizationsZhHans();
         }
         break;
       }

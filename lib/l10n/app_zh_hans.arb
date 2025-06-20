@@ -1,5 +1,5 @@
 {
-  "@@locale": "zh_CN",
+  "@@locale": "zh_Hans",
   "appName": "Only Timetable",
   "saved": "已保存",
   "nearby": "附近",
@@ -122,5 +122,6 @@
     }
   },
   "marketplace": "插件商店",
-  "details": "详细"
+  "details": "详细",
+  "added": "已添加"
 }

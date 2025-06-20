@@ -51,44 +51,80 @@ class _SearchScreenState extends State<SearchScreen> {
                 enableHero: true,
                 showCloseButton: true,
               ),
-              Expanded(
-                child: GestureDetector(
-                  onTap: () => context.pop(),
-                  child: _searchResults == null || _searchResults!.isEmpty
-                      ? CupertinoActivityIndicator()
-                      : SingleChildScrollView(
-                          keyboardDismissBehavior:
-                              ScrollViewKeyboardDismissBehavior.onDrag,
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                              bottom: context.mediaQuery.padding.bottom,
-                            ),
-                            child: Consumer<PluginService>(
-                              builder: (context, pluginService, _) => Column(
-                                spacing: 20,
-                                children: _searchResults!.entries.map((entry) {
-                                  final plugin = pluginService.getPluginById(
-                                    entry.key,
-                                  )!;
+              if (_searchResults != null && _searchResults!.isEmpty)
+                Text(
+                  context.l10n.noPluginAvailable,
+                  style: context.textTheme.titleSmall?.copyWith(
+                    color: context.subTextColor,
+                  ),
+                ),
+              if (_searchResults == null)
+                CupertinoActivityIndicator()
+              else
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () => context.pop(),
+                    child: SingleChildScrollView(
+                      keyboardDismissBehavior:
+                          ScrollViewKeyboardDismissBehavior.onDrag,
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          bottom: context.mediaQuery.padding.bottom,
+                        ),
+                        child: Consumer<PluginService>(
+                          builder: (context, pluginService, _) => Column(
+                            spacing: 20,
+                            children: _searchResults!.entries.map((entry) {
+                              final plugin = pluginService.getPluginById(
+                                entry.key,
+                              )!;
 
-                                  return GestureDetector(
-                                    // Make it not dissmissible
-                                    onTap: () {},
-                                    child: Column(
-                                      spacing: 5,
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 10,
-                                          ),
-                                          child: IntrinsicHeight(
-                                            child: Row(
-                                              children: [
-                                                Text(
-                                                  plugin.name,
+                              return GestureDetector(
+                                // Make it not dissmissible
+                                onTap: () {},
+                                child: Column(
+                                  spacing: 5,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10,
+                                      ),
+                                      child: IntrinsicHeight(
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              plugin.name,
+                                              style: context
+                                                  .textTheme
+                                                  .titleMedium
+                                                  ?.copyWith(
+                                                    color: context.primaryColor,
+                                                    fontWeight:
+                                                        FontWeight.normal,
+                                                  ),
+                                            ),
+                                            Expanded(
+                                              child: CupertinoButton(
+                                                padding: EdgeInsets.zero,
+                                                minimumSize: Size.zero,
+                                                alignment:
+                                                    Alignment.bottomRight,
+                                                onPressed: () =>
+                                                    showModalBottomSheet(
+                                                      context: context,
+                                                      isScrollControlled: true,
+                                                      builder: (context) =>
+                                                          SearchByPluginModal(
+                                                            plugin: plugin,
+                                                            query: _query!,
+                                                          ),
+                                                    ),
+                                                child: Text(
+                                                  context.l10n.viewAll,
+
                                                   style: context
                                                       .textTheme
-                                                      .titleMedium
+                                                      .titleSmall
                                                       ?.copyWith(
                                                         color: context
                                                             .primaryColor,
@@ -96,57 +132,26 @@ class _SearchScreenState extends State<SearchScreen> {
                                                             FontWeight.normal,
                                                       ),
                                                 ),
-                                                Expanded(
-                                                  child: CupertinoButton(
-                                                    padding: EdgeInsets.zero,
-                                                    minimumSize: Size.zero,
-                                                    alignment:
-                                                        Alignment.bottomRight,
-                                                    onPressed: () =>
-                                                        showModalBottomSheet(
-                                                          context: context,
-                                                          isScrollControlled:
-                                                              true,
-                                                          builder: (context) =>
-                                                              SearchByPluginModal(
-                                                                plugin: plugin,
-                                                                query: _query!,
-                                                              ),
-                                                        ),
-                                                    child: Text(
-                                                      context.l10n.viewAll,
-
-                                                      style: context
-                                                          .textTheme
-                                                          .titleSmall
-                                                          ?.copyWith(
-                                                            color: context
-                                                                .primaryColor,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .normal,
-                                                          ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
+                                              ),
                                             ),
-                                          ),
+                                          ],
                                         ),
-                                        RoutesList(
-                                          plugin: plugin,
-                                          routes: entry.value,
-                                        ),
-                                      ],
+                                      ),
                                     ),
-                                  );
-                                }).toList(),
-                              ),
-                            ),
+                                    RoutesList(
+                                      plugin: plugin,
+                                      routes: entry.value,
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }).toList(),
                           ),
                         ),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
             ],
           ),
         ),
